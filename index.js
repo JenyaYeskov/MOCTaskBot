@@ -5,7 +5,7 @@ const
     express = require('express'),
     bodyParser = require('body-parser'),
     app = express().use(bodyParser.json()); // creates express http server
-
+app.use(bodyParser.urlencoded({extended: false}));
 
 // Sets server port and logs message on success
 app.listen(process.env.PORT || 1337, () => console.log('webhook is listening'));
@@ -64,4 +64,9 @@ app.get('/webhook', (req, res) => {
             res.sendStatus(403);
         }
     }
+});
+
+// Server index page
+app.get("/", function (req, res) {
+    res.send("Deployed!");
 });

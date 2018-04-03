@@ -1,0 +1,32 @@
+{
+  "name": "moctaskbot",
+  "version": "1.0.0",
+  "description": "fb chatbot for MOC task",
+  "main": "index.js",
+  "scripts": {
+    "test": "test",
+    "start": "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JenyaYeskov/MOCTaskBot.git"
+  },
+  "keywords": [
+    "bot"
+  ],
+  "author": "Jenya",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/JenyaYeskov/MOCTaskBot/issues"
+  },
+  "homepage": "https://github.com/JenyaYeskov/MOCTaskBot#readme",
+  "devDependencies": {
+    "eslint": "^4.19.1"
+  },
+  "dependencies": {
+    "body-parser": "^1.18.2",
+    "express": "^4.16.3",
+    "mongoose": "^5.0.12",
+    "request": "^2.85.0"
+  }
+}

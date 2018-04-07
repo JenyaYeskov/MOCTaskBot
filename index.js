@@ -81,7 +81,7 @@ app.get('/webhook', (req, res) => {
 });
 
 app.get("/loh", function (req, res) {
-    res.send({"text": "ty loh"});
+    res.send(loh[{"text": "ty loh"}]);
 });
 
 // Server index page

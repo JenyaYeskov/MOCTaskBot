@@ -80,7 +80,7 @@ app.get('/webhook', (req, res) => {
     }
 });
 
-app.get("loh", function (req, res) {
+app.get("/loh", function (req, res) {
     res.send({"text": "ty loh"});
 });
 

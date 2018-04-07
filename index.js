@@ -10,6 +10,8 @@ app.use(bodyParser.urlencoded({extended: false}));
 const PAGE_ACCESS_TOKEN = process.env.PAGE_ACCESS_TOKEN;
 const request = require('request');
 
+const mongoose = require('mongoose');
+
 // Sets server port and logs message on success
 app.listen(process.env.PORT || 1337, () => console.log('webhook is listening'));
 
@@ -86,6 +88,63 @@ app.get("/loh", function (req, res) {
     res.send(loh);
 });
 
+app.get("/getRems", function (req, res) {
+
+    let uri = 'mongodb://<dbuser>:<dbpassword>@ds237669.mlab.com:37669/moc_chatbot_reminderstask_db';
+
+    mongoose.connect(uri);
+
+    let db = mongoose.connection;
+
+    db.on('error', console.error.bind(console, 'connection error:'));
+
+    db.once('open', function callback() {
+
+        // Create event schema
+        let remSchema = mongoose.Schema({
+            date: String,
+            time: String,
+            event: String
+        });
+
+        // Store event documents in a collection called "songs"
+        let Reminder = mongoose.model('rems', remSchema);
+
+        let first = new Reminder({
+            date: '23.5.18',
+            time: '15.45',
+            event: 'pizdyuli'
+        });
+
+        let second = new Reminder({
+            date: '24.5.18',
+            time: '15.45',
+            event: 'tobi pizda'
+        });
+
+        let list = [first, second];
+
+
+        Reminder.insertMany(list).then(() => {
+
+            // Only close the connection when your app is terminating
+            return mongoose.connection.close();
+
+        }).catch(err => {
+
+            // Log any errors that are thrown in the Promise chain
+            console.log(err);
+
+        });
+
+
+        let loh = [];
+        loh.push({"text": "ty loh"});
+        res.send(loh);
+    });
+
+});
+
 // Server index page
 app.get("/", function (req, res) {
     res.send("Deployed");
@@ -128,7 +187,7 @@ function callSendAPI(sender_psid, response) {
     // Send the HTTP request to the Messenger Platform
     request({
         "uri": "https://graph.facebook.com/v2.6/me/messages",
-        "qs": { "access_token": PAGE_ACCESS_TOKEN },
+        "qs": {"access_token": PAGE_ACCESS_TOKEN},
         "method": "POST",
         "json": request_body
     }, (err, res, body) => {

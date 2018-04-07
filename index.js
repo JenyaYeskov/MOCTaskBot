@@ -80,9 +80,13 @@ app.get('/webhook', (req, res) => {
     }
 });
 
+app.get("loh", function (req, res) {
+    res.send({"text": "ty loh"});
+});
+
 // Server index page
 app.get("/", function (req, res) {
-    res.send("Deployed!");
+    res.send("Deployed");
 });
 
 
@@ -117,7 +121,7 @@ function callSendAPI(sender_psid, response) {
             "id": sender_psid
         },
         "message": response
-    }
+    };
 
     // Send the HTTP request to the Messenger Platform
     request({

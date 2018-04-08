@@ -150,8 +150,10 @@ app.get("/getRems", function (req, res) {
 
 app.post ("/getRems", (req, res) => {
 
-    let body = req.body;
-    
+    let body = [];
+
+    body.push(req.body);
+
     res.send(body);
 
 });

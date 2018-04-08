@@ -124,9 +124,13 @@ app.get("/getRems", function (req, res) {
 
         Reminder.insertMany(list).then(() => {
 
-            console.log("done");
+            mongoose.connection.close();
 
-            return mongoose.connection.close();
+        }).then(() => {
+
+            let loh = [];
+            loh.push({"text": "ty loh"});
+            res.send(loh);
 
         }).catch(err => {
 
@@ -136,9 +140,7 @@ app.get("/getRems", function (req, res) {
 
     });
 
-    let loh = [];
-    loh.push({"text": "ty loh"});
-    res.send(loh);
+
 });
 
 // Server index page

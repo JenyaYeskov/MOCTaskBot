@@ -128,8 +128,9 @@ app.get("/getRems", function (req, res) {
 
         // Log any errors that are thrown in the Promise chain
         console.log(err)
-
     });
+
+    res.send("added");
 });
 
 // Server index page

@@ -148,6 +148,14 @@ app.get("/getRems", function (req, res) {
 
 });
 
+app.post ("/getRems", (req, res) => {
+
+    let body = req.body;
+    
+    res.send(body);
+
+});
+
 // Server index page
 app.get("/", function (req, res) {
     res.send("Deployed");

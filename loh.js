@@ -10,6 +10,9 @@ app.get('/*', function (req, res) {
     res.send(jsonResponse);
 });
 
+let Reminder;
+let remSchema;
+
 let uri = 'mongodb://admin:7447030j@ds237669.mlab.com:37669/moc_chatbot_reminderstask_db';
 
 let db = mongoose.connection;
@@ -21,14 +24,16 @@ db.on('error', console.error.bind(console, 'connection error:'));
 
 db.once('open', function callback() {
 
-    // Create event schema
-    let remSchema = mongoose.Schema({
-        date: String,
-        time: String,
-        event: String
-    });
+    if (typeof Reminder === "undefined"){
+        remSchema = mongoose.Schema({
+            date: String,
+            time: String,
+            event: String
+        });
 
-    let Reminder = mongoose.model('rems', remSchema);
+        Reminder = mongoose.model('rems', remSchema);
+    }
+
 
     let first = new Reminder({
         date: '23.5.18',

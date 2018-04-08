@@ -91,6 +91,8 @@ app.get("/loh", function (req, res) {
 let Reminder;
 let remSchema;
 
+let hui;
+
 app.get("/getRems", function (req, res) {
 
     let uri = 'mongodb://admin:7447030j@ds237669.mlab.com:37669/moc_chatbot_reminderstask_db';
@@ -135,7 +137,8 @@ app.get("/getRems", function (req, res) {
 
             let loh = [];
             loh.push({"text": "ty loh"});
-            res.send(loh);
+            // res.send(loh);
+            res.send(hui);
 
         }).catch(err => {
 
@@ -156,6 +159,7 @@ app.post ("/getRems", (req, res) => {
 
     res.send(body);
 
+    hui = body;
 });
 
 // Server index page

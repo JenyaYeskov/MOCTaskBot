@@ -21,6 +21,8 @@ remSchema = mongoose.Schema({
 
 Reminder = mongoose.model('rems', remSchema);
 
+let db = mongoose.connection;
+
 app.use(bodyParser.urlencoded({extended: false}));
 
 
@@ -103,24 +105,13 @@ app.get("/loh", function (req, res) {
 
 app.get("/getRems", function (req, res) {
 
-    // let uri = 'mongodb://admin:7447030j@ds237669.mlab.com:37669/moc_chatbot_reminderstask_db';
-    let db = mongoose.connection;
+    // let db = mongoose.connection;
 
     mongoose.connect(uri);
 
     db.on('error', console.error.bind(console, 'connection error:'));
 
     db.once('open', function callback() {
-
-        // if (typeof Reminder === "undefined") {
-        //     remSchema = mongoose.Schema({
-        //         date: String,
-        //         time: String,
-        //         event: String
-        //     });
-        //
-        //     Reminder = mongoose.model('rems', remSchema);
-        // }
 
         let first = new Reminder({
             date: '23.5.18',
@@ -154,7 +145,6 @@ app.get("/getRems", function (req, res) {
 
 app.post("/getRems", (req, res) => {
 
-    let uri = 'mongodb://admin:7447030j@ds237669.mlab.com:37669/moc_chatbot_reminderstask_db';
     let db = mongoose.connection;
 
     mongoose.connect(uri);
@@ -162,16 +152,6 @@ app.post("/getRems", (req, res) => {
     db.on('error', console.error.bind(console, 'connection error:'));
 
     db.once('open', function callback() {
-
-        if (typeof Reminder === "undefined") {
-            remSchema = mongoose.Schema({
-                date: String,
-                time: String,
-                event: String
-            });
-
-            Reminder = mongoose.model('rems', remSchema);
-        }
 
         let r = req.body;
 
@@ -183,7 +163,6 @@ app.post("/getRems", (req, res) => {
 
         let list = [vjn];
 
-
         Reminder.insertMany(list).then(() => {
 
             mongoose.connection.close();
@@ -193,21 +172,12 @@ app.post("/getRems", (req, res) => {
             let loh = [];
             loh.push({"text": "ty loh"});
             res.send(loh);
-            // res.send(hui);
 
         }).catch(err => {
 
-            // Log any errors that are thrown in the Promise chain
             console.log(err)
         });
 
-        // let body = [];
-        //
-        // body.push(req.body);
-        //
-        // res.send(body);
-        //
-        // hui = body;
     });
 
 });

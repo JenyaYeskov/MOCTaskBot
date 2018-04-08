@@ -88,6 +88,9 @@ app.get("/loh", function (req, res) {
     res.send(loh);
 });
 
+let Reminder;
+let remSchema;
+
 app.get("/getRems", function (req, res) {
 
     let uri = 'mongodb://admin:7447030j@ds237669.mlab.com:37669/moc_chatbot_reminderstask_db';
@@ -99,13 +102,15 @@ app.get("/getRems", function (req, res) {
 
     db.once('open', function callback() {
 
-        let remSchema = mongoose.Schema({
-            date: String,
-            time: String,
-            event: String
-        });
+        if (typeof Reminder === "undefined"){
+            remSchema = mongoose.Schema({
+                date: String,
+                time: String,
+                event: String
+            });
 
-        let Reminder = mongoose.model('rems', remSchema);
+            Reminder = mongoose.model('rems', remSchema);
+        }
 
         let first = new Reminder({
             date: '23.5.18',

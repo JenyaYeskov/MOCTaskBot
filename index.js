@@ -130,7 +130,9 @@ app.get("/getRems", function (req, res) {
         console.log(err)
     });
 
-    res.send("added");
+    let loh = [];
+    loh.push({"text": "ty loh"});
+    res.send(loh);
 });
 
 // Server index page

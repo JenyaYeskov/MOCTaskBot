@@ -2,15 +2,27 @@
 
 // Imports dependencies and set up http server
 const
+    PAGE_ACCESS_TOKEN = process.env.PAGE_ACCESS_TOKEN,
+    request = require('request'),
+    mongoose = require('mongoose'),
+    uri = 'mongodb://admin:7447030j@ds237669.mlab.com:37669/moc_chatbot_reminderstask_db',
     express = require('express'),
     bodyParser = require('body-parser'),
     app = express().use(bodyParser.json()); // creates express http server
+
+let Reminder;
+let remSchema;
+
+remSchema = mongoose.Schema({
+    date: String,
+    time: String,
+    event: String
+});
+
+Reminder = mongoose.model('rems', remSchema);
+
 app.use(bodyParser.urlencoded({extended: false}));
 
-const PAGE_ACCESS_TOKEN = process.env.PAGE_ACCESS_TOKEN;
-const request = require('request');
-
-const mongoose = require('mongoose');
 
 // Sets server port and logs message on success
 app.listen(process.env.PORT || 1337, () => console.log('webhook is listening'));
@@ -53,7 +65,6 @@ app.post("/webhook", (req, res) => {
 
 });
 
-
 // Adds support for GET requests to our webhook
 app.get('/webhook', (req, res) => {
 
@@ -88,14 +99,11 @@ app.get("/loh", function (req, res) {
     res.send(loh);
 });
 
-let Reminder;
-let remSchema;
-
-let hui;
+// let hui;
 
 app.get("/getRems", function (req, res) {
 
-    let uri = 'mongodb://admin:7447030j@ds237669.mlab.com:37669/moc_chatbot_reminderstask_db';
+    // let uri = 'mongodb://admin:7447030j@ds237669.mlab.com:37669/moc_chatbot_reminderstask_db';
     let db = mongoose.connection;
 
     mongoose.connect(uri);
@@ -104,15 +112,15 @@ app.get("/getRems", function (req, res) {
 
     db.once('open', function callback() {
 
-        if (typeof Reminder === "undefined") {
-            remSchema = mongoose.Schema({
-                date: String,
-                time: String,
-                event: String
-            });
-
-            Reminder = mongoose.model('rems', remSchema);
-        }
+        // if (typeof Reminder === "undefined") {
+        //     remSchema = mongoose.Schema({
+        //         date: String,
+        //         time: String,
+        //         event: String
+        //     });
+        //
+        //     Reminder = mongoose.model('rems', remSchema);
+        // }
 
         let first = new Reminder({
             date: '23.5.18',
@@ -120,14 +128,7 @@ app.get("/getRems", function (req, res) {
             event: 'pizdyuli'
         });
 
-        let second = new Reminder({
-            date: '24.5.18',
-            time: '15.45',
-            event: 'tobi pizda'
-        });
-
-        let list = [first, second];
-
+        let list = [first];
 
         Reminder.insertMany(list).then(() => {
 

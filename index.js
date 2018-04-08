@@ -10,8 +10,11 @@ const
     bodyParser = require('body-parser'),
     app = express().use(bodyParser.json()); // creates express http server
 
+let db = mongoose.connection;
 let Reminder;
 let remSchema;
+
+app.use(bodyParser.urlencoded({extended: false}));
 
 remSchema = mongoose.Schema({
     date: String,
@@ -21,16 +24,10 @@ remSchema = mongoose.Schema({
 
 Reminder = mongoose.model('rems', remSchema);
 
-let db = mongoose.connection;
-
-app.use(bodyParser.urlencoded({extended: false}));
-
-
 // Sets server port and logs message on success
 app.listen(process.env.PORT || 1337, () => console.log('webhook is listening'));
 
 
-// Creates the endpoint for our webhook
 app.post("/webhook", (req, res) => {
 
     let body = req.body;
@@ -67,7 +64,6 @@ app.post("/webhook", (req, res) => {
 
 });
 
-// Adds support for GET requests to our webhook
 app.get('/webhook', (req, res) => {
 
     // Your verify token. Should be a random string.
@@ -101,11 +97,8 @@ app.get("/loh", function (req, res) {
     res.send(loh);
 });
 
-// let hui;
 
 app.get("/getRems", function (req, res) {
-
-    // let db = mongoose.connection;
 
     mongoose.connect(uri);
 
@@ -127,10 +120,9 @@ app.get("/getRems", function (req, res) {
 
         }).then(() => {
 
-            let loh = [];
-            loh.push({"text": "ty loh"});
-            res.send(loh);
-            // res.send(hui);
+            let text = [];
+            text.push({"text": "Done"});
+            res.send(text);
 
         }).catch(err => {
 
@@ -140,12 +132,9 @@ app.get("/getRems", function (req, res) {
 
     });
 
-
 });
 
 app.post("/getRems", (req, res) => {
-
-    let db = mongoose.connection;
 
     mongoose.connect(uri);
 
@@ -153,25 +142,24 @@ app.post("/getRems", (req, res) => {
 
     db.once('open', function callback() {
 
-        let r = req.body;
+        let body = req.body;
 
-        let vjn = new Reminder({
-            date: r.date,
-            time: r.time,
-            event: r.what
+        let rem = new Reminder({
+            date: body.date,
+            time: body.time,
+            event: body.what
         });
 
-        let list = [vjn];
+        let list = [rem];
 
         Reminder.insertMany(list).then(() => {
 
             mongoose.connection.close();
 
         }).then(() => {
-
-            let loh = [];
-            loh.push({"text": "ty loh"});
-            res.send(loh);
+            let text = [];
+            text.push({"text": "Done"});
+            res.send(text);
 
         }).catch(err => {
 

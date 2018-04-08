@@ -19,6 +19,7 @@ mongoose.connect(uri);
 db.on('error', console.error.bind(console, 'connection error:'));
 
 
+db.once('open', function callback() {
 
     // Create event schema
     let remSchema = mongoose.Schema({
@@ -27,7 +28,6 @@ db.on('error', console.error.bind(console, 'connection error:'));
         event: String
     });
 
-    // Store event documents in a collection called "songs"
     let Reminder = mongoose.model('rems', remSchema);
 
     let first = new Reminder({
@@ -44,17 +44,20 @@ db.on('error', console.error.bind(console, 'connection error:'));
 
     let list = [first, second];
 
-
     Reminder.insertMany(list).then(() => {
 
-        return mongoose.connection.close();
+        mongoose.connection.close();
 
+        console.log("done");
     }).catch(err => {
 
         // Log any errors that are thrown in the Promise chain
         console.log(err)
 
     });
+});
+
+
 
 
 

@@ -97,37 +97,43 @@ app.get("/getRems", function (req, res) {
 
     db.on('error', console.error.bind(console, 'connection error:'));
 
-    let remSchema = mongoose.Schema({
-        date: String,
-        time: String,
-        event: String
-    });
+    db.once('open', function callback() {
 
-    let Reminder = mongoose.model('rems', remSchema);
+        let remSchema = mongoose.Schema({
+            date: String,
+            time: String,
+            event: String
+        });
 
-    let first = new Reminder({
-        date: '23.5.18',
-        time: '15.45',
-        event: 'pizdyuli'
-    });
+        let Reminder = mongoose.model('rems', remSchema);
 
-    let second = new Reminder({
-        date: '24.5.18',
-        time: '15.45',
-        event: 'tobi pizda'
-    });
+        let first = new Reminder({
+            date: '23.5.18',
+            time: '15.45',
+            event: 'pizdyuli'
+        });
 
-    let list = [first, second];
+        let second = new Reminder({
+            date: '24.5.18',
+            time: '15.45',
+            event: 'tobi pizda'
+        });
+
+        let list = [first, second];
 
 
-    Reminder.insertMany(list).then(() => {
+        Reminder.insertMany(list).then(() => {
 
-        return mongoose.connection.close();
+            console.log("done");
 
-    }).catch(err => {
+            return mongoose.connection.close();
 
-        // Log any errors that are thrown in the Promise chain
-        console.log(err)
+        }).catch(err => {
+
+            // Log any errors that are thrown in the Promise chain
+            console.log(err)
+        });
+
     });
 
     let loh = [];

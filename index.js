@@ -104,7 +104,7 @@ app.get("/getRems", function (req, res) {
 
     db.once('open', function callback() {
 
-        if (typeof Reminder === "undefined"){
+        if (typeof Reminder === "undefined") {
             remSchema = mongoose.Schema({
                 date: String,
                 time: String,
@@ -137,8 +137,8 @@ app.get("/getRems", function (req, res) {
 
             let loh = [];
             loh.push({"text": "ty loh"});
-            // res.send(loh);
-            res.send(hui);
+            res.send(loh);
+            // res.send(hui);
 
         }).catch(err => {
 
@@ -151,15 +151,64 @@ app.get("/getRems", function (req, res) {
 
 });
 
-app.post ("/getRems", (req, res) => {
+app.post("/getRems", (req, res) => {
 
-    let body = [];
+    let uri = 'mongodb://admin:7447030j@ds237669.mlab.com:37669/moc_chatbot_reminderstask_db';
+    let db = mongoose.connection;
 
-    body.push(req.body);
+    mongoose.connect(uri);
 
-    res.send(body);
+    db.on('error', console.error.bind(console, 'connection error:'));
 
-    hui = body;
+    db.once('open', function callback() {
+
+        if (typeof Reminder === "undefined") {
+            remSchema = mongoose.Schema({
+                date: String,
+                time: String,
+                event: String
+            });
+
+            Reminder = mongoose.model('rems', remSchema);
+        }
+
+        let r = req.body;
+
+        let vjn = new Reminder({
+            date: r.date,
+            time: r.time,
+            event: r.what
+        });
+
+        let list = [vjn];
+
+
+        Reminder.insertMany(list).then(() => {
+
+            mongoose.connection.close();
+
+        }).then(() => {
+
+            let loh = [];
+            loh.push({"text": "ty loh"});
+            res.send(loh);
+            // res.send(hui);
+
+        }).catch(err => {
+
+            // Log any errors that are thrown in the Promise chain
+            console.log(err)
+        });
+
+        // let body = [];
+        //
+        // body.push(req.body);
+        //
+        // res.send(body);
+        //
+        // hui = body;
+    });
+
 });
 
 // Server index page

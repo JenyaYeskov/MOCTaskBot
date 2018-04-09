@@ -17,6 +17,7 @@ let remSchema;
 app.use(bodyParser.urlencoded({extended: false}));
 
 remSchema = mongoose.Schema({
+    messengerId: String,
     date: String,
     time: String,
     event: String
@@ -121,7 +122,8 @@ app.get("/getRems", function (req, res) {
         }).then(() => {
 
             let text = [];
-            text.push({"text": "Done"});
+            // text.push({"text": "Done"});
+            text.push(qwe);
             res.send(text);
 
         }).catch(err => {
@@ -134,6 +136,8 @@ app.get("/getRems", function (req, res) {
 
 });
 
+let qwe;
+
 app.post("/getRems", (req, res) => {
 
     mongoose.connect(uri);
@@ -144,7 +148,10 @@ app.post("/getRems", (req, res) => {
 
         let body = req.body;
 
+        qwe = body;
+
         let rem = new Reminder({
+            // messengerId: body.messenger user id,
             date: body.date,
             time: body.time,
             event: body.what

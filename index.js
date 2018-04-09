@@ -63,7 +63,8 @@ app.get("/getRems", function (req, res) {
         //     // });
         //
         // })
-            let message = [];
+
+        let message = [];
 
         Reminder.find({'messengerId': "1898219773585506"}).then(rems => {
 
@@ -79,57 +80,19 @@ app.get("/getRems", function (req, res) {
 
                 message.push({"text": "Reminder: " + event + " date: " + date + " time: " + time});
 
-                // return message;
-                // res.send([{"text": "Reminder: " + event + " date: " + date + " time: " + time}]);
-
             })
-            //     .then(message => {
-            //
-            //     message.forEach(m => {
-            //         res.send([m]);
-            //     })
-            //
-            // }).catch(err => {
-            //     // Log any errors that are thrown in the Promise chain
-            //     console.log(err)
-            // });
 
+        }).then(() => {
 
+            if (message.isEmpty)
+                res.send("No reminders");
+            else res.send(message);
 
-            // // rty = [rems];
-            //
-            // res.send(rty);
-            //
-            // return rems;
-            //
-            // // mongoose.connection.close();
+        }).then(() => {
 
-        })
-        //     .then((rty) => {
-        //
-        //     // let rty = Reminder.find({"messenger user id": qwe});
-        //
-        //     // let text = [];
-        //     // // text.push({"text": "Done"});
-        //     // text.push(rty);
-        //     // res.send(rty);
-        //
-        // })
-            .then(() => {
+            mongoose.connection.close();
 
-                // message.forEach(m => {
-                //     res.send([m]);
-                // })
-
-                if (message.isEmpty)
-                res.send("loh");
-                else res.send(message);
-
-            }).then(() => {
-
-                mongoose.connection.close();
-
-            }).catch(err => {
+        }).catch(err => {
 
             // Log any errors that are thrown in the Promise chain
             console.log(err)

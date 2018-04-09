@@ -79,7 +79,7 @@ app.get("/getRems", function (req, res) {
 
                 message.push({"text": "Reminder: " + event + " date: " + date + " time: " + time});
 
-                return message;
+                // return message;
                 // res.send([{"text": "Reminder: " + event + " date: " + date + " time: " + time}]);
 
             }).then(message => {

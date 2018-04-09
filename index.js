@@ -38,17 +38,18 @@ app.get("/getRems", function (req, res) {
 
     db.once('open', function callback() {
 
+        rty = Reminder.find({'messengerId': qwe});
 
-        Reminder.find({'date': "k"}).then((err, docs) => {
+        Reminder.find({'messengerId': qwe}).then((err, docs) => {
 
             // docs.forEach(doc =>{
             //
             // })
 
 
-            rty = [docs];
+            // rty = [docs];
 
-            res.send(docs);
+            res.send(rty);
 
             return docs;
 

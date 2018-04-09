@@ -141,7 +141,7 @@ app.post("/addRem", (req, res) => {
 
         let body = req.body;
 
-        qwe = ["messenger user id"];
+        qwe = body["messenger user id"];
 
         let rem = new Reminder({
             messengerId: body["messenger user id"],

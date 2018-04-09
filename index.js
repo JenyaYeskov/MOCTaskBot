@@ -121,7 +121,9 @@ app.get("/getRems", function (req, res) {
                 //     res.send([m]);
                 // })
 
+                if (message.isEmpty)
                 res.send(message);
+                else res.send('loh');
 
             }).then(() => {
 

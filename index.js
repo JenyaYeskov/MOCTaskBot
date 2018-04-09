@@ -100,6 +100,7 @@ app.get("/getRems", function (req, res) {
     });
 });
 
+
 app.post("/getRems", (req, res) => {
 
     mongoose.connect(uri);
@@ -109,32 +110,38 @@ app.post("/getRems", (req, res) => {
     db.once('open', function callback() {
 
         let body = req.body;
+        let messengerId = body["messenger user id"];
+        let message = [];
 
-        let messId = body["messenger user id"];
+        Reminder.find({'messengerId': messengerId}).then(rems => {
 
+            let date;
+            let time;
+            let event;
 
-        qwe = messId;
+            rems.forEach(rem => {
 
-        let rem = new Reminder({
-            messengerId: body["messenger user id"],
-            date: body.date,
-            time: body.time,
-            event: body.what
-        });
+                date = rem.date;
+                time = rem.time;
+                event = rem.event;
 
-        let list = [rem];
+                message.push({"text": "Reminder: " + event + " date: " + date + " time: " + time});
 
-        Reminder.insertMany(list).then(() => {
+            })
+
+        }).then(() => {
+
+            if (message.isEmpty)
+                res.send("No reminders");
+            else res.send(message);
+
+        }).then(() => {
 
             mongoose.connection.close();
 
-        }).then(() => {
-            let text = [];
-            text.push({"text": "Done"});
-            res.send(text);
-
         }).catch(err => {
 
+            // Log any errors that are thrown in the Promise chain
             console.log(err)
         });
     });

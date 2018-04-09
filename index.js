@@ -38,7 +38,7 @@ app.get("/getRems", function (req, res) {
 
     db.once('open', function callback() {
 
-        let remQuery = Reminder.find({'messengerId': qwe});
+        let remQuery = Reminder.find({'messengerId': "1898219773585506"});
 
         remQuery.exec((err, rems) => {
 
@@ -53,13 +53,14 @@ app.get("/getRems", function (req, res) {
                 message.push({"text": "You have an " + event + " at " + date + " " + time});
 
                 res.send(message);
-            }).then(() => {
-
-                mongoose.connection.close();
-
-            }).catch(err => {
-                console.log(err)
             });
+            //     .then(() => {
+            //
+            //     mongoose.connection.close();
+            //
+            // }).catch(err => {
+            //     console.log(err)
+            // });
 
         })
 

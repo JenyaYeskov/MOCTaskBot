@@ -106,9 +106,6 @@ app.post("/getRems", (req, res) => {
     let body = req.body;
     let messengerId = body["messenger user id"];
 
-    // res.send([{"text": "loh"}]);
-    // res.send(body);
-
     mongoose.connect(uri);
 
     db.on('error', console.error.bind(console, 'connection error:'));
@@ -130,13 +127,12 @@ app.post("/getRems", (req, res) => {
                 event = rem.event;
 
                 message.push({"text": "Reminder: " + event + " date: " + date + " time: " + time});
-
             })
 
         }).then(() => {
 
             if (message.isEmpty)
-                res.send("No reminders");
+                res.send([{"text": "No reminders"}]);
             else res.send(message);
 
         }).then(() => {

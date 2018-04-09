@@ -1,6 +1,5 @@
 'use strict';
 
-// Imports dependencies and set up http server
 const
     PAGE_ACCESS_TOKEN = process.env.PAGE_ACCESS_TOKEN,
     request = require('request'),
@@ -28,6 +27,129 @@ Reminder = mongoose.model('rems', remSchema);
 // Sets server port and logs message on success
 app.listen(process.env.PORT || 1337, () => console.log('webhook is listening'));
 
+
+app.get("/getRems", function (req, res) {
+
+    mongoose.connect(uri);
+
+    db.on('error', console.error.bind(console, 'connection error:'));
+
+    db.once('open', function callback() {
+
+        let first = new Reminder({
+            date: '23.5.18',
+            time: '15.45',
+            event: 'pizdyuli'
+        });
+
+        let list = [first];
+
+        Reminder.insertMany(list).then(() => {
+
+            mongoose.connection.close();
+
+        }).then(() => {
+
+            let rty = Reminder.find({"messenger user id": qwe});
+
+            let text = [];
+            // text.push({"text": "Done"});
+            text.push(rty);
+            res.send(text);
+
+        }).catch(err => {
+
+            // Log any errors that are thrown in the Promise chain
+            console.log(err)
+        });
+    });
+});
+
+app.post("/getRems", (req, res) => {
+
+    mongoose.connect(uri);
+
+    db.on('error', console.error.bind(console, 'connection error:'));
+
+    db.once('open', function callback() {
+
+        let body = req.body;
+
+        let messId = body["messenger user id"];
+
+
+
+
+        qwe = messId;
+
+        let rem = new Reminder({
+            messengerId: body["messenger user id"],
+            date: body.date,
+            time: body.time,
+            event: body.what
+        });
+
+        let list = [rem];
+
+        Reminder.insertMany(list).then(() => {
+
+            mongoose.connection.close();
+
+        }).then(() => {
+            let text = [];
+            text.push({"text": "Done"});
+            res.send(text);
+
+        }).catch(err => {
+
+            console.log(err)
+        });
+    });
+});
+
+let qwe;
+
+app.post("/addRem", (req, res) => {
+
+    mongoose.connect(uri);
+
+    db.on('error', console.error.bind(console, 'connection error:'));
+
+    db.once('open', function callback() {
+
+        let body = req.body;
+
+        qwe = ["messenger user id"];
+
+        let rem = new Reminder({
+            messengerId: body["messenger user id"],
+            date: body.date,
+            time: body.time,
+            event: body.what
+        });
+
+        let list = [rem];
+
+        Reminder.insertMany(list).then(() => {
+
+            mongoose.connection.close();
+
+        }).then(() => {
+            let text = [];
+            text.push({"text": "Done"});
+            res.send(text);
+
+        }).catch(err => {
+
+            console.log(err)
+        });
+    });
+});
+
+
+app.get("/", function (req, res) {
+    res.send("Deployed");
+});
 
 app.post("/webhook", (req, res) => {
 
@@ -90,96 +212,6 @@ app.get('/webhook', (req, res) => {
             res.sendStatus(403);
         }
     }
-});
-
-app.get("/loh", function (req, res) {
-    let loh = [];
-    loh.push({"text": "ty loh"});
-    res.send(loh);
-});
-
-
-app.get("/getRems", function (req, res) {
-
-    mongoose.connect(uri);
-
-    db.on('error', console.error.bind(console, 'connection error:'));
-
-    db.once('open', function callback() {
-
-        let first = new Reminder({
-            date: '23.5.18',
-            time: '15.45',
-            event: 'pizdyuli'
-        });
-
-        let list = [first];
-
-        Reminder.insertMany(list).then(() => {
-
-            mongoose.connection.close();
-
-        }).then(() => {
-
-            let text = [];
-            // text.push({"text": "Done"});
-            text.push(qwe);
-            res.send(text);
-
-        }).catch(err => {
-
-            // Log any errors that are thrown in the Promise chain
-            console.log(err)
-        });
-
-    });
-
-});
-
-let qwe;
-
-app.post("/getRems", (req, res) => {
-
-    mongoose.connect(uri);
-
-    db.on('error', console.error.bind(console, 'connection error:'));
-
-    db.once('open', function callback() {
-
-        let body = req.body;
-
-        qwe = body;
-
-        let rem = new Reminder({
-            messengerId: body["messenger user id"],
-            date: body.date,
-            time: body.time,
-            event: body.what
-        });
-
-        let list = [rem];
-
-        Reminder.insertMany(list).then(() => {
-
-            mongoose.connection.close();
-
-        }).then(() => {
-            let text = [];
-            text.push({"text": "Done"});
-            res.send(text);
-
-        }).catch(err => {
-
-            console.log(err)
-        });
-
-    });
-
-});
-
-// Server index page
-app.get("/", function (req, res) {
-    res.send("Deployed");
 });
 
 

@@ -151,7 +151,7 @@ app.post("/getRems", (req, res) => {
         qwe = body;
 
         let rem = new Reminder({
-            messengerId: body.messenger_user_id,
+            messengerId: body.messenger user id,
             date: body.date,
             time: body.time,
             event: body.what

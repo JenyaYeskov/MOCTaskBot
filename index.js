@@ -115,15 +115,15 @@ app.get("/getRems", function (req, res) {
         //     // res.send(rty);
         //
         // })
-            .then(message => {
+            .then(() => {
 
                 // message.forEach(m => {
                 //     res.send([m]);
                 // })
 
                 if (message.isEmpty)
-                res.send(message);
-                else res.send('loh');
+                res.send("loh");
+                else res.send(message);
 
             }).then(() => {
 

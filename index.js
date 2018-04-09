@@ -47,6 +47,8 @@ app.get("/getRems", function (req, res) {
 
             rty = docs;
 
+            res.send(docs);
+
             return docs;
 
             // mongoose.connection.close();
@@ -55,10 +57,10 @@ app.get("/getRems", function (req, res) {
 
             // let rty = Reminder.find({"messenger user id": qwe});
 
-            let text = [];
-            // text.push({"text": "Done"});
-            text.push(rty);
-            res.send(rty);
+            // let text = [];
+            // // text.push({"text": "Done"});
+            // text.push(rty);
+            // res.send(rty);
 
         }).then(() => {
 

@@ -64,32 +64,28 @@ app.get("/getRems", function (req, res) {
         //
         // })
 
-        Reminder.find({'messengerId': "1898219773585506"}).then(docs => {
+        Reminder.find({'messengerId': "1898219773585506"}).then(rems => {
 
             let date;
             let time;
             let event;
-            let message = [];
 
-            docs.forEach(doc => {
+            rems.forEach(rem => {
 
-                date = doc.date;
-                time = doc.time;
-                event = doc.event;
-
-
-                // message.push({"text": "You have an " + event + " at " + date + " " + time});
+                date = rem.date;
+                time = rem.time;
+                event = rem.event;
 
                 res.send([{"text": "You have an " + event + " at " + date + " " + time}]);
 
             });
 
 
-            // // rty = [docs];
+            // // rty = [rems];
             //
             // res.send(rty);
             //
-            // return docs;
+            // return rems;
             //
             // // mongoose.connection.close();
 

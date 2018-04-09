@@ -45,9 +45,9 @@ app.get("/getRems", function (req, res) {
             //
             // })
 
-            rty = docs;
+            rty = [docs];
 
-            res.send(docs);
+            res.send(rty);
 
             return docs;
 

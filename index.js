@@ -38,16 +38,26 @@ app.get("/getRems", function (req, res) {
 
     db.once('open', function callback() {
 
-        rty = Reminder.find({'messengerId': qwe});
+        let remQuery = Reminder.find({'messengerId': qwe});
 
-        rty.exec((err, rem) => {
+        remQuery.exec((err, rems) => {
+
             if (err) return console.log(err);
 
-            res.send(rem).then(() => {
-                mongoose.connection.close();
-            }).catch(err => {
+            rems.forEach(rem => {
+                let date = rem.date;
+                let time = rem.time;
+                let event = rem.event;
+                let message = [];
 
-                // Log any errors that are thrown in the Promise chain
+                message.push({"text": "You have an " + event + " at " + date + " " + time});
+
+                res.send(message);
+            }).then(() => {
+
+                mongoose.connection.close();
+
+            }).catch(err => {
                 console.log(err)
             });
 

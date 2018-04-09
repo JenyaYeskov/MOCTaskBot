@@ -103,48 +103,50 @@ app.get("/getRems", function (req, res) {
 
 app.post("/getRems", (req, res) => {
 
-    mongoose.connect(uri);
+    res.send([{"text": "loh"}]);
 
-    db.on('error', console.error.bind(console, 'connection error:'));
-
-    db.once('open', function callback() {
-
-        let body = req.body;
-        let messengerId = body["messenger user id"];
-        let message = [];
-
-        Reminder.find({'messengerId': messengerId}).then(rems => {
-
-            let date;
-            let time;
-            let event;
-
-            rems.forEach(rem => {
-
-                date = rem.date;
-                time = rem.time;
-                event = rem.event;
-
-                message.push({"text": "Reminder: " + event + " date: " + date + " time: " + time});
-
-            })
-
-        }).then(() => {
-
-            if (message.isEmpty)
-                res.send("No reminders");
-            else res.send(message);
-
-        }).then(() => {
-
-            mongoose.connection.close();
-
-        }).catch(err => {
-
-            // Log any errors that are thrown in the Promise chain
-            console.log(err)
-        });
-    });
+    // mongoose.connect(uri);
+    //
+    // db.on('error', console.error.bind(console, 'connection error:'));
+    //
+    // db.once('open', function callback() {
+    //
+    //     let body = req.body;
+    //     let messengerId = body["messenger user id"];
+    //     let message = [];
+    //
+    //     Reminder.find({'messengerId': messengerId}).then(rems => {
+    //
+    //         let date;
+    //         let time;
+    //         let event;
+    //
+    //         rems.forEach(rem => {
+    //
+    //             date = rem.date;
+    //             time = rem.time;
+    //             event = rem.event;
+    //
+    //             message.push({"text": "Reminder: " + event + " date: " + date + " time: " + time});
+    //
+    //         })
+    //
+    //     }).then(() => {
+    //
+    //         if (message.isEmpty)
+    //             res.send("No reminders");
+    //         else res.send(message);
+    //
+    //     }).then(() => {
+    //
+    //         mongoose.connection.close();
+    //
+    //     }).catch(err => {
+    //
+    //         // Log any errors that are thrown in the Promise chain
+    //         console.log(err)
+    //     });
+    // });
 });
 
 let qwe;

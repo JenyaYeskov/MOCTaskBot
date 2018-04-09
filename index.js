@@ -56,7 +56,7 @@ app.get("/getRems", function (req, res) {
             let text = [];
             // text.push({"text": "Done"});
             text.push(rty);
-            res.send(text);
+            res.send(rty);
 
         }).catch(err => {
 

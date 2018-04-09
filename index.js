@@ -47,7 +47,7 @@ app.get("/getRems", function (req, res) {
 
             rty = docs;
 
-            return rty;
+            return docs;
 
             // mongoose.connection.close();
 

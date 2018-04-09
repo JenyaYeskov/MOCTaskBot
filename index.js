@@ -78,9 +78,9 @@ app.get("/getRems", function (req, res) {
                 event = doc.event;
 
 
-                message.push({"text": "You have an " + event + " at " + date + " " + time});
+                // message.push({"text": "You have an " + event + " at " + date + " " + time});
 
-                res.send(message);
+                res.send([{"text": "You have an " + event + " at " + date + " " + time}]);
 
             });
 

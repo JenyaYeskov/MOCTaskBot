@@ -40,39 +40,52 @@ app.get("/getRems", function (req, res) {
 
         rty = Reminder.find({'messengerId': qwe});
 
-        Reminder.exec().then((docs) => {
+        rty.exec((err, rem) => {
+            if (err) return console.log(err);
 
-            // docs.forEach(doc =>{
-            //
-            // })
+            res.send(rem).then(() => {
+                mongoose.connection.close();
+            }).catch(err => {
 
+                // Log any errors that are thrown in the Promise chain
+                console.log(err)
+            });
 
-            // rty = [docs];
+        })
 
-            res.send(rty);
-
-            return docs;
-
-            // mongoose.connection.close();
-
-        }).then((rty) => {
-
-            // let rty = Reminder.find({"messenger user id": qwe});
-
-            // let text = [];
-            // // text.push({"text": "Done"});
-            // text.push(rty);
-            // res.send(rty);
-
-        }).then(() => {
-
-            mongoose.connection.close();
-
-        }).catch(err => {
-
-            // Log any errors that are thrown in the Promise chain
-            console.log(err)
-        });
+        // Reminder.exec().then((docs) => {
+        //
+        //     // docs.forEach(doc =>{
+        //     //
+        //     // })
+        //
+        //
+        //     // rty = [docs];
+        //
+        //     res.send(rty);
+        //
+        //     return docs;
+        //
+        //     // mongoose.connection.close();
+        //
+        // }).then((rty) => {
+        //
+        //     // let rty = Reminder.find({"messenger user id": qwe});
+        //
+        //     // let text = [];
+        //     // // text.push({"text": "Done"});
+        //     // text.push(rty);
+        //     // res.send(rty);
+        //
+        // }).then(() => {
+        //
+        //     mongoose.connection.close();
+        //
+        // }).catch(err => {
+        //
+        //     // Log any errors that are thrown in the Promise chain
+        //     console.log(err)
+        // });
     });
 });
 
@@ -87,8 +100,6 @@ app.post("/getRems", (req, res) => {
         let body = req.body;
 
         let messId = body["messenger user id"];
-
-
 
 
         qwe = messId;

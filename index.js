@@ -106,8 +106,8 @@ app.post("/getRems", (req, res) => {
     let body = req.body;
     let messengerId = body["messenger user id"];
 
-    res.send([{"text": "loh"}]);
-    res.send(body);
+    // res.send([{"text": "loh"}]);
+    // res.send(body);
 
     mongoose.connect(uri);
 

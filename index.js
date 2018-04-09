@@ -69,6 +69,7 @@ app.get("/getRems", function (req, res) {
             let date;
             let time;
             let event;
+            let message = [];
 
             rems.forEach(rem => {
 
@@ -76,9 +77,19 @@ app.get("/getRems", function (req, res) {
                 time = rem.time;
                 event = rem.event;
 
-                res.send([{"text": "You have an " + event + " at " + date + " " + time}]);
+                message.push({"text": "Reminder: " + event + " date: " + date + " time: " + time});
 
+                return message;
+                // res.send([{"text": "Reminder: " + event + " date: " + date + " time: " + time}]);
+
+            }).then(message => {
+                res.send(message);
+
+            }).catch(err => {
+                // Log any errors that are thrown in the Promise chain
+                console.log(err)
             });
+
 
 
             // // rty = [rems];

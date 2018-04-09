@@ -34,23 +34,24 @@ app.get("/getRems", function (req, res) {
 
     db.on('error', console.error.bind(console, 'connection error:'));
 
+    let rty;
+
     db.once('open', function callback() {
 
-        let first = new Reminder({
-            date: '23.5.18',
-            time: '15.45',
-            event: 'pizdyuli'
-        });
 
-        let list = [first];
+        Reminder.find({"messenger user id": qwe}).then((docs) => {
 
-        Reminder.insertMany(list).then(() => {
+            // docs.forEach(doc =>{
+            //
+            // })
+
+            rty = docs;
 
             mongoose.connection.close();
 
         }).then(() => {
 
-            let rty = Reminder.find({"messenger user id": qwe});
+            // let rty = Reminder.find({"messenger user id": qwe});
 
             let text = [];
             // text.push({"text": "Done"});

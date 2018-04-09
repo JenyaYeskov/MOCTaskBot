@@ -39,7 +39,7 @@ app.get("/getRems", function (req, res) {
     db.once('open', function callback() {
 
 
-        Reminder.find({"messengerId": qwe}).then(docs => {
+        Reminder.find({'messengerId': qwe}).then(docs => {
 
             // docs.forEach(doc =>{
             //

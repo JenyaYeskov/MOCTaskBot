@@ -128,10 +128,9 @@ app.post("/getRems", (req, res) => {
 
                 message.push({"text": "Reminder: " + event + " date: " + date + " time: " + time});
             })
-
         }).then(() => {
 
-            if (message.isEmpty)
+            if (message.count() === 0)
                 res.send([{"text": "No reminders"}]);
             else res.send(message);
 

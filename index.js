@@ -79,11 +79,14 @@ app.get("/getRems", function (req, res) {
 
                 message.push({"text": "Reminder: " + event + " date: " + date + " time: " + time});
 
-                // return message;
+                return message;
                 // res.send([{"text": "Reminder: " + event + " date: " + date + " time: " + time}]);
 
             }).then(message => {
-                res.send(message);
+
+                message.forEach(m => {
+                    res.send([m]);
+                })
 
             }).catch(err => {
                 // Log any errors that are thrown in the Promise chain

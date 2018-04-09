@@ -38,48 +38,63 @@ app.get("/getRems", function (req, res) {
 
     db.once('open', function callback() {
 
-        let remQuery = Reminder.find({'messengerId': "1898219773585506"});
+        // let remQuery = Reminder.find({'messengerId': "1898219773585506"});
+        //
+        // remQuery.exec((err, rems) => {
+        //
+        //     if (err) return console.log(err);
+        //
+        //     rems.forEach(rem => {
+        //         let date = rem.date;
+        //         let time = rem.time;
+        //         let event = rem.event;
+        //         let message = [];
+        //
+        //         message.push({"text": "You have an " + event + " at " + date + " " + time});
+        //
+        //         res.send(message);
+        //     });
+        //     //     .then(() => {
+        //     //
+        //     //     mongoose.connection.close();
+        //     //
+        //     // }).catch(err => {
+        //     //     console.log(err)
+        //     // });
+        //
+        // })
 
-        remQuery.exec((err, rems) => {
+        Reminder.find({'messengerId': "1898219773585506"}).then(docs => {
 
-            if (err) return console.log(err);
+            let date;
+            let time;
+            let event;
+            let message = [];
 
-            rems.forEach(rem => {
-                let date = rem.date;
-                let time = rem.time;
-                let event = rem.event;
-                let message = [];
+            docs.forEach(doc => {
+
+                date = doc.date;
+                time = doc.time;
+                event = doc.event;
+
 
                 message.push({"text": "You have an " + event + " at " + date + " " + time});
 
                 res.send(message);
+
             });
-            //     .then(() => {
+
+
+            // // rty = [docs];
             //
-            //     mongoose.connection.close();
+            // res.send(rty);
             //
-            // }).catch(err => {
-            //     console.log(err)
-            // });
+            // return docs;
+            //
+            // // mongoose.connection.close();
 
         })
-
-        // Reminder.exec().then((docs) => {
-        //
-        //     // docs.forEach(doc =>{
-        //     //
-        //     // })
-        //
-        //
-        //     // rty = [docs];
-        //
-        //     res.send(rty);
-        //
-        //     return docs;
-        //
-        //     // mongoose.connection.close();
-        //
-        // }).then((rty) => {
+        //     .then((rty) => {
         //
         //     // let rty = Reminder.find({"messenger user id": qwe});
         //
@@ -88,15 +103,16 @@ app.get("/getRems", function (req, res) {
         //     // text.push(rty);
         //     // res.send(rty);
         //
-        // }).then(() => {
-        //
-        //     mongoose.connection.close();
-        //
-        // }).catch(err => {
-        //
-        //     // Log any errors that are thrown in the Promise chain
-        //     console.log(err)
-        // });
+        // })
+            .then(() => {
+
+                mongoose.connection.close();
+
+            }).catch(err => {
+
+            // Log any errors that are thrown in the Promise chain
+            console.log(err)
+        });
     });
 });
 

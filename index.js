@@ -40,7 +40,7 @@ app.get("/getRems", function (req, res) {
 
         rty = Reminder.find({'messengerId': qwe});
 
-        Reminder.find({'messengerId': qwe}).then((err, docs) => {
+        Reminder.exec().then((docs) => {
 
             // docs.forEach(doc =>{
             //

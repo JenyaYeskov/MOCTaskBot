@@ -117,9 +117,11 @@ app.get("/getRems", function (req, res) {
         // })
             .then(message => {
 
-                message.forEach(m => {
-                    res.send([m]);
-                })
+                // message.forEach(m => {
+                //     res.send([m]);
+                // })
+
+                res.send(message);
 
             }).then(() => {
 

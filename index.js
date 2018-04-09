@@ -63,13 +63,13 @@ app.get("/getRems", function (req, res) {
         //     // });
         //
         // })
+            let message = [];
 
         Reminder.find({'messengerId': "1898219773585506"}).then(rems => {
 
             let date;
             let time;
             let event;
-            let message = [];
 
             rems.forEach(rem => {
 
@@ -79,19 +79,20 @@ app.get("/getRems", function (req, res) {
 
                 message.push({"text": "Reminder: " + event + " date: " + date + " time: " + time});
 
-                return message;
+                // return message;
                 // res.send([{"text": "Reminder: " + event + " date: " + date + " time: " + time}]);
 
-            }).then(message => {
-
-                message.forEach(m => {
-                    res.send([m]);
-                })
-
-            }).catch(err => {
-                // Log any errors that are thrown in the Promise chain
-                console.log(err)
-            });
+            })
+            //     .then(message => {
+            //
+            //     message.forEach(m => {
+            //         res.send([m]);
+            //     })
+            //
+            // }).catch(err => {
+            //     // Log any errors that are thrown in the Promise chain
+            //     console.log(err)
+            // });
 
 
 
@@ -114,7 +115,13 @@ app.get("/getRems", function (req, res) {
         //     // res.send(rty);
         //
         // })
-            .then(() => {
+            .then(message => {
+
+                message.forEach(m => {
+                    res.send([m]);
+                })
+
+            }).then(() => {
 
                 mongoose.connection.close();
 

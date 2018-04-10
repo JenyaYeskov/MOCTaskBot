@@ -215,9 +215,7 @@ app.post("/addRem", (req, res) => {
         }).then((rem) => {
             Reminder.create(rem)
         }).then(() => {
-
             mongoose.connection.close();
-
         }).then(() => {
             let text = [];
             text.push({"text": "Done " + id});

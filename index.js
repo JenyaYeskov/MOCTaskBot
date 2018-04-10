@@ -198,7 +198,7 @@ app.post("/addRem", (req, res) => {
             });
 
         }).then(() => {
-            while (ar.contains(id)) {
+            while (ar.includes(id)) {
                 id = id + 1;
             }
         });

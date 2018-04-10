@@ -83,18 +83,22 @@ app.get("/getRems", function (req, res) {
 
             })
 
-        }).then(() => {
+
+
+        }).then(rems => {
+
 
             if (message.length === 0)
                 res.send("No reminders");
             else {
-                // res.send("loh " + c);
+                res.send(typeof  rems + " " + rems.length);
 
-                Reminder.find({'messengerId': "1898219773585506"}, (err, rems) => {
-                    if (err)  console.log(err);
-                    let l = [];
-                    res.send(typeof l + " " + typeof rems);
-                });
+
+                // Reminder.find({'messengerId': "1898219773585506"}, (err, rems) => {
+                //     if (err)  console.log(err);
+                //     let l = [];
+                //     res.send(typeof l + " " + typeof rems);
+                // });
             }
 
             // let c ;

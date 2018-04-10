@@ -16,7 +16,7 @@ let remSchema;
 app.use(bodyParser.urlencoded({extended: false}));
 
 remSchema = mongoose.Schema({
-    // remId: number,
+    remId: Number,
     messengerId: String,
     date: String,
     time: String,
@@ -188,7 +188,7 @@ app.post("/addRem", (req, res) => {
         qwe = body["messenger user id"];
 
         let rem = new Reminder({
-            remId: 5,
+            // remId: 5,
             messengerId: body["messenger user id"],
             date: body.date,
             time: body.time,

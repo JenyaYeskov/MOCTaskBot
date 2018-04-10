@@ -211,7 +211,7 @@ app.post("/addRem", (req, res) => {
             date: body.date,
             time: body.time,
             event: body.what,
-            remId: 2
+            remId: id
         });
 
         let list = [rem];
@@ -222,7 +222,7 @@ app.post("/addRem", (req, res) => {
 
         }).then(() => {
             let text = [];
-            text.push({"text": "Done " + id + typeof id});
+            text.push({"text": "Done " + id});
             res.send(text);
 
         }).catch(err => {

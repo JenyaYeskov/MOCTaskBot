@@ -188,20 +188,30 @@ app.post("/addRem", (req, res) => {
 
         let body = req.body;
         let id;
+        let ar = [];
 
         Reminder.find({'messengerId': "1898219773585506"}).then(rems => {
             id = rems.length + 1;
+
+            return rems.forEach(r => {
+                ar.push(r.remId);
+            });
+
+        }).then(() => {
+            while (ar.contains(id)) {
+                id = id + 1;
+            }
         });
 
 
         qwe = body["messenger user id"];
 
         let rem = new Reminder({
-            remId: 5,
             messengerId: body["messenger user id"],
             date: body.date,
             time: body.time,
-            event: body.what
+            event: body.what,
+            remId: 5
         });
 
         let list = [rem];

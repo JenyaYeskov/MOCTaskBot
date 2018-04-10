@@ -88,15 +88,15 @@ app.get("/getRems", function (req, res) {
             let c = 0;
 
             Reminder.count({'messengerId': "1898219773585506"}, (err, count) => {
-                c = count + 10;
             if (message.length === 0)
                 res.send("No reminders");
-            else res.send("loh " + c);
+            else res.send("loh " );
+                c = count + 10;
             });
 
             if (message.length === 0)
                 res.send("No reminders");
-            else res.send("loh " + c);
+            else res.send("loh " );
 
         }).then(() => {
 

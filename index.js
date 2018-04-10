@@ -87,28 +87,16 @@ app.get("/getRems", function (req, res) {
 
             let c;
 
-            Reminder.count({"messengerId": "1898219773585506"}).then(cnt => {
-                // c = cnt + 1;
+            Reminder.count({messengerId: "1898219773585506"}, (err, count) => {
+                c = count + 1;
+
                 if (message.length === 0)
                     res.send("No reminders");
                 else {
-                    res.send(typeof cnt + " " + cnt + " " + c);
+                    res.send(typeof count + " " + count + " " + c);
                 }
-            });
 
-            // Reminder.count({messengerId: "1898219773585506"}, (err, count) => {
-            //     c = count + 1;
-            //
-            //     Reminder.count({messengerId: "1898219773585506"}).then(cnt => {
-            //         c = cnt + 1;
-            //         if (message.length === 0)
-            //             res.send("No reminders");
-            //         else {
-            //             res.send(typeof cnt + " " + cnt + " " + c);
-            //         }
-            //     })
-            //
-            // });
+            });
 
             // if (message.length === 0)
             //     res.send("No reminders");

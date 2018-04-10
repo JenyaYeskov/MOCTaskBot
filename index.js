@@ -188,7 +188,7 @@ app.post("/addRem", (req, res) => {
         let body = req.body;
         let id;
         let ar = [];
-        // let rem;
+        let rem;
 
         Reminder.find({'messengerId': "1898219773585506"}).then(rems => {
 
@@ -205,14 +205,14 @@ app.post("/addRem", (req, res) => {
             }
         }).then(() => {
 
-            return new Reminder({
+            rem = new Reminder({
                 messengerId: body["messenger user id"],
                 date: body.date,
                 time: body.time,
                 event: body.what,
                 remId: id
             });
-        }).then((rem) => {
+        }).then(() => {
             Reminder.create(rem)
         }).then(() => {
             mongoose.connection.close();
@@ -220,7 +220,6 @@ app.post("/addRem", (req, res) => {
             let text = [];
             text.push({"text": "Done " + id});
             res.send(text);
-
         }).catch(err => {
             console.log(err)
         });

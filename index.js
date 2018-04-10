@@ -194,19 +194,24 @@ app.post("/addRem", (req, res) => {
 
             let ar = [];
 
-            return rems.forEach(r => {
+            rems.forEach(r => {
                 ar.push(r.remId);
             });
 
+            return ar;
+
         }).then((ar) => {
+
             let id = ar.length + 1;
 
-            return () => {
-                while (ar.includes(id)) {
-                    id = id + 1;
-                }
+            while (ar.includes(id)) {
+                id = id + 1;
             }
+
+            return id;
+
         }).then((id) => {
+
             return new Reminder({
                 messengerId: body["messenger user id"],
                 date: body.date,

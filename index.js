@@ -86,7 +86,7 @@ app.get("/getRems", function (req, res) {
 
             res.send(typeof message + " " + message.isEmpty + " " + message.length)
 
-            if (message.length > 0)
+            if (message.length === 0)
                 res.send("No reminders");
             else res.send(message);
 

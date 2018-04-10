@@ -189,6 +189,8 @@ app.post("/addRem", (req, res) => {
         let body = req.body;
         let id;
         let ar = [];
+        let rem;
+        let list;
 
         Reminder.find({'messengerId': "1898219773585506"}).then(rems => {
             id = rems.length + 1;
@@ -201,20 +203,30 @@ app.post("/addRem", (req, res) => {
             while (ar.includes(id)) {
                 id = id + 1;
             }
+        }).then(() => {
+            rem = new Reminder({
+                messengerId: body["messenger user id"],
+                date: body.date,
+                time: body.time,
+                event: body.what,
+                remId: id
+            });
+        }).then(() => {
+            list = [rem];
         });
 
 
-        qwe = body["messenger user id"];
+        // qwe = body["messenger user id"];
+        //
+        // rem = new Reminder({
+        //     messengerId: body["messenger user id"],
+        //     date: body.date,
+        //     time: body.time,
+        //     event: body.what,
+        //     remId: id
+        // });
 
-        let rem = new Reminder({
-            messengerId: body["messenger user id"],
-            date: body.date,
-            time: body.time,
-            event: body.what,
-            remId: id
-        });
-
-        let list = [rem];
+        // let list = [rem];
 
         Reminder.insertMany(list).then(() => {
 

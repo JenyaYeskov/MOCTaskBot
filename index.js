@@ -88,7 +88,6 @@ app.get("/getRems", function (req, res) {
 
         }).then(rems => {
 
-
             if (message.length === 0)
                 res.send("No reminders");
             else {

@@ -85,10 +85,16 @@ app.get("/getRems", function (req, res) {
 
         }).then(() => {
 
-            Reminder.find({'messengerId': "1898219773585506"}, (err, rems) => {
-                if(err) return console.log(err);
-                res.send("log");
-            });
+            if (message.length === 0)
+                res.send("No reminders");
+            else {
+                // res.send("loh " + c);
+
+                Reminder.find({'messengerId': "1898219773585506"}, (err, rems) => {
+                    if (err) return console.log(err);
+                    res.send("log");
+                });
+            }
 
             // let c ;
 

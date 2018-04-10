@@ -201,8 +201,10 @@ app.post("/addRem", (req, res) => {
         }).then((ar) => {
             let id = ar.length + 1;
 
-            return while (ar.includes(id)) {
-                id = id + 1;
+            return () => {
+                while (ar.includes(id)) {
+                    id = id + 1;
+                }
             }
         }).then((id) => {
             return new Reminder({

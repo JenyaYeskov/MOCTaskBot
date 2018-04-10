@@ -193,7 +193,7 @@ app.post("/addRem", (req, res) => {
         Reminder.find({'messengerId': "1898219773585506"}).then(rems => {
             id = rems.length + 1;
 
-            return rems.forEach(r => {
+            rems.forEach(r => {
                 ar.push(r.remId);
             });
 

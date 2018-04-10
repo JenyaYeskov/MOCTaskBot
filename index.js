@@ -85,7 +85,7 @@ app.get("/getRems", function (req, res) {
 
         }).then(() => {
 
-            Reminder.find({'messengerId': "1898219773585506"}, (rems) => {
+            Reminder.find({'messengerId': "1898219773585506"}, (err, rems) => {
                 res.send(rems.length() + " " + rems);
             });
 

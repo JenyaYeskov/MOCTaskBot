@@ -84,11 +84,11 @@ app.get("/getRems", function (req, res) {
 
         }).then(() => {
 
-            res.send(typeof message + " " + message.isEmpty + " " + message.length)
+            // res.send(typeof message + " " + message.isEmpty + " " + message.length)
 
-            // if (message.count() === 0)
-            //     res.send("No reminders");
-            // else res.send(message);
+            if (message.length > 0)
+                res.send("No reminders");
+            else res.send(message);
 
         }).then(() => {
 
@@ -132,7 +132,7 @@ app.post("/getRems", (req, res) => {
             })
         }).then(() => {
 
-            if (message.count() === 0)
+            if (message.length > 0)
                 res.send([{"text": "No reminders"}]);
             else res.send(message);
 

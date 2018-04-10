@@ -85,18 +85,20 @@ app.get("/getRems", function (req, res) {
 
         }).then(() => {
 
-            let c;
+            let c =  Reminder.count();
 
-            Reminder.count({}, (err, count) => {
-                c = count + 1;
+            res.send(c);
 
-                if (message.length === 0)
-                    res.send("No reminders");
-                else {
-                    res.send(typeof count + " " + count + " " + c);
-                }
-
-            });
+            // Reminder.count({}, (err, count) => {
+            //     c = count + 1;
+            //
+            //     if (message.length === 0)
+            //         res.send("No reminders");
+            //     else {
+            //         res.send(typeof count + " " + count + " " + c);
+            //     }
+            //
+            // });
 
             // if (message.length === 0)
             //     res.send("No reminders");

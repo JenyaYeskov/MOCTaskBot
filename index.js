@@ -189,16 +189,18 @@ app.post("/addRem", (req, res) => {
         let id;
         let ar = [];
         let rem;
+        let r;
 
         Reminder.find({'messengerId': "1898219773585506"}).then(rems => {
 
+            r = rems;
             rems.forEach(r => {
                 ar.push(r.remId);
             });
 
         }).then((arr) => {
 
-            id = arr.length + 1;
+            id = r.length + 1;
 
             while (arr.includes(id)) {
                 id = id + 1;

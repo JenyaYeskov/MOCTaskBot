@@ -213,6 +213,20 @@ app.post("/addRem", (req, res) => {
             });
         }).then(() => {
             list = [rem];
+        }).then(() => {
+            Reminder.insertMany(list)
+        }).then(() => {
+
+            mongoose.connection.close();
+
+        }).then(() => {
+            let text = [];
+            text.push({"text": "Done " + id});
+            res.send(text);
+
+        }).catch(err => {
+
+            console.log(err)
         });
 
 
@@ -228,19 +242,19 @@ app.post("/addRem", (req, res) => {
 
         // let list = [rem];
 
-        Reminder.insertMany(list).then(() => {
-
-            mongoose.connection.close();
-
-        }).then(() => {
-            let text = [];
-            text.push({"text": "Done " + id});
-            res.send(text);
-
-        }).catch(err => {
-
-            console.log(err)
-        });
+        // Reminder.insertMany(list).then(() => {
+        //
+        //     mongoose.connection.close();
+        //
+        // }).then(() => {
+        //     let text = [];
+        //     text.push({"text": "Done " + id});
+        //     res.send(text);
+        //
+        // }).catch(err => {
+        //
+        //     console.log(err)
+        // });
     });
 });
 

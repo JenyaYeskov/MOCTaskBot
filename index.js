@@ -211,7 +211,7 @@ app.post("/addRem", (req, res) => {
             date: body.date,
             time: body.time,
             event: body.what,
-            remId: 5
+            remId: 2
         });
 
         let list = [rem];

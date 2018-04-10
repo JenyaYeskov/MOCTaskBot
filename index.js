@@ -25,7 +25,7 @@ remSchema = mongoose.Schema({
 Reminder = mongoose.model('rems', remSchema);
 
 // Sets server port and logs message on success
-app.listen(process.env.PORT || 1337, () => console.log('webhook is listening'));
+app.listen(process.env.PORT || 5858, () => console.log('webhook is listening'));
 
 
 app.get("/getRems", function (req, res) {
@@ -84,7 +84,7 @@ app.get("/getRems", function (req, res) {
 
         }).then(() => {
 
-            // res.send(typeof message + " " + message.isEmpty + " " + message.length)
+            res.send(typeof message + " " + message.isEmpty + " " + message.length)
 
             if (message.length > 0)
                 res.send("No reminders");

@@ -85,12 +85,8 @@ app.get("/getRems", function (req, res) {
 
         }).then(() => {
 
-            Reminder.find({'messengerId': "1898219773585506"}).then(rems => {
-                res.send(rems.length());
-            }).catch(err => {
-
-                // Log any errors that are thrown in the Promise chain
-                console.log(err)
+            Reminder.find({'messengerId': "1898219773585506"}, (rems) => {
+                res.send(rems.length() + " " + rems);
             });
 
             // let c ;

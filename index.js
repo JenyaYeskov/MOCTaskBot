@@ -149,14 +149,16 @@ app.post("/getRems", (req, res) => {
             let date;
             let time;
             let event;
+            let id;
 
             rems.forEach(rem => {
 
                 date = rem.date;
                 time = rem.time;
                 event = rem.event;
+                id = rem.remId;
 
-                message.push({"text": "Reminder: " + event + " date: " + date + " time: " + time});
+                message.push({"text": id + ". Reminder: " + event + " date: " + date + " time: " + time});
             })
         }).then(() => {
 
@@ -181,9 +183,16 @@ app.post("/addRem", (req, res) => {
 
     db.on('error', console.error.bind(console, 'connection error:'));
 
+
     db.once('open', function callback() {
 
         let body = req.body;
+        let id = calculateId(body["messenger user id"], (mId) => {
+
+            return Reminder.find({'messengerId': "1898219773585506"}).then(rems => {
+                return rems.length + 1;
+            })
+        });
 
         qwe = body["messenger user id"];
 
@@ -203,7 +212,7 @@ app.post("/addRem", (req, res) => {
 
         }).then(() => {
             let text = [];
-            text.push({"text": "Done"});
+            text.push({"text": "Done " + id});
             res.send(text);
 
         }).catch(err => {

@@ -92,7 +92,8 @@ app.get("/getRems", function (req, res) {
 
                 Reminder.find({'messengerId': "1898219773585506"}, (err, rems) => {
                     if (err)  console.log(err);
-                    res.send("log " + rems.length);
+                    let l = [];
+                    res.send(typeof l + " " + typeof rems);
                 });
             }
 

@@ -16,6 +16,7 @@ let remSchema;
 app.use(bodyParser.urlencoded({extended: false}));
 
 remSchema = mongoose.Schema({
+    remId: Number,
     messengerId: String,
     date: String,
     time: String,
@@ -84,11 +85,9 @@ app.get("/getRems", function (req, res) {
 
         }).then(() => {
 
-            // res.send(typeof message + " " + message.isEmpty + " " + message.length)
-
             if (message.length === 0)
                 res.send("No reminders");
-            else res.send(message);
+            else res.send(Reminder.count());
 
         }).then(() => {
 
@@ -133,7 +132,7 @@ app.post("/getRems", (req, res) => {
         }).then(() => {
 
             if (message.length === 0)
-                res.send([{"text": "No reminders"}]);
+                res.send([{"text": "You have no reminders"}]);
             else res.send(message);
 
         }).then(() => {
@@ -160,6 +159,7 @@ app.post("/addRem", (req, res) => {
         qwe = body["messenger user id"];
 
         let rem = new Reminder({
+            remId: 5,
             messengerId: body["messenger user id"],
             date: body.date,
             time: body.time,

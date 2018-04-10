@@ -191,7 +191,7 @@ app.post("/addRem", (req, res) => {
         let rem;
         let list;
 
-        Reminder.find({'messengerId': "1898219773585506"}).then(rems => {
+        Reminder.find({'messengerId': body["messenger user id"]}).then(rems => {
             id = rems.length + 1;
 
             rems.forEach(r => {

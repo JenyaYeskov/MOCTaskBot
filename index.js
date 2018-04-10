@@ -183,7 +183,6 @@ app.post("/addRem", (req, res) => {
 
     db.on('error', console.error.bind(console, 'connection error:'));
 
-
     db.once('open', function callback() {
 
         let body = req.body;
@@ -214,7 +213,7 @@ app.post("/addRem", (req, res) => {
         }).then(() => {
             list = [rem];
         }).then(() => {
-            Reminder.insertMany(list)
+            Reminder.create(rem)
         }).then(() => {
 
             mongoose.connection.close();
@@ -225,7 +224,6 @@ app.post("/addRem", (req, res) => {
             res.send(text);
 
         }).catch(err => {
-
             console.log(err)
         });
 

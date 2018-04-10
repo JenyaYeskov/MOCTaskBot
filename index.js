@@ -187,12 +187,12 @@ app.post("/addRem", (req, res) => {
     db.once('open', function callback() {
 
         let body = req.body;
-        let id = calculateId(body["messenger user id"], (mId) => {
+        let id;
 
-            return Reminder.find({'messengerId': "1898219773585506"}).then(rems => {
-                return rems.length + 1;
-            })
+        Reminder.find({'messengerId': "1898219773585506"}).then(rems => {
+            id = rems.length + 1;
         });
+
 
         qwe = body["messenger user id"];
 
@@ -212,7 +212,7 @@ app.post("/addRem", (req, res) => {
 
         }).then(() => {
             let text = [];
-            text.push({"text": "Done " + id});
+            text.push({"text": "Done " + id + typeof id});
             res.send(text);
 
         }).catch(err => {

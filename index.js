@@ -198,13 +198,13 @@ app.post("/addRem", (req, res) => {
                 ar.push(r.remId);
             });
 
-            return ar;
+            return [ar, rems];
 
-        }).then((ar) => {
+        }).then((arr) => {
 
-            let id = ar.length + 1;
+            let id = arr[1].length + 1;
 
-            while (ar.includes(id)) {
+            while (arr[0].includes(id)) {
                 id = id + 1;
             }
 
@@ -219,6 +219,7 @@ app.post("/addRem", (req, res) => {
                 event: body.what,
                 remId: id
             });
+
         }).then((rem) => {
             Reminder.create(rem)
         }).then(() => {

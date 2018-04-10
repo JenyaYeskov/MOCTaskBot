@@ -16,7 +16,7 @@ let remSchema;
 app.use(bodyParser.urlencoded({extended: false}));
 
 remSchema = mongoose.Schema({
-    remId: Number,
+    remId: number,
     messengerId: String,
     date: String,
     time: String,

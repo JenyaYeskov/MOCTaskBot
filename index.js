@@ -87,7 +87,7 @@ app.get("/getRems", function (req, res) {
 
             if (message.length === 0)
                 res.send("No reminders");
-            else res.send(Reminder.count());
+            else res.send(Reminder.count({'messengerId': "1898219773585506"}));
 
         }).then(() => {
 

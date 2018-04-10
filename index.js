@@ -91,9 +91,12 @@ app.get("/getRems", function (req, res) {
                 c = count + 10;
             if (message.length === 0)
                 res.send("No reminders");
-            else res.send(c);
+            else res.send("loh " + c);
             });
 
+            if (message.length === 0)
+                res.send("No reminders");
+            else res.send("loh " + c);
 
         }).then(() => {
 

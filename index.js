@@ -189,24 +189,20 @@ app.post("/addRem", (req, res) => {
         let id;
         let ar = [];
         let rem;
-        let r;
+        let list;
 
         Reminder.find({'messengerId': "1898219773585506"}).then(rems => {
+            id = rems.length + 1;
 
-            r = rems;
             rems.forEach(r => {
                 ar.push(r.remId);
             });
 
-        }).then((arr) => {
-
-            id = r.length + 1;
-
-            while (arr.includes(id)) {
+        }).then(() => {
+            while (ar.includes(id)) {
                 id = id + 1;
             }
         }).then(() => {
-
             rem = new Reminder({
                 messengerId: body["messenger user id"],
                 date: body.date,
@@ -215,9 +211,13 @@ app.post("/addRem", (req, res) => {
                 remId: id
             });
         }).then(() => {
+            list = [rem];
+        }).then(() => {
             Reminder.create(rem)
         }).then(() => {
+
             mongoose.connection.close();
+
         }).then(() => {
             let text = [];
             text.push({"text": "Done " + id});

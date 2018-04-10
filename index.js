@@ -186,33 +186,33 @@ app.post("/addRem", (req, res) => {
     db.once('open', function callback() {
 
         let body = req.body;
-        let id;
-        let ar = [];
-        let rem;
-        let list;
+        // let id;
+        // let ar = [];
+        // let rem;
 
         Reminder.find({'messengerId': "1898219773585506"}).then(rems => {
-            id = rems.length + 1;
 
-            rems.forEach(r => {
+            let ar = [];
+
+            return rems.forEach(r => {
                 ar.push(r.remId);
             });
 
-        }).then(() => {
-            while (ar.includes(id)) {
+        }).then((ar) => {
+            let id = ar.length + 1;
+
+            return while (ar.includes(id)) {
                 id = id + 1;
             }
-        }).then(() => {
-            rem = new Reminder({
+        }).then((id) => {
+            return new Reminder({
                 messengerId: body["messenger user id"],
                 date: body.date,
                 time: body.time,
                 event: body.what,
                 remId: id
             });
-        }).then(() => {
-            list = [rem];
-        }).then(() => {
+        }).then((rem) => {
             Reminder.create(rem)
         }).then(() => {
 

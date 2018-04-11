@@ -266,10 +266,21 @@ app.post("/delete", (req, res) => {
         let body = req.body;
         let messengerId = body["messenger user id"];
         let remId = body.remId;
+        let ar = [];
 
-        Reminder.remove({"messengerId": messengerId, "remId": remId}).then(() => {
-            mongoose.connection.close();
+        Reminder.find({'messengerId': messengerId}).then((rems) => {
+            rems.forEach(r => {
+                ar.push(r.remId);
+            });
+
         }).then(() => {
+            if (ar.includes(remId))
+                Reminder.remove({'messengerId': messengerId, "remId": remId});
+            else res.send([{"text": "Wrong number "}]);
+        }).then(() => {
+
+            mongoose.connection.close();
+
             res.send([{"text": "Done "}]);
         }).catch(err => {
             console.log(err)

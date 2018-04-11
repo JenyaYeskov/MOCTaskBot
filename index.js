@@ -255,6 +255,28 @@ app.post("/addRem", (req, res) => {
     });
 });
 
+app.post("/delete", (req, res) => {
+
+    mongoose.connect(uri);
+
+    db.on('error', console.error.bind(console, 'connection error:'));
+
+    db.once('open', function callback() {
+
+        let body = req.body;
+        let messengerId = body["messenger user id"];
+        let remId = body.remId;
+
+        Reminder.remove({"messengerId": messengerId}, {"remId": remId}).then(() => {
+            mongoose.connection.close();
+        }).then(() => {
+            res.send([{"text": "Done "}]);
+        }).catch(err => {
+            console.log(err)
+        });
+
+    })
+});
 
 app.get("/", function (req, res) {
     res.send("Deployed");

@@ -276,7 +276,7 @@ app.post("/delete", (req, res) => {
         }).then(() => {
             if (ar.includes(remId))
                 Reminder.remove({'messengerId': messengerId, "remId": remId});
-            else res.send([{"text": "Wrong number " + ar.length}]);
+            else res.send([{"text": "Wrong number " + ar[2] + " " + ar[0] + ar[1]}]);
         }).then(() => {
 
             mongoose.connection.close();

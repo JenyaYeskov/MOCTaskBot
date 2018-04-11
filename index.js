@@ -266,25 +266,37 @@ app.post("/delete", (req, res) => {
         let body = req.body;
         let messengerId = body["messenger user id"];
         let remId = body.remId;
-        let ar = [];
+        // let ar = [];
 
-        Reminder.find({'messengerId': messengerId}).then((rems) => {
-            rems.forEach(r => {
-                ar.push(r.remId);
-            });
+        Reminder.remove({"messengerId": messengerId, "remId": remId}).then(() => {
 
-        }).then(() => {
-            if (ar.includes(remId))
-                Reminder.remove({'messengerId': messengerId, "remId": remId});
-            else res.send([{"text": "Wrong number " + ar[2] + " " + ar[0] + ar[1]}]);
-        }).then(() => {
+        mongoose.connection.close();
 
-            mongoose.connection.close();
+        res.send([{"text": "Done "}]);
+    }).catch(err => {
+        console.log(err)
+    });
 
-            res.send([{"text": "Done "}]);
-        }).catch(err => {
-            console.log(err)
-        });
+
+        //Prototype of function with reminder id validation
+
+        // Reminder.find({'messengerId': messengerId}).then((rems) => {
+        //     rems.forEach(r => {
+        //         ar.push(r.remId);
+        //     });
+        //
+        // }).then(() => {
+        //     if (ar.includes(remId))
+        //         Reminder.remove({"messengerId": messengerId, "remId": remId});
+        //     else res.send([{"text": "Wrong number " + ar[2] + " " + ar[0] + ar[1]}]);
+        // }).then(() => {
+        //
+        //     mongoose.connection.close();
+        //
+        //     res.send([{"text": "Done "}]);
+        // }).catch(err => {
+        //     console.log(err)
+        // });
 
     })
 });

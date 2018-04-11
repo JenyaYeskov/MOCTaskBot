@@ -267,7 +267,7 @@ app.post("/delete", (req, res) => {
         let messengerId = body["messenger user id"];
         let remId = body.remId;
 
-        Reminder.remove({"remId": remId}).then(() => {
+        Reminder.remove({"messengerId": messengerId, "remId": remId}).then(() => {
             mongoose.connection.close();
         }).then(() => {
             res.send([{"text": "Done "}]);

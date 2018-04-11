@@ -215,13 +215,11 @@ app.post("/addRem", (req, res) => {
         }).then(() => {
             Reminder.create(rem)
         }).then(() => {
-
             mongoose.connection.close();
-
         }).then(() => {
-            let text = [];
-            text.push({"text": "Done " + id});
-            res.send(text);
+            // let text = [];
+            // text.push({"text": "Done " + id});
+            res.send([{"text": "Done " + id}]);
         }).catch(err => {
             console.log(err)
         });
@@ -270,12 +268,12 @@ app.post("/delete", (req, res) => {
 
         Reminder.remove({"messengerId": messengerId, "remId": remId}).then(() => {
 
-        mongoose.connection.close();
+            mongoose.connection.close();
 
-        res.send([{"text": "Done "}]);
-    }).catch(err => {
-        console.log(err)
-    });
+            res.send([{"text": "Done "}]);
+        }).catch(err => {
+            console.log(err)
+        });
 
 
         //Prototype of function with reminder id validation

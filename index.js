@@ -158,8 +158,10 @@ app.post("/getRems", (req, res) => {
                 event = rem.event;
                 id = rem.remId;
 
-                message.push({"text": "id: " + id + ". Reminder: " + event + " date: " + date +
-                     " time: " + time});
+                message.push({
+                    "text": "id: " + id + ". Reminder: " + event + " date: " + date +
+                    " time: " + time
+                });
             })
         }).then(() => {
 
@@ -265,7 +267,7 @@ app.post("/delete", (req, res) => {
         let remId = body.remId;
         // let ar = [];
 
-        if (!remId.toLowerCase() === "all") {
+        if (!remId.toLowerCase() == "all") {
 
             Reminder.remove({"messengerId": messengerId, "remId": remId}).then(() => {
 

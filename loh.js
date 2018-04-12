@@ -62,7 +62,7 @@
 //
 
 
-let a = "all";
+let a ;
 
 console.log(a === "all")
 

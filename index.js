@@ -7,7 +7,8 @@ const
     uri = 'mongodb://admin:7447030j@ds237669.mlab.com:37669/moc_chatbot_reminderstask_db',
     express = require('express'),
     bodyParser = require('body-parser'),
-    app = express().use(bodyParser.json()); // creates express http server
+    app = express().use(bodyParser.json()), // creates express http server
+    dateAndTime = require('date-and-time');
 
 let db = mongoose.connection;
 let Reminder;
@@ -66,6 +67,7 @@ app.get("/getRems", function (req, res) {
         // })
 
         let message = [];
+
 
         Reminder.find({'messengerId': "1898219773585506"}).then(rems => {
 
@@ -143,6 +145,8 @@ app.post("/getRems", (req, res) => {
     db.once('open', function callback() {
 
         let message = [];
+        let now = new Date();
+        let remDate;
 
         Reminder.find({'messengerId': messengerId}).then(rems => {
 
@@ -157,11 +161,14 @@ app.post("/getRems", (req, res) => {
                 time = rem.time;
                 event = rem.event;
                 id = rem.remId;
+                remDate = new Date(date)
+                dateAndTime.format(remDate, "DD.MM.YYYY")
 
-                message.push({
-                    "text": "id: " + id + ". Reminder: " + event + " date: " + date +
-                    " time: " + time
-                });
+                if (dateAndTime.isSameDay(now, remDate))
+                    message.push({
+                        "text": "id: " + id + ". Reminder: " + event + " date: " + date +
+                        " time: " + time
+                    });
             })
         }).then(() => {
 

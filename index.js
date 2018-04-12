@@ -283,7 +283,7 @@ app.post("/delete", (req, res) => {
 
                 mongoose.connection.close();
 
-                res.send([{"text": "Done all" + remId}]);
+                res.send([{"text": "Done all " + remId}]);
             }).catch(err => {
                 console.log(err)
             });

@@ -265,7 +265,7 @@ app.post("/delete", (req, res) => {
         let remId = body.remId;
         // let ar = [];
 
-        if (remId.toLowerCase() === "all") {
+        if (!remId.toLowerCase() === "all") {
 
             Reminder.remove({"messengerId": messengerId, "remId": remId}).then(() => {
 

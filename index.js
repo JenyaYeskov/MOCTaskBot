@@ -267,13 +267,13 @@ app.post("/delete", (req, res) => {
         let remId = body.remId;
         // let ar = [];
 
-        if (!remId.toLowerCase() == "all") {
+        if (!(remId.toUpperCase() === "ALL")) {
 
             Reminder.remove({"messengerId": messengerId, "remId": remId}).then(() => {
 
                 mongoose.connection.close();
 
-                res.send([{"text": "Done "}]);
+                res.send([{"text": "Done " + remId}]);
             }).catch(err => {
                 console.log(err)
             });
@@ -283,7 +283,7 @@ app.post("/delete", (req, res) => {
 
                 mongoose.connection.close();
 
-                res.send([{"text": "Done "}]);
+                res.send([{"text": "Done all" + remId}]);
             }).catch(err => {
                 console.log(err)
             });

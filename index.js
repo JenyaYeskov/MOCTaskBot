@@ -161,8 +161,7 @@ app.post("/getRems", (req, res) => {
                 time = rem.time;
                 event = rem.event;
                 id = rem.remId;
-                remDate = new Date(date)
-                dateAndTime.format(remDate, "DD.MM.YYYY")
+                remDate = dateAndTime.parse(date, "DD.MM.YYYY")
 
                 if (dateAndTime.isSameDay(now, remDate))
                     message.push({

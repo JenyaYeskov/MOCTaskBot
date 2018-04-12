@@ -61,11 +61,9 @@
 //
 //
 
+dateAndTime = require('date-and-time');
+// let a : Date;
+// a = new Date("28.03.2015")
+a = dateAndTime.parse("28.13.2015", "DD.MM.YYYY")
 
-let a ;
-
-console.log(a === "all")
-
-    console.log(!a === "all")
-    console.log(!(a === "all"))
- console.log(a !== "all")
+console.log(a)

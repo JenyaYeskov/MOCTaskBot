@@ -265,14 +265,27 @@ app.post("/delete", (req, res) => {
         let remId = body.remId;
         // let ar = [];
 
-        Reminder.remove({"messengerId": messengerId, "remId": remId}).then(() => {
+        if (remId.toLowerCase() === "all") {
 
-            mongoose.connection.close();
+            Reminder.remove({"messengerId": messengerId, "remId": remId}).then(() => {
 
-            res.send([{"text": "Done "}]);
-        }).catch(err => {
-            console.log(err)
-        });
+                mongoose.connection.close();
+
+                res.send([{"text": "Done "}]);
+            }).catch(err => {
+                console.log(err)
+            });
+        }
+        else {
+            Reminder.remove({"messengerId": messengerId}).then(() => {
+
+                mongoose.connection.close();
+
+                res.send([{"text": "Done "}]);
+            }).catch(err => {
+                console.log(err)
+            });
+        }
 
 
         //Prototype of function with reminder id validation

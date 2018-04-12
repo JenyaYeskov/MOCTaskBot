@@ -145,8 +145,12 @@ app.post("/getRems", (req, res) => {
     db.once('open', function callback() {
 
         let message = [];
-        let now = new Date();
-        let remDate;
+        // let now = new Date();
+        // let remDate;
+
+        function fu(date, callback) {
+            callback(dateAndTime.parse(date, "DD.MM.YYYY"));
+        }
 
         Reminder.find({'messengerId': messengerId}).then(rems => {
 
@@ -161,13 +165,23 @@ app.post("/getRems", (req, res) => {
                 time = rem.time;
                 event = rem.event;
                 id = rem.remId;
-                remDate = dateAndTime.parse(date, "DD.MM.YYYY")
 
-                if (dateAndTime.isSameDay(now, remDate))
-                    message.push({
-                        "text": "id: " + id + ". Reminder: " + event + " date: " + date +
-                        " time: " + time
-                    });
+                fu(date, (remDate) => {
+                    if (dateAndTime.isSameDay(new Date(), remDate))
+                        message.push({
+                            "text": "id: " + id + ". Reminder: " + event + " date: " + date +
+                            " time: " + time
+                        });
+                })
+
+                // remDate = dateAndTime.parse(date, "DD.MM.YYYY");
+                //
+                //     if (dateAndTime.isSameDay(now, remDate))
+                //         message.push({
+                //             "text": "id: " + id + ". Reminder: " + event + " date: " + date +
+                //             " time: " + time
+                //         });
+
             })
         }).then(() => {
 

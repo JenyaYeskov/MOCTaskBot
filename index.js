@@ -172,7 +172,7 @@ app.post("/getRems", (req, res) => {
                             "text": "id: " + id + ". Reminder: " + event + " date: " + date +
                             " time: " + time
                         });
-                    else message.push({"text": "sasi " + remDate});
+                    else message.push({"text": "sasi " + remDate + "   " + new Date()});
                 })
 
                 // remDate = dateAndTime.parse(date, "DD.MM.YYYY");

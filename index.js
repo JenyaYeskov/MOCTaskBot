@@ -166,7 +166,7 @@ app.post("/getRems", (req, res) => {
                 event = rem.event;
                 id = rem.remId;
 
-                if (body["todays"].toLowerCase() === "todays"]) {
+                if (body["todays"].toLowerCase() === "todays") {
                     fu(date, (remDate) => {
                         if (dateAndTime.isSameDay(new Date(), remDate))
                             message.push({

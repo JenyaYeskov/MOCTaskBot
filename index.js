@@ -145,10 +145,8 @@ app.post("/getRems", (req, res) => {
     db.once('open', function callback() {
 
         let message = [];
-        // let now = new Date();
-        // let remDate;
 
-        function fu(date, callback) {
+        function dateParser(date, callback) {
             callback(dateAndTime.parse(date, "DD.MM.YYYY"));
         }
 
@@ -167,13 +165,12 @@ app.post("/getRems", (req, res) => {
                 id = rem.remId;
 
                 if (body["todays"].toLowerCase() === "todays") {
-                    fu(date, (remDate) => {
+                    dateParser(date, (remDate) => {
                         if (dateAndTime.isSameDay(new Date(), remDate))
                             message.push({
                                 "text": "id: " + id + ". Reminder: " + event + " date: " + date +
                                 " time: " + time
                             });
-                        else message.push({"text": "sasi " + remDate + "   " + new Date()});
                     })
                 }
                 else {

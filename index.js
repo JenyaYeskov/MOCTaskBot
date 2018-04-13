@@ -3,8 +3,10 @@
 const
     // PAGE_ACCESS_TOKEN = process.env.PAGE_ACCESS_TOKEN,
     // request = require('request'),
+    dotenv = require('dotenv').config(),
     mongoose = require('mongoose'),
-    uri = 'mongodb://admin:7447030j@ds237669.mlab.com:37669/moc_chatbot_reminderstask_db',
+    // uri = 'mongodb://admin:7447030j@ds237669.mlab.com:37669/moc_chatbot_reminderstask_db',
+    uri = process.env.MONGO_URI,
     express = require('express'),
     bodyParser = require('body-parser'),
     app = express().use(bodyParser.json()), // creates express http server

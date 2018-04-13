@@ -1,8 +1,8 @@
 'use strict';
 
 const
-    PAGE_ACCESS_TOKEN = process.env.PAGE_ACCESS_TOKEN,
-    request = require('request'),
+    // PAGE_ACCESS_TOKEN = process.env.PAGE_ACCESS_TOKEN,
+    // request = require('request'),
     mongoose = require('mongoose'),
     uri = 'mongodb://admin:7447030j@ds237669.mlab.com:37669/moc_chatbot_reminderstask_db',
     express = require('express'),
@@ -12,23 +12,19 @@ const
 
 let db = mongoose.connection;
 let Reminder;
-let remSchema;
-
-app.use(bodyParser.urlencoded({extended: false}));
-
-remSchema = mongoose.Schema({
+let remSchema = mongoose.Schema({
     remId: Number,
     messengerId: String,
     date: String,
     time: String,
     event: String
 });
-
 Reminder = mongoose.model('rems', remSchema);
+
+app.use(bodyParser.urlencoded({extended: false}));
 
 // Sets server port and logs message on success
 app.listen(process.env.PORT || 5858, () => console.log('webhook is listening'));
-
 
 app.get("/getRems", function (req, res) {
 

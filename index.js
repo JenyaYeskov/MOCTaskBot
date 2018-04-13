@@ -166,23 +166,22 @@ app.post("/getRems", (req, res) => {
                 event = rem.event;
                 id = rem.remId;
 
-                fu(date, (remDate) => {
-                    if (dateAndTime.isSameDay(new Date(), remDate))
-                        message.push({
-                            "text": "id: " + id + ". Reminder: " + event + " date: " + date +
-                            " time: " + time
-                        });
-                    else message.push({"text": "sasi " + remDate + "   " + new Date()});
-                })
-
-                // remDate = dateAndTime.parse(date, "DD.MM.YYYY");
-                //
-                //     if (dateAndTime.isSameDay(now, remDate))
-                //         message.push({
-                //             "text": "id: " + id + ". Reminder: " + event + " date: " + date +
-                //             " time: " + time
-                //         });
-
+                if (body["todays".toLowerCase() === "todays"]) {
+                    fu(date, (remDate) => {
+                        if (dateAndTime.isSameDay(new Date(), remDate))
+                            message.push({
+                                "text": "id: " + id + ". Reminder: " + event + " date: " + date +
+                                " time: " + time
+                            });
+                        else message.push({"text": "sasi " + remDate + "   " + new Date()});
+                    })
+                }
+                else {
+                    message.push({
+                        "text": "id: " + id + ". Reminder: " + event + " date: " + date +
+                        " time: " + time
+                    });
+                }
             })
         }).then(() => {
 

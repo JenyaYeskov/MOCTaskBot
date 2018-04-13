@@ -39,93 +39,31 @@ app.get("/getRems", function (req, res) {
     // let rty;
 
     db.once('open', function callback() {
-
-        // let remQuery = Reminder.find({'messengerId': "1898219773585506"});
-        //
-        // remQuery.exec((err, rems) => {
-        //
-        //     if (err) return console.log(err);
-        //
-        //     rems.forEach(rem => {
-        //         let date = rem.date;
-        //         let time = rem.time;
-        //         let event = rem.event;
-        //         let message = [];
-        //
-        //         message.push({"text": "You have an " + event + " at " + date + " " + time});
-        //
-        //         res.send(message);
-        //     });
-        //     //     .then(() => {
-        //     //
-        //     //     mongoose.connection.close();
-        //     //
-        //     // }).catch(err => {
-        //     //     console.log(err)
-        //     // });
-        //
-        // })
-
         let message = [];
 
-
         Reminder.find({'messengerId': "1898219773585506"}).then(rems => {
-
             let date;
             let time;
             let event;
 
             rems.forEach(rem => {
-
                 date = rem.date;
                 time = rem.time;
                 event = rem.event;
 
                 message.push({"text": "Reminder: " + event + " date: " + date + " time: " + time});
-
             });
 
-
             return rems;
-
         }).then(rems => {
-
             if (message.length === 0)
                 res.send("No reminders");
             else {
                 res.send(typeof  rems + " " + rems.length);
-
-
-                // Reminder.find({'messengerId': "1898219773585506"}, (err, rems) => {
-                //     if (err)  console.log(err);
-                //     let l = [];
-                //     res.send(typeof l + " " + typeof rems);
-                // });
             }
-
-            // let c ;
-
-            // Reminder.count({}, (err, count) => {
-            //     c = count + 1;
-            //
-            //     if (message.length === 0)
-            //         res.send("No reminders");
-            //     else {
-            //         res.send(typeof count + " " + count + " " + c);
-            //     }
-            //
-            // });
-            //
-            // if (message.length === 0)
-            //     res.send("No reminders");
-            // else res.send("loh " + c);
-
         }).then(() => {
-
             mongoose.connection.close();
-
         }).catch(err => {
-
             // Log any errors that are thrown in the Promise chain
             console.log(err)
         });
@@ -134,7 +72,6 @@ app.get("/getRems", function (req, res) {
 
 
 app.post("/getRems", (req, res) => {
-
     let body = req.body;
     let messengerId = body["messenger user id"];
 
@@ -143,7 +80,6 @@ app.post("/getRems", (req, res) => {
     db.on('error', console.error.bind(console, 'connection error:'));
 
     db.once('open', function callback() {
-
         let message = [];
 
         function dateParser(date, callback) {
@@ -151,7 +87,6 @@ app.post("/getRems", (req, res) => {
         }
 
         Reminder.find({'messengerId': messengerId}).then(rems => {
-
             let date;
             let time;
             let event;
@@ -181,7 +116,6 @@ app.post("/getRems", (req, res) => {
                 }
             })
         }).then(() => {
-
             if (message.length === 0)
                 res.send([{"text": "You have no reminders"}]);
             else res.send(message);
@@ -203,7 +137,6 @@ app.post("/addRem", (req, res) => {
     db.on('error', console.error.bind(console, 'connection error:'));
 
     db.once('open', function callback() {
-
         let body = req.body;
         let id;
         let ar = [];
@@ -240,33 +173,6 @@ app.post("/addRem", (req, res) => {
         }).catch(err => {
             console.log(err)
         });
-
-
-        // qwe = body["messenger user id"];
-        //
-        // rem = new Reminder({
-        //     messengerId: body["messenger user id"],
-        //     date: body.date,
-        //     time: body.time,
-        //     event: body.what,
-        //     remId: id
-        // });
-
-        // let list = [rem];
-
-        // Reminder.insertMany(list).then(() => {
-        //
-        //     mongoose.connection.close();
-        //
-        // }).then(() => {
-        //     let text = [];
-        //     text.push({"text": "Done " + id});
-        //     res.send(text);
-        //
-        // }).catch(err => {
-        //
-        //     console.log(err)
-        // });
     });
 });
 
@@ -278,18 +184,13 @@ app.post("/delete", (req, res) => {
     db.on('error', console.error.bind(console, 'connection error:'));
 
     db.once('open', function callback() {
-
         let body = req.body;
         let messengerId = body["messenger user id"];
         let remId = body.remId;
-        // let ar = [];
 
         if (!(remId.toUpperCase() === "ALL")) {
-
             Reminder.remove({"messengerId": messengerId, "remId": remId}).then(() => {
-
                 mongoose.connection.close();
-
                 res.send([{"text": "Done " + remId}]);
             }).catch(err => {
                 console.log(err)
@@ -297,9 +198,7 @@ app.post("/delete", (req, res) => {
         }
         else {
             Reminder.remove({"messengerId": messengerId}).then(() => {
-
                 mongoose.connection.close();
-
                 res.send([{"text": "Done all " + remId}]);
             }).catch(err => {
                 console.log(err)

@@ -5,15 +5,13 @@ const
     // request = require('request'),
     dotenv = require('dotenv').config(),
     mongoose = require('mongoose'),
-    // uri = 'mongodb://admin:7447030j@ds237669.mlab.com:37669/moc_chatbot_reminderstask_db',
     uri = process.env.MONGO_URI,
     express = require('express'),
     bodyParser = require('body-parser'),
-    app = express().use(bodyParser.json()), // creates express http server
+    app = express().use(bodyParser.json()),
     dateAndTime = require('date-and-time');
 
 let db = mongoose.connection;
-let Reminder;
 let remSchema = mongoose.Schema({
     remId: Number,
     messengerId: String,
@@ -21,55 +19,15 @@ let remSchema = mongoose.Schema({
     time: String,
     event: String
 });
-Reminder = mongoose.model('rems', remSchema);
+let Reminder = mongoose.model('rems', remSchema);
 
 app.use(bodyParser.urlencoded({extended: false}));
 
-// Sets server port and logs message on success
 app.listen(process.env.PORT || 5858, () => console.log('webhook is listening'));
-
-app.get("/getRems", function (req, res) {
-
-    mongoose.connect(uri);
-
-    db.on('error', console.error.bind(console, 'connection error:'));
-
-    // let rty;
-
-    db.once('open', function callback() {
-        let message = [];
-
-        Reminder.find({'messengerId': "1898219773585506"}).then(rems => {
-            let date;
-            let time;
-            let event;
-
-            rems.forEach(rem => {
-                date = rem.date;
-                time = rem.time;
-                event = rem.event;
-
-                message.push({"text": "Reminder: " + event + " date: " + date + " time: " + time});
-            });
-
-            return rems;
-        }).then(rems => {
-            if (message.length === 0)
-                res.send("No reminders");
-            else {
-                res.send(typeof  rems + " " + rems.length);
-            }
-        }).then(() => {
-            mongoose.connection.close();
-        }).catch(err => {
-            // Log any errors that are thrown in the Promise chain
-            console.log(err)
-        });
-    });
-});
 
 
 app.post("/getRems", (req, res) => {
+
     let body = req.body;
     let messengerId = body["messenger user id"];
 
@@ -91,7 +49,6 @@ app.post("/getRems", (req, res) => {
             let id;
 
             rems.forEach(rem => {
-
                 date = rem.date;
                 time = rem.time;
                 event = rem.event;
@@ -117,11 +74,9 @@ app.post("/getRems", (req, res) => {
             if (message.length === 0)
                 res.send([{"text": "You have no reminders"}]);
             else res.send(message);
-
         }).then(() => {
             mongoose.connection.close();
         }).catch(err => {
-            // Log any errors that are thrown in the Promise chain
             console.log(err)
         });
     });
@@ -152,6 +107,7 @@ app.post("/addRem", (req, res) => {
             while (ar.includes(id)) {
                 id = id + 1;
             }
+
         }).then(() => {
             rem = new Reminder({
                 messengerId: body["messenger user id"],
@@ -160,9 +116,12 @@ app.post("/addRem", (req, res) => {
                 event: body.what,
                 remId: id
             });
-        }).then(() => {
-            list = [rem];
-        }).then(() => {
+
+        })
+        //     .then(() => {
+        //     list = [rem];
+        // })
+            .then(() => {
             Reminder.create(rem)
         }).then(() => {
             mongoose.connection.close();
@@ -190,6 +149,7 @@ app.post("/delete", (req, res) => {
             Reminder.remove({"messengerId": messengerId, "remId": remId}).then(() => {
                 mongoose.connection.close();
                 res.send([{"text": "Done " + remId}]);
+
             }).catch(err => {
                 console.log(err)
             });
@@ -198,32 +158,11 @@ app.post("/delete", (req, res) => {
             Reminder.remove({"messengerId": messengerId}).then(() => {
                 mongoose.connection.close();
                 res.send([{"text": "Done all " + remId}]);
+
             }).catch(err => {
                 console.log(err)
             });
         }
-
-
-        //Prototype of function with reminder id validation
-
-        // Reminder.find({'messengerId': messengerId}).then((rems) => {
-        //     rems.forEach(r => {
-        //         ar.push(r.remId);
-        //     });
-        //
-        // }).then(() => {
-        //     if (ar.includes(remId))
-        //         Reminder.remove({"messengerId": messengerId, "remId": remId});
-        //     else res.send([{"text": "Wrong number " + ar[2] + " " + ar[0] + ar[1]}]);
-        // }).then(() => {
-        //
-        //     mongoose.connection.close();
-        //
-        //     res.send([{"text": "Done "}]);
-        // }).catch(err => {
-        //     console.log(err)
-        // });
-
     })
 });
 
@@ -342,5 +281,3 @@ app.get("/", function (req, res) {
 //         }
 //     });
 // }
-
-

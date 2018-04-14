@@ -94,7 +94,6 @@ app.post("/addRem", (req, res) => {
         let id;
         let ar = [];
         let rem;
-        let list;
 
         Reminder.find({'messengerId': body["messenger user id"]}).then(rems => {
             id = rems.length + 1;
@@ -117,11 +116,7 @@ app.post("/addRem", (req, res) => {
                 remId: id
             });
 
-        })
-        //     .then(() => {
-        //     list = [rem];
-        // })
-            .then(() => {
+        }).then(() => {
             Reminder.create(rem)
         }).then(() => {
             mongoose.connection.close();

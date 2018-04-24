@@ -135,9 +135,9 @@ app.post("/delete", (req, res) => {
 
     db.on('error', console.error.bind(console, 'connection error:'));
 
-    db.once('open', function callback() {
+    db.once('open', async function callback() {
 
-        (async () => {
+
             try {
                 let body = req.body;
                 let messengerId = body["messenger user id"];
@@ -163,7 +163,7 @@ app.post("/delete", (req, res) => {
                 console.error(e);
             }
 
-        })();
+
 
     })
 });

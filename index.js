@@ -136,30 +136,69 @@ app.post("/delete", (req, res) => {
     db.on('error', console.error.bind(console, 'connection error:'));
 
     db.once('open', function callback() {
-        let body = req.body;
-        let messengerId = body["messenger user id"];
-        let remId = body.remId;
 
-        if (!(remId.toUpperCase() === "ALL")) {
-            Reminder.remove({"messengerId": messengerId, "remId": remId}).then(() => {
-                mongoose.connection.close();
-                res.send([{"text": "Done " + remId}]);
+        (async () => {
+            try {
+                let body = req.body;
+                let messengerId = body["messenger user id"];
+                let remId = body.remId;
 
-            }).catch(err => {
-                console.log(err)
-            });
-        }
-        else {
-            Reminder.remove({"messengerId": messengerId}).then(() => {
-                mongoose.connection.close();
-                res.send([{"text": "Done all " + remId}]);
+                if (!(remId.toUpperCase() === "ALL")) {
 
-            }).catch(err => {
-                console.log(err)
-            });
-        }
+                    await Reminder.remove({"messengerId": messengerId, "remId": remId});
+
+                    mongoose.connection.close();
+                    res.send([{"text": "Done " + remId}]);
+
+                }
+                else {
+                    await Reminder.remove({"messengerId": messengerId});
+
+                    mongoose.connection.close();
+                    res.send([{"text": "Done all " + remId}]);
+
+                }
+            }
+            catch (e) {
+                console.error(e);
+            }
+
+        })();
+
     })
 });
+
+// app.post("/delete", (req, res) => {
+//
+//     mongoose.connect(uri);
+//
+//     db.on('error', console.error.bind(console, 'connection error:'));
+//
+//     db.once('open', function callback() {
+//         let body = req.body;
+//         let messengerId = body["messenger user id"];
+//         let remId = body.remId;
+//
+//         if (!(remId.toUpperCase() === "ALL")) {
+//             Reminder.remove({"messengerId": messengerId, "remId": remId}).then(() => {
+//                 mongoose.connection.close();
+//                 res.send([{"text": "Done " + remId}]);
+//
+//             }).catch(err => {
+//                 console.log(err)
+//             });
+//         }
+//         else {
+//             Reminder.remove({"messengerId": messengerId}).then(() => {
+//                 mongoose.connection.close();
+//                 res.send([{"text": "Done all " + remId}]);
+//
+//             }).catch(err => {
+//                 console.log(err)
+//             });
+//         }
+//     })
+// });
 
 app.get("/", function (req, res) {
     res.send("Deployed");

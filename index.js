@@ -73,7 +73,7 @@ app.post("/getRems", (req, res) => {
                     // dateParser(date, (remDate) => {
                     // let remDate = await dateParserPromise(date);
                     let rd = util.promisify(dateParser);
-                    let remDate = rd(date);
+                    let remDate = await rd(date);
 
                     if (dateAndTime.isSameDay(new Date(), remDate))
                        await message.push({

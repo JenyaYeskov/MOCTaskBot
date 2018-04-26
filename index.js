@@ -123,7 +123,7 @@ app.post("/addRem", (req, res) => {
 
                 mongoose.connection.close();
 
-                await res.send([{"text": "Done " + id}]);
+                await res.send([{"text": "Done " + id + " tyh"}]);
 
         }
         catch (e) {

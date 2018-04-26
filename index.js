@@ -9,6 +9,7 @@ const
     express = require('express'),
     bodyParser = require('body-parser'),
     app = express().use(bodyParser.json()),
+    util = require('util'),
     dateAndTime = require('date-and-time');
 
 let db = mongoose.connection;
@@ -70,7 +71,10 @@ app.post("/getRems", (req, res) => {
 
                 if (body["todays"].toLowerCase() === "todays") {
                     // dateParser(date, (remDate) => {
-                    let remDate = await dateParserPromise(date);
+                    // let remDate = await dateParserPromise(date);
+                    let rd = util.promisify(dateParser);
+                    let remDate = rd(date);
+
                     if (dateAndTime.isSameDay(new Date(), remDate))
                        await message.push({
                             "text": "id: " + id + ". Reminder: " + event + " date: " + date +

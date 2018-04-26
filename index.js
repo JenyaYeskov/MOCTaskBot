@@ -89,44 +89,95 @@ app.post("/addRem", (req, res) => {
 
     db.on('error', console.error.bind(console, 'connection error:'));
 
-    db.once('open', function callback() {
+    db.once('open', async function callback() {
         let body = req.body;
         let id;
         let ar = [];
         let rem;
 
-        Reminder.find({'messengerId': body["messenger user id"]}).then(rems => {
+        try {
+            let rems = await Reminder.find({'messengerId': body["messenger user id"]});
+
             id = rems.length + 1;
 
-            rems.forEach(r => {
-                ar.push(r.remId);
-            });
-
-        }).then(() => {
-            while (ar.includes(id)) {
-                id = id + 1;
+            for (let r of rems){
+                await ar.push(r.remId);
             }
 
-        }).then(() => {
-            rem = new Reminder({
-                messengerId: body["messenger user id"],
-                date: body.date,
-                time: body.time,
-                event: body.what,
-                remId: id
-            });
 
-        }).then(() => {
-            Reminder.create(rem)
-        }).then(() => {
-            mongoose.connection.close();
-        }).then(() => {
-            res.send([{"text": "Done " + id}]);
-        }).catch(err => {
-            console.log(err)
-        });
+                while (ar.includes(id)) {
+                    id = id + 1;
+                }
+
+
+                rem = await new Reminder({
+                    messengerId: body["messenger user id"],
+                    date: body.date,
+                    time: body.time,
+                    event: body.what,
+                    remId: id
+                });
+
+
+               await Reminder.create(rem);
+
+                mongoose.connection.close();
+
+                await res.send([{"text": "Done " + id}]);
+
+        }
+        catch (e) {
+            console.error(e);
+        }
+        
     });
 });
+
+
+// app.post("/addRem", (req, res) => {
+//
+//     mongoose.connect(uri);
+//
+//     db.on('error', console.error.bind(console, 'connection error:'));
+//
+//     db.once('open', function callback() {
+//         let body = req.body;
+//         let id;
+//         let ar = [];
+//         let rem;
+//
+//         Reminder.find({'messengerId': body["messenger user id"]}).then(rems => {
+//             id = rems.length + 1;
+//
+//             rems.forEach(r => {
+//                 ar.push(r.remId);
+//             });
+//
+//         }).then(() => {
+//             while (ar.includes(id)) {
+//                 id = id + 1;
+//             }
+//
+//         }).then(() => {
+//             rem = new Reminder({
+//                 messengerId: body["messenger user id"],
+//                 date: body.date,
+//                 time: body.time,
+//                 event: body.what,
+//                 remId: id
+//             });
+//
+//         }).then(() => {
+//             Reminder.create(rem)
+//         }).then(() => {
+//             mongoose.connection.close();
+//         }).then(() => {
+//             res.send([{"text": "Done " + id}]);
+//         }).catch(err => {
+//             console.log(err)
+//         });
+//     });
+// });
 
 
 app.post("/delete", (req, res) => {
@@ -137,34 +188,28 @@ app.post("/delete", (req, res) => {
 
     db.once('open', async function callback() {
 
+        try {
+            let body = req.body;
+            let messengerId = body["messenger user id"];
+            let remId = body.remId;
 
-            try {
-                let body = req.body;
-                let messengerId = body["messenger user id"];
-                let remId = body.remId;
+            if (!(remId.toUpperCase() === "ALL")) {
 
-                if (!(remId.toUpperCase() === "ALL")) {
+                await Reminder.remove({"messengerId": messengerId, "remId": remId});
 
-                    await Reminder.remove({"messengerId": messengerId, "remId": remId});
-
-                    mongoose.connection.close();
-                    res.send([{"text": "Done " + remId}]);
-
-                }
-                else {
-                    await Reminder.remove({"messengerId": messengerId});
-
-                    mongoose.connection.close();
-                    res.send([{"text": "Done all " + remId}]);
-
-                }
+                mongoose.connection.close();
+                res.send([{"text": "Done " + remId}]);
             }
-            catch (e) {
-                console.error(e);
+            else {
+                await Reminder.remove({"messengerId": messengerId});
+
+                mongoose.connection.close();
+                res.send([{"text": "Done all " + remId}]);
             }
-
-
-
+        }
+        catch (e) {
+            console.error(e);
+        }
     })
 });
 

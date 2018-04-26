@@ -43,6 +43,17 @@ app.post("/getRems", (req, res) => {
             callback(dateAndTime.parse(date, "DD.MM.YYYY"));
         }
 
+        function dateParserPromise(date) {
+
+            return new Promise((resolve, reject) => {
+                dateAndTime.parse(date, "DD.MM.YYYY", (err, data) => {
+                    if (err) reject(err);
+                    else resolve(data);
+
+                });
+            })
+        }
+
         try {
             let rems = await Reminder.find({'messengerId': messengerId});
             let date;
@@ -58,16 +69,17 @@ app.post("/getRems", (req, res) => {
                 id = rem.remId;
 
                 if (body["todays"].toLowerCase() === "todays") {
-                    dateParser(date, (remDate) => {
-                        if (dateAndTime.isSameDay(new Date(), remDate))
-                            message.push({
-                                "text": "id: " + id + ". Reminder: " + event + " date: " + date +
-                                " time: " + time
-                            });
-                    })
+                    // dateParser(date, (remDate) => {
+                    let remDate = await dateParserPromise(date);
+                    if (dateAndTime.isSameDay(new Date(), remDate))
+                       await message.push({
+                            "text": "id: " + id + ". Reminder: " + event + " date: " + date +
+                            " time: " + time
+                        });
+                    // })
                 }
                 else {
-                    message.push({
+                   await message.push({
                         "text": "id: " + id + ". Reminder: " + event + " date: " + date +
                         " time: " + time
                     });

@@ -35,20 +35,22 @@ app.post("/getRems", (req, res) => {
 
     db.on('error', console.error.bind(console, 'connection error:'));
 
-    db.once('open', function callback() {
+    db.once('open', async function callback() {
         let message = [];
 
         function dateParser(date, callback) {
             callback(dateAndTime.parse(date, "DD.MM.YYYY"));
         }
 
-        Reminder.find({'messengerId': messengerId}).then(rems => {
+        try {
+            let rems = await Reminder.find({'messengerId': messengerId});
             let date;
             let time;
             let event;
             let id;
 
-            rems.forEach(rem => {
+            for (let rem of rems) {
+
                 date = rem.date;
                 time = rem.time;
                 event = rem.event;
@@ -69,18 +71,77 @@ app.post("/getRems", (req, res) => {
                         " time: " + time
                     });
                 }
-            })
-        }).then(() => {
+            }
+
             if (message.length === 0)
                 res.send([{"text": "You have no reminders"}]);
             else res.send(message);
-        }).then(() => {
+
             mongoose.connection.close();
-        }).catch(err => {
-            console.log(err)
-        });
+        }
+        catch (e) {
+            console.error(e);
+            mongoose.connection.close();
+        }
     });
 });
+
+
+// app.post("/getRems", (req, res) => {
+//
+//     let body = req.body;
+//     let messengerId = body["messenger user id"];
+//
+//     mongoose.connect(uri);
+//
+//     db.on('error', console.error.bind(console, 'connection error:'));
+//
+//     db.once('open', function callback() {
+//         let message = [];
+//
+//         function dateParser(date, callback) {
+//             callback(dateAndTime.parse(date, "DD.MM.YYYY"));
+//         }
+//
+//         Reminder.find({'messengerId': messengerId}).then(rems => {
+//             let date;
+//             let time;
+//             let event;
+//             let id;
+//
+//             rems.forEach(rem => {
+//                 date = rem.date;
+//                 time = rem.time;
+//                 event = rem.event;
+//                 id = rem.remId;
+//
+//                 if (body["todays"].toLowerCase() === "todays") {
+//                     dateParser(date, (remDate) => {
+//                         if (dateAndTime.isSameDay(new Date(), remDate))
+//                             message.push({
+//                                 "text": "id: " + id + ". Reminder: " + event + " date: " + date +
+//                                 " time: " + time
+//                             });
+//                     })
+//                 }
+//                 else {
+//                     message.push({
+//                         "text": "id: " + id + ". Reminder: " + event + " date: " + date +
+//                         " time: " + time
+//                     });
+//                 }
+//             })
+//         }).then(() => {
+//             if (message.length === 0)
+//                 res.send([{"text": "You have no reminders"}]);
+//             else res.send(message);
+//         }).then(() => {
+//             mongoose.connection.close();
+//         }).catch(err => {
+//             console.log(err)
+//         });
+//     });
+// });
 
 
 app.post("/addRem", (req, res) => {
@@ -100,36 +161,31 @@ app.post("/addRem", (req, res) => {
 
             id = rems.length + 1;
 
-            for (let r of rems){
+            for (let r of rems) {
                 await ar.push(r.remId);
             }
+            while (ar.includes(id)) {
+                id = id + 1;
+            }
 
+            rem = await new Reminder({
+                messengerId: body["messenger user id"],
+                date: body.date,
+                time: body.time,
+                event: body.what,
+                remId: id
+            });
 
-                while (ar.includes(id)) {
-                    id = id + 1;
-                }
+            await Reminder.create(rem);
 
+            mongoose.connection.close();
 
-                rem = await new Reminder({
-                    messengerId: body["messenger user id"],
-                    date: body.date,
-                    time: body.time,
-                    event: body.what,
-                    remId: id
-                });
-
-
-               await Reminder.create(rem);
-
-                mongoose.connection.close();
-
-                await res.send([{"text": "Done " + id + " tyh"}]);
-
+            res.send([{"text": "Done " + id}]);
         }
         catch (e) {
             console.error(e);
+            mongoose.connection.close();
         }
-        
     });
 });
 
@@ -209,6 +265,7 @@ app.post("/delete", (req, res) => {
         }
         catch (e) {
             console.error(e);
+            mongoose.connection.close();
         }
     })
 });

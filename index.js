@@ -39,6 +39,7 @@ app.post("/getRems", (req, res) => {
         let message = [];
 
         function dateParser(date, callback) {
+
             callback(dateAndTime.parse(date, "DD.MM.YYYY"));
         }
 
@@ -80,6 +81,7 @@ app.post("/getRems", (req, res) => {
             mongoose.connection.close();
         }
         catch (e) {
+            res.send([{"text": "error"}]);
             console.error(e);
             mongoose.connection.close();
         }

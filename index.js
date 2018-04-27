@@ -326,6 +326,14 @@ app.get("/", function (req, res) {
 
 
 
+app.post("/loh", (req, res) => {
+    let body = req.body;
+    let messengerId = body["messenger user id"];
+    let text = {"text": body["loh"]};
+
+    handleMessage(messengerId, text);
+
+});
 
 
 

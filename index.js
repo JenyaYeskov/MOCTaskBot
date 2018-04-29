@@ -332,7 +332,7 @@ app.get("/", function (req, res) {
 
 
 
-app.post("/loh", (req, res) => {
+app.get("/loh", (req, res) => {
     trySend(myMessId);
 
 });

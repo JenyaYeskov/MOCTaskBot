@@ -461,7 +461,7 @@ function trySend(mid) {
 
     request({
         "Content-Type": "application/json",
-        "uri": "https://api.chatfuel.com/users/" + mid + "/messages?chatfuel_token=" + token + "&chatfuel_block_name=loh",
+        "uri": "https://api.chatfuel.com/bots/5ac8230ce4b0336c50287a5d/users/"+mid+"/send?chatfuel_token=" + token + "&chatfuel_block_name=loh",
         "method": "POST",
         // "json": request_body
     }, (err, res, body) => {

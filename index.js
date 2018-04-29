@@ -1,5 +1,6 @@
 'use strict';
 
+let myMessId = "1898219773585506";
 const
     PAGE_ACCESS_TOKEN = process.env.PAGE_ACCESS_TOKEN,
     request = require('request'),
@@ -91,7 +92,7 @@ app.post("/getRems", (req, res) => {
                 }
             }
 
-            trySend(messengerId);
+
 
             if (message.length === 0)
                 res.send([{"text": "You have no reminders"}]);
@@ -334,11 +335,7 @@ app.get("/", function (req, res) {
 
 
 app.post("/loh", (req, res) => {
-    let body = req.body;
-    let messengerId = body["messenger user id"];
-    let text = {"text": body["loh"]};
-
-    handleMessage(messengerId, text);
+    trySend(myMessId);
 
 });
 
@@ -461,7 +458,8 @@ function trySend(mid) {
     let token = "qwYLsCSz8hk4ytd6CPKP4C0oalstMnGdpDjF8YFHPHCieKNc0AfrnjVs91fGuH74";
 
     request({
-        "Content-Type": "application/json",
+        "headers": {"Content-Type": "application/json"},
+
         "uri": "https://api.chatfuel.com/bots/5ac8230ce4b0336c50287a5d/users/"+mid+"/send?chatfuel_token=" + token + "&chatfuel_block_id=5ae34ee1e4b088ff003688cf",
         "method": "POST",
         // "json": request_body

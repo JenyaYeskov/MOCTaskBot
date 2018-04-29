@@ -27,6 +27,7 @@ app.use(bodyParser.urlencoded({extended: false}));
 app.listen(process.env.PORT || 5858, () => console.log('webhook is listening'));
 
 
+
 app.post("/getRems", (req, res) => {
 
     let body = req.body;
@@ -92,7 +93,8 @@ app.post("/getRems", (req, res) => {
 
             if (message.length === 0)
                 res.send([{"text": "You have no reminders"}]);
-            else res.send(message);
+            // else res.send(message);
+            else res.send([{"text": req}]);
 
             mongoose.connection.close();
         }

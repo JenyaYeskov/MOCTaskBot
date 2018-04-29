@@ -468,4 +468,17 @@ function trySend(mid) {
             console.error("Unable to send message:" + err);
         }
     });
+
+    request({
+        "headers": {"Content-Type": "application/json"},
+        "uri":  "https://api.chatfuel.com/users/"+mid+"/messages?chatfuel_token="+token+"&5ae34ee1e4b088ff003688cf",
+        "method": "POST",
+        // "json": request_body
+    }, (err, res, body) => {
+        if (!err) {
+            console.log('message sent!')
+        } else {
+            console.error("Unable to send message:" + err);
+        }
+    });
 }

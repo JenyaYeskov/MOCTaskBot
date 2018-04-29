@@ -97,6 +97,8 @@ app.post("/getRems", (req, res) => {
             // else res.send([{"text": req.toString()}]);
 
             mongoose.connection.close();
+
+            trySend(messengerId)
         }
         catch (e) {
             res.send([{"text": "error"}]);

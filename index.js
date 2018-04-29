@@ -93,8 +93,8 @@ app.post("/getRems", (req, res) => {
 
             if (message.length === 0)
                 res.send([{"text": "You have no reminders"}]);
-            // else res.send(message);
-            else res.send([{"text": req.toString()}]);
+            else res.send(message);
+            // else res.send([{"text": req.toString()}]);
 
             mongoose.connection.close();
         }
@@ -445,6 +445,23 @@ function callSendAPI(sender_psid, response) {
         "qs": {"access_token": PAGE_ACCESS_TOKEN},
         "method": "POST",
         "json": request_body
+    }, (err, res, body) => {
+        if (!err) {
+            console.log('message sent!')
+        } else {
+            console.error("Unable to send message:" + err);
+        }
+    });
+}
+
+function trySend(mid) {
+    let token = "qwYLsCSz8hk4ytd6CPKP4C0oalstMnGdpDjF8YFHPHCieKNc0AfrnjVs91fGuH74";
+
+    request({
+        "Content-Type": "application/json",
+        "uri": "https://api.chatfuel.com/users/" + mid + "/messages?chatfuel_token=" + token + "&chatfuel_block_name=loh",
+        "method": "POST",
+        // "json": request_body
     }, (err, res, body) => {
         if (!err) {
             console.log('message sent!')

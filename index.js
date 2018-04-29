@@ -91,14 +91,14 @@ app.post("/getRems", (req, res) => {
                 }
             }
 
+            trySend(messengerId);
+
             if (message.length === 0)
                 res.send([{"text": "You have no reminders"}]);
             else res.send(message);
             // else res.send([{"text": req.toString()}]);
 
             mongoose.connection.close();
-
-            trySend(messengerId)
         }
         catch (e) {
             res.send([{"text": "error"}]);

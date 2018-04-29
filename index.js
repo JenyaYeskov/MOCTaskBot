@@ -327,9 +327,7 @@ app.post("/delete", (req, res) => {
 // });
 
 app.get("/", function (req, res) {
-    for (let r of req) {
-    res.send(r);
-    }
+    res.send("deployed");
 });
 
 

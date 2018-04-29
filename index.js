@@ -28,7 +28,6 @@ app.use(bodyParser.urlencoded({extended: false}));
 app.listen(process.env.PORT || 5858, () => console.log('webhook is listening'));
 
 
-
 app.post("/getRems", (req, res) => {
 
     let body = req.body;
@@ -92,7 +91,7 @@ app.post("/getRems", (req, res) => {
                 }
             }
 
-
+            trySend(myMessId);
 
             if (message.length === 0)
                 res.send([{"text": "You have no reminders"}]);
@@ -331,14 +330,11 @@ app.get("/", function (req, res) {
 });
 
 
-
 app.get("/loh", (req, res) => {
     trySend(myMessId);
 
     res.send("loh")
 });
-
-
 
 
 app.post("/webhook", (req, res) => {
@@ -458,7 +454,7 @@ function trySend(mid) {
 
     request({
         "headers": {"Content-Type": "application/json"},
-        "uri": "https://api.chatfuel.com/bots/5ac8230ce4b0336c50287a5d/users/"+mid+"/send?chatfuel_token=" + token + "&chatfuel_block_id=5ae34ee1e4b088ff003688cf",
+        "uri": "https://api.chatfuel.com/bots/5ac8230ce4b0336c50287a5d/users/" + mid + "/send?chatfuel_token=" + token + "&chatfuel_block_id=5ae34ee1e4b088ff003688cf",
         "method": "POST",
         // "json": request_body
     }, (err, res, body) => {
@@ -471,8 +467,8 @@ function trySend(mid) {
 
     request({
         "headers": {"Content-Type": "application/json"},
-        "uri":  "https://api.chatfuel.com/users/"+mid+"/messages?chatfuel_token="+token+"&5ae34ee1e4b088ff003688cf",
-        // "method": "POST",
+        "uri": "https://api.chatfuel.com/users/" + mid + "/messages?chatfuel_token=" + token + "&5ae34ee1e4b088ff003688cf",
+        "method": "POST",
         // "json": request_body
     }, (err, res, body) => {
         if (!err) {

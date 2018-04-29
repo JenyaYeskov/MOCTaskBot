@@ -95,8 +95,7 @@ app.post("/getRems", (req, res) => {
 
             if (message.length === 0)
                 res.send([{"text": "You have no reminders"}]);
-            // else res.send(message);
-            else res.send([{"text": req.qs}]);
+            else res.send(message);
             // else res.send([{"text": req.toString()}]);
 
             mongoose.connection.close();

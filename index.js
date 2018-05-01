@@ -466,12 +466,12 @@ function trySend(mid) {
 
     request({
         "uri": "https://api.chatfuel.com/users/" + mid + "/messages?chatfuel_token=" + token + "&chatfuel_block_id=5ae34ee1e4b088ff003688cf",
-        "headers": {"Content-Type": "application/json"},
+        "Content-Type": "application/json",
         "method": "POST"
         // "json": request_body
     }, (err, res, body) => {
         if (!err) {
-            console.log(request.body)
+            console.log('message sent!')
         } else {
             console.error("Unable to send message:" + err);
         }

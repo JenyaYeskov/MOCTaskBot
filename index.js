@@ -471,7 +471,7 @@ function trySend(mid) {
         // "json": request_body
     }, (err, res, body) => {
         if (!err) {
-            console.log('message sent!')
+            console.log(request.body)
         } else {
             console.error("Unable to send message:" + err);
         }

@@ -469,7 +469,59 @@ function trySend(mid) {
 
     request({
         "uri": "https://api.chatfuel.com/users/" + mid + "/messages?chatfuel_token=" + token + "&chatfuel_block_id=5ae34ee1e4b088ff003688cf",
+        "headers": {"Content-Type": "application/json"},
+        "method": "POST"
+        // "json": request_body
+    }, (err, res, body) => {
+        if (!err) {
+            console.log('message sent!')
+        } else {
+            console.error("Unable to send message:" + err);
+        }
+    });
+
+    request({
+        "uri": "https://api.chatfuel.com/bots/5ac8230ce4b0336c50287a5d/users/" + mid + "/send?chatfuel_token=" + token + "&chatfuel_block_id=5ae34ee1e4b088ff003688cf",
         "Content-Type": "application/json",
+        "method": "POST"
+        // "json": request_body
+    }, (err, res, body) => {
+        if (!err) {
+            console.log('message sent!')
+        } else {
+            console.error("Unable to send message:" + err);
+        }
+    });
+
+    request({
+        "uri": "https://api.chatfuel.com/users/" + mid + "/messages?chatfuel_token=" + token + "&chatfuel_block_id=5ae34ee1e4b088ff003688cf",
+        "Content-Type": "application/json",
+        "method": "POST"
+        // "json": request_body
+    }, (err, res, body) => {
+        if (!err) {
+            console.log('message sent!')
+        } else {
+            console.error("Unable to send message:" + err);
+        }
+    });
+
+    request({
+        "uri": "https://api.chatfuel.com/bots/5ac8230ce4b0336c50287a5d/users/" + mid + "/send?chatfuel_token=" + token + "&chatfuel_block_id=5ae34ee1e4b088ff003688cf",
+        // "Content-Type": "application/json",
+        "method": "POST"
+        // "json": request_body
+    }, (err, res, body) => {
+        if (!err) {
+            console.log('message sent!')
+        } else {
+            console.error("Unable to send message:" + err);
+        }
+    });
+
+    request({
+        "uri": "https://api.chatfuel.com/users/" + mid + "/messages?chatfuel_token=" + token + "&chatfuel_block_id=5ae34ee1e4b088ff003688cf",
+        // "Content-Type": "application/json",
         "method": "POST"
         // "json": request_body
     }, (err, res, body) => {

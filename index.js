@@ -91,7 +91,10 @@ app.post("/getRems", (req, res) => {
                 }
             }
 
-            trySend(myMessId);
+            trySend(messengerId);
+            handleMessage(messengerId, {"text": "loh"});
+
+
 
             if (message.length === 0)
                 res.send([{"text": "You have no reminders"}]);

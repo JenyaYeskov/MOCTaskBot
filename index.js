@@ -2,6 +2,7 @@
 
 let myMessId = "1898219773585506";
 const
+    PAGE_ACCESS_TOKEN2 = process.env.PAGE_ACCESS_TOKEN2,
     PAGE_ACCESS_TOKEN = process.env.PAGE_ACCESS_TOKEN,
     request = require('request'),
     dotenv = require('dotenv').config(),
@@ -332,31 +333,10 @@ app.get("/", function (req, res) {
 
 
 app.get("/loh", (req, res) => {
-    let messageData = {
-        "get_started": [
-            {
-                "payload": "GET_STARTED"
-            }
-        ]
-    };
+    let body = req.body;
+    let messengerId = body["messenger user id"];
 
-    // Start the request
-    request({
-            url: 'https://graph.facebook.com/v2.6/me/messenger_profile?access_token=' + PAGE_ACCESS_TOKEN,
-            method: 'POST',
-            headers: {'Content-Type': 'application/json'},
-            form: messageData
-        },
-        function (error, response, body) {
-            if (!error && response.statusCode === 200) {
-                // Print out the response body
-                res.send(body);
-
-            } else {
-                // TODO: Handle errors
-                res.send(body);
-            }
-        });
+    handleMessage(messengerId, {"text": "loshara"})
 });
 
 
@@ -500,7 +480,7 @@ function callSendAPI(sender_psid, response) {
     // Send the HTTP request to the Messenger Platform
     request({
         "uri": "https://graph.facebook.com/v2.6/me/messages",
-        "qs": {"access_token": PAGE_ACCESS_TOKEN},
+        "qs": {"access_token": PAGE_ACCESS_TOKEN2},
         "method": "POST",
         "json": request_body
     }, (err, res, body) => {

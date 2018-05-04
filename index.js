@@ -233,7 +233,7 @@ app.post("/addRem", (req, res) => {
             let qwe = await Reminder.findOne({"messengerId": messengerId, "remId": userReminderId})["_id"];
             console.log(qwe);
 
-            let reminderId = qwe["_id"];
+            let reminderId = qwe;
 
 
             schedule.scheduleJob(timeAndDate, () => {

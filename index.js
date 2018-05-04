@@ -230,15 +230,13 @@ app.post("/addRem", (req, res) => {
             // if (validateDate(timeAndDateString))
             timeAndDate = validateAndSetDate(timeAndDateString);
 
-            //TODO: get reminder id from DB
-
-            let qwe = await Reminder.findOne({"messengerId": messengerId, "remId": userReminderId});
+            let qwe = await Reminder.findOne({"messengerId": messengerId, "remId": userReminderId})["_id"];
             console.log(qwe);
 
             let reminderId = qwe["_id"];
 
 
-            schedule.scheduleJob('15 * * * *', reminderId, (reminderId) => {
+            schedule.scheduleJob(timeAndDate, () => {
                 // fireReminder(reminderId)
                 console.log(" ty loh " + reminderId);
             });

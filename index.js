@@ -388,7 +388,7 @@ app.get("/loh", (req, res) => {
         });
     }
 
-    trySend("1844369452275489", "pizda");
+    // trySend("1844369452275489", "pizda");
     handleMessage("1844369452275489", {"text": "zdarova"});
     res.send("hz")
     // handleMessage(messengerId, {"text": "loshara"})

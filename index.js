@@ -377,9 +377,9 @@ app.get("/loh", (req, res) => {
     // let body = req.body;
     // let messengerId = body["messenger user id"];
 
-    for (let i = 6; i < 10; i++) {
-        let q = i + ' * * * *';
-        schedule.scheduleJob(q, () => {
+    for (let i = 5; i < 55; i=i+10) {
+        let q = i + ' * * * * *';
+        schedule.scheduleJob(q, function()  {
             // fireReminder(reminderId)
             console.log(" ty loh " );
             trySend("1844369452275489", "hui");
@@ -388,7 +388,7 @@ app.get("/loh", (req, res) => {
         });
     }
 
-    // trySend("1844369452275489", "pizda");
+    trySend("1844369452275489", "pizda");
     handleMessage("1844369452275489", {"text": "zdarova"});
     res.send("hz")
     // handleMessage(messengerId, {"text": "loshara"})

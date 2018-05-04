@@ -238,7 +238,7 @@ app.post("/addRem", (req, res) => {
             let reminderId = qwe["_id"];
 
 
-            schedule.scheduleJob('23 * * * *', reminderId, (reminderId) => {
+            schedule.scheduleJob('15 * * * *', reminderId, (reminderId) => {
                 // fireReminder(reminderId)
                 console.log(reminderId);
             });

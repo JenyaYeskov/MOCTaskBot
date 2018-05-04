@@ -240,7 +240,7 @@ app.post("/addRem", (req, res) => {
 
             schedule.scheduleJob('15 * * * *', reminderId, (reminderId) => {
                 // fireReminder(reminderId)
-                console.log(reminderId);
+                console.log(" ty loh " + reminderId);
             });
 
             mongoose.connection.close();
@@ -533,11 +533,11 @@ function callSendAPI(sender_psid, response) {
     });
 }
 
-function trySend(mid) {
+function trySend(mid, smt) {
     let token = "qwYLsCSz8hk4ytd6CPKP4C0oalstMnGdpDjF8YFHPHCieKNc0AfrnjVs91fGuH74";
 
     request({
-        "uri": "https://api.chatfuel.com/bots/5ac8230ce4b0336c50287a5d/users/" + mid + "/send?chatfuel_token=" + token + "&chatfuel_block_id=5ae34ee1e4b088ff003688cf&what=loh",
+        "uri": "https://api.chatfuel.com/bots/5ac8230ce4b0336c50287a5d/users/" + mid + "/send?chatfuel_token=" + token + "&chatfuel_block_id=5ae34ee1e4b088ff003688cf&what=" + smt,
         "headers": {"Content-Type": "application/json"},
         "method": "POST"
         // "json": request_body

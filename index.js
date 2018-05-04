@@ -170,7 +170,19 @@ app.post("/getRems", (req, res) => {
 
 
 function validateAndSetDate(timeAndDateString) {
-    //TODO: do function
+
+    if (dateAndTime.isValid(timeAndDateString, "DD.MM.YYYY HH.mm"))
+        return dateAndTime.parse(timeAndDateString, "DD.MM.YYYY HH.mm");
+
+    else if (dateAndTime.isValid(timeAndDateString, "D.MM.YYYY HH.mm"))
+        return dateAndTime.parse(timeAndDateString, "D.MM.YYYY HH.mm");
+
+    else if (dateAndTime.isValid(timeAndDateString, "DD.MM.YYYY H.mm"))
+        return dateAndTime.parse(timeAndDateString, "DD.MM.YYYY H.mm");
+
+    else if (dateAndTime.isValid(timeAndDateString, "D.MM.YYYY H.mm"))
+        return dateAndTime.parse(timeAndDateString, "D.MM.YYYY H.mm");
+    else return "wrong"
 }
 
 function fireReminder(reminderId) {
@@ -224,13 +236,11 @@ app.post("/addRem", (req, res) => {
             console.log(qwe);
 
             let reminderId = qwe["_id"];
-            console.log("reminderId[\"$oid\"]: " + reminderId["$oid"] + "\ntypeof qwe[\"remId\"]: " + typeof qwe["remId"] +
-                "\nreminderId[\"oid\"]: " + reminderId["oid"] + "\nqwe._id[\"$oid\"]: " + qwe._id["$oid"] +
-                "\nreminderId: " + reminderId + "\ntypeof reminderId: " + typeof reminderId +
-                "{}: "  +       {reminderId}     );
 
-            schedule.scheduleJob(timeAndDate, (reminderId) => {
-                fireReminder(reminderId)
+
+            schedule.scheduleJob('23 * * * *', reminderId, (reminderId) => {
+                // fireReminder(reminderId)
+                console.log(reminderId);
             });
 
             mongoose.connection.close();

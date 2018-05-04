@@ -365,7 +365,6 @@ app.get("/loh", (req, res) => {
     for (let i = 5; i < 55; i=i+10) {
         let q = i + ' * * * * *';
         schedule.scheduleJob(q, function()  {
-            // fireReminder(reminderId)
             console.log(" ty loh " );
             trySend("1844369452275489", "hui");
             handleMessage("1844369452275489", {"text": "zdarova"});
@@ -376,9 +375,6 @@ app.get("/loh", (req, res) => {
     trySend("1844369452275489", "pizda");
     handleMessage("1844369452275489", {"text": "zdarova"});
     res.send("hz")
-    while (true) {
-
-    }
     // handleMessage(messengerId, {"text": "loshara"})
 });
 

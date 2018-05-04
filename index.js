@@ -169,24 +169,11 @@ app.post("/getRems", (req, res) => {
 // });
 
 
-function validateAndSetDate(timeAndDateString) {
 
-    if (dateAndTime.isValid(timeAndDateString, "DD.MM.YYYY HH.mm"))
-        return dateAndTime.parse(timeAndDateString, "DD.MM.YYYY HH.mm");
-
-    else if (dateAndTime.isValid(timeAndDateString, "D.MM.YYYY HH.mm"))
-        return dateAndTime.parse(timeAndDateString, "D.MM.YYYY HH.mm");
-
-    else if (dateAndTime.isValid(timeAndDateString, "DD.MM.YYYY H.mm"))
-        return dateAndTime.parse(timeAndDateString, "DD.MM.YYYY H.mm");
-
-    else if (dateAndTime.isValid(timeAndDateString, "D.MM.YYYY H.mm"))
-        return dateAndTime.parse(timeAndDateString, "D.MM.YYYY H.mm");
-    else return "wrong"
-}
-
-function fireReminder(reminderId) {
-//    TODO: do things
+async function fireReminder(reminderId) {
+    let rem = await Reminder.findOne(reminderId);
+    callSendAPI(rem.messengerId, {"text": "Hey, it's time for \"" + rem.event + "\""});
+//    TODO: accept/snooze buttons
 }
 
 app.post("/addRem", (req, res) => {
@@ -230,14 +217,14 @@ app.post("/addRem", (req, res) => {
             // if (validateDate(timeAndDateString))
             timeAndDate = validateAndSetDate(timeAndDateString);
 
-            let qwe = await Reminder.findOne({"messengerId": messengerId, "remId": userReminderId})["_id"];
+            let qwe = await Reminder.findOne({"messengerId": messengerId, "remId": userReminderId});
             console.log(qwe);
 
-            let reminderId = qwe;
+            let reminderId = qwe["_id"];
 
 
             schedule.scheduleJob(timeAndDate, () => {
-                // fireReminder(reminderId)
+                fireReminder(reminderId)
                 console.log(" ty loh " + reminderId);
             });
 
@@ -389,6 +376,9 @@ app.get("/loh", (req, res) => {
     trySend("1844369452275489", "pizda");
     handleMessage("1844369452275489", {"text": "zdarova"});
     res.send("hz")
+    while (true) {
+
+    }
     // handleMessage(messengerId, {"text": "loshara"})
 });
 
@@ -574,4 +564,21 @@ function trySend(mid, smt) {
     //         console.error("Unable to send message:" + err);
     //     }
     // });
+}
+
+
+function validateAndSetDate(timeAndDateString) {
+
+    if (dateAndTime.isValid(timeAndDateString, "DD.MM.YYYY HH.mm"))
+        return dateAndTime.parse(timeAndDateString, "DD.MM.YYYY HH.mm");
+
+    else if (dateAndTime.isValid(timeAndDateString, "D.MM.YYYY HH.mm"))
+        return dateAndTime.parse(timeAndDateString, "D.MM.YYYY HH.mm");
+
+    else if (dateAndTime.isValid(timeAndDateString, "DD.MM.YYYY H.mm"))
+        return dateAndTime.parse(timeAndDateString, "DD.MM.YYYY H.mm");
+
+    else if (dateAndTime.isValid(timeAndDateString, "D.MM.YYYY H.mm"))
+        return dateAndTime.parse(timeAndDateString, "D.MM.YYYY H.mm");
+    else return "wrong"
 }

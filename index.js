@@ -225,7 +225,8 @@ app.post("/addRem", (req, res) => {
             console.log(qwe);
 
             let reminderId = qwe["_id"];
-            console.log(reminderId["$oid"] + "  "+ typeof qwe["remId"] + "  " + reminderId["oid"] +" l" + qwe.id["$oid"]);
+            console.log("reminderId[\"$oid\"]: " + reminderId["$oid"] + " typeof qwe[\"remId\"]: " + typeof qwe["remId"] +
+            " reminderId[\"oid\"]: " + reminderId["oid"] +" qwe.id[\"$oid\"]: " + qwe.id["$oid"]);
 
             schedule.scheduleJob(timeAndDate, (reminderId) =>{
                 fireReminder(reminderId)

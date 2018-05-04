@@ -374,10 +374,18 @@ app.get("/", function (req, res) {
 
 
 app.get("/loh", (req, res) => {
-    let body = req.body;
-    let messengerId = body["messenger user id"];
+    // let body = req.body;
+    // let messengerId = body["messenger user id"];
 
-    handleMessage(messengerId, {"text": "loshara"})
+    for (let i = 30; i < 35; i++) {
+        let q = i + ' * * * *';
+        schedule.scheduleJob(q, "blya", (reminderId) => {
+            // fireReminder(reminderId)
+            console.log(" ty loh " + reminderId);
+            trySend(1898219773585506, reminderId)
+        });
+    }
+    // handleMessage(messengerId, {"text": "loshara"})
 });
 
 

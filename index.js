@@ -1,6 +1,5 @@
 'use strict';
 
-let myMessId = "1898219773585506";
 const
     PAGE_ACCESS_TOKEN2 = process.env.PAGE_ACCESS_TOKEN2,
     PAGE_ACCESS_TOKEN = process.env.PAGE_ACCESS_TOKEN,
@@ -12,6 +11,7 @@ const
     bodyParser = require('body-parser'),
     app = express().use(bodyParser.json()),
     util = require('util'),
+    schedule = require('node-schedule'),
     dateAndTime = require('date-and-time');
 
 let db = mongoose.connection;
@@ -169,6 +169,14 @@ app.post("/getRems", (req, res) => {
 // });
 
 
+function validateAndSetDate(timeAndDateString) {
+    //TODO: do function
+}
+
+function fireReminder(reminderId) {
+//    TODO: do things
+}
+
 app.post("/addRem", (req, res) => {
 
     mongoose.connect(uri);
@@ -177,20 +185,21 @@ app.post("/addRem", (req, res) => {
 
     db.once('open', async function callback() {
         let body = req.body;
-        let id;
+        let userReminderId;
+        let messengerId = body["messenger user id"];
         let ar = [];
         let rem;
 
         try {
-            let rems = await Reminder.find({'messengerId': body["messenger user id"]});
+            let rems = await Reminder.find({'messengerId': messengerId});
 
-            id = rems.length + 1;
+            userReminderId = rems.length + 1;
 
             for (let r of rems) {
                 await ar.push(r.remId);
             }
-            while (ar.includes(id)) {
-                id = id + 1;
+            while (ar.includes(userReminderId)) {
+                userReminderId = userReminderId + 1;
             }
 
             rem = await new Reminder({
@@ -198,14 +207,32 @@ app.post("/addRem", (req, res) => {
                 date: body.date,
                 time: body.time,
                 event: body.what,
-                remId: id
+                remId: userReminderId
             });
+
+            let timeAndDate;
+            let timeAndDateString = body.date + " " + body.time;
 
             await Reminder.create(rem);
 
+            // if (validateDate(timeAndDateString))
+            timeAndDate = validateAndSetDate(timeAndDateString);
+
+            //TODO: get reminder id from DB
+
+            let qwe = await Reminder.findOne({"messengerId": messengerId, "remId": userReminderId});
+            console.log(qwe);
+
+            let reminderId = qwe["_id"];
+            console.log(reminderId);
+
+            schedule.scheduleJob(timeAndDate, (reminderId) =>{
+                fireReminder(reminderId)
+            });
+
             mongoose.connection.close();
 
-            res.send([{"text": "Done " + id}]);
+            res.send([{"text": "Done " + userReminderId}]);
         }
         catch (e) {
             console.error(e);
@@ -215,6 +242,7 @@ app.post("/addRem", (req, res) => {
 });
 
 
+//promise based version
 // app.post("/addRem", (req, res) => {
 //
 //     mongoose.connect(uri);
@@ -509,18 +537,16 @@ function trySend(mid) {
     });
 
     //doesn't work
-    request({
-        "uri": "https://api.chatfuel.com/users/" + mid + "/messages?chatfuel_token=" + token + "&chatfuel_block_id=5ae34ee1e4b088ff003688cf&what=loh",
-        "headers": {"Content-Type": "application/json"},
-        "method": "POST"
-        // "json": request_body
-    }, (err, res, body) => {
-        if (!err) {
-            console.log('message sent!')
-        } else {
-            console.error("Unable to send message:" + err);
-        }
-    });
-
-
+    // request({
+    //     "uri": "https://api.chatfuel.com/users/" + mid + "/messages?chatfuel_token=" + token + "&chatfuel_block_id=5ae34ee1e4b088ff003688cf&what=loh",
+    //     "headers": {"Content-Type": "application/json"},
+    //     "method": "POST"
+    //     // "json": request_body
+    // }, (err, res, body) => {
+    //     if (!err) {
+    //         console.log('message sent!')
+    //     } else {
+    //         console.error("Unable to send message:" + err);
+    //     }
+    // });
 }

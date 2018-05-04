@@ -112,7 +112,6 @@ app.post("/getRems", (req, res) => {
 });
 
 
-
 // app.post("/getRems", (req, res) => {
 //
 //     let body = req.body;
@@ -225,10 +224,11 @@ app.post("/addRem", (req, res) => {
             console.log(qwe);
 
             let reminderId = qwe["_id"];
-            console.log("reminderId[\"$oid\"]: " + reminderId["$oid"] + " typeof qwe[\"remId\"]: " + typeof qwe["remId"] +
-            " reminderId[\"oid\"]: " + reminderId["oid"] +" qwe.id[\"$oid\"]: " + qwe.id["$oid"]);
+            console.log("reminderId[\"$oid\"]: " + reminderId["$oid"] + " | typeof qwe[\"remId\"]: " + typeof qwe["remId"] +
+                " | reminderId[\"oid\"]: " + reminderId["oid"] + " | qwe.id[\"$oid\"]: " + qwe.id["$oid"] +
+                " | reminderId: " + reminderId + " | typeof reminderId" + typeof reminderId);
 
-            schedule.scheduleJob(timeAndDate, (reminderId) =>{
+            schedule.scheduleJob(timeAndDate, (reminderId) => {
                 fireReminder(reminderId)
             });
 

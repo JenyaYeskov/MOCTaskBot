@@ -358,9 +358,12 @@ app.get("/loh", (req, res) => {
     // let body = req.body;
     // let messengerId = body["messenger user id"];
 
-    for (let i = 5; i < 55; i=i+10) {
-        let q = i + ' * * * * *';
-        schedule.scheduleJob(q, function()  {
+    for (let i = 1; i < 59; i=i+3) {
+        let q = i + ' * * * *';
+        let d = new Date()
+        d.setMinutes(d.getMinutes() + 1)
+
+        schedule.scheduleJob(d, function()  {
             console.log(" ty loh " );
             trySend("1844369452275489", "hui");
             handleMessage("1844369452275489", {"text": "zdarova"});

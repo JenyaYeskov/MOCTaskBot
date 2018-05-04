@@ -377,12 +377,12 @@ app.get("/loh", (req, res) => {
     // let body = req.body;
     // let messengerId = body["messenger user id"];
 
-    for (let i = 49; i < 59; i++) {
+    for (let i = 6; i < 10; i++) {
         let q = i + ' * * * *';
-        schedule.scheduleJob(q, "blya", (reminderId) => {
+        schedule.scheduleJob(q, () => {
             // fireReminder(reminderId)
-            console.log(" ty loh " + reminderId);
-            trySend("1844369452275489", reminderId);
+            console.log(" ty loh " );
+            trySend("1844369452275489", "hui");
             handleMessage("1844369452275489", {"text": "zdarova"});
             res.send("norm")
         });

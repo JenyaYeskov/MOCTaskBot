@@ -377,7 +377,7 @@ app.get("/loh", (req, res) => {
         let q = i + ' * * * * *';
         let d = new Date();
             d.setMinutes(d.getMinutes() + 1);
-        new CronJob(q, function() {
+        new CronJob(d, function() {
             console.log('cron');
             trySend("1844369452275489", "pizda");
             callSendAPI("1844369452275489", {"text": "zdarova"});

@@ -371,16 +371,17 @@ app.get("/loh", (req, res) => {
     //     });
     // }
     let nodeCron = require('node-cron');
+    let CronJob = require('cron').CronJob;
 
     for (let i = 0; i < 59; i = i + 5) {
         let q = i + ' * * * * *';
-        let d = new Date()
-            d.setMinutes(d.getMinutes() + 1)
-        nodeCron.schedule(d, function(){
-            console.log('node-cron');
-            trySend("1844369452275489", "in pizda");
-            callSendAPI("1844369452275489", {"text": "in zdarova"});
-        });
+        let d = new Date();
+            d.setMinutes(d.getMinutes() + 1);
+        new CronJob(q, function() {
+            console.log('cron');
+            trySend("1844369452275489", "pizda");
+            callSendAPI("1844369452275489", {"text": "zdarova"});
+        }, null, true, 'America/Los_Angeles');
     }
 
     trySend("1844369452275489", "pizda");

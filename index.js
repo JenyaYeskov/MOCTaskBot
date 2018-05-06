@@ -169,7 +169,7 @@ app.post("/getRems", (req, res) => {
 async function fireReminder(reminderId) {
     let rem = await Reminder.findOne(reminderId);
     callSendAPI(rem.messengerId, {"text": "Hey, it's time for \"" + rem.event + "\""});
-    trySend(rem.messengerId, "dobryi ranok");
+    trySend(rem.messengerId, "dobryi ranok " + rem.time);
 //    TODO: accept/snooze buttons
 }
 

@@ -358,16 +358,26 @@ app.get("/loh", (req, res) => {
     // let body = req.body;
     // let messengerId = body["messenger user id"];
 
-    for (let i = 1; i < 59; i=i+3) {
-        let q = i + ' * * * *';
-        let d = new Date()
-        d.setMinutes(d.getMinutes() + 1)
+    // for (let i = 1; i < 59; i=i+3) {
+    //     let q = i + ' * * * *';
+    //     let d = new Date()
+    //     d.setMinutes(d.getMinutes() + 1)
+    //
+    //     schedule.scheduleJob(d, function()  {
+    //         console.log(" ty loh " );
+    //         trySend("1844369452275489", "hui");
+    //         handleMessage("1844369452275489", {"text": "zdarova"});
+    //         res.send("norm")
+    //     });
+    // }
+    let nodeCron = require('node-cron');
 
-        schedule.scheduleJob(d, function()  {
-            console.log(" ty loh " );
-            trySend("1844369452275489", "hui");
-            handleMessage("1844369452275489", {"text": "zdarova"});
-            res.send("norm")
+    for (let i = 0; i < 59; i = i + 5) {
+        let q = i + ' * * * * *';
+        nodeCron.schedule(q, function(){
+            console.log('node-cron');
+            trySend("1844369452275489", "in pizda");
+            callSendAPI("1844369452275489", {"text": "in zdarova"});
         });
     }
 

@@ -374,7 +374,9 @@ app.get("/loh", (req, res) => {
 
     for (let i = 0; i < 59; i = i + 5) {
         let q = i + ' * * * * *';
-        nodeCron.schedule(q, function(){
+        let d = new Date()
+            d.setMinutes(d.getMinutes() + 1)
+        nodeCron.schedule(d, function(){
             console.log('node-cron');
             trySend("1844369452275489", "in pizda");
             callSendAPI("1844369452275489", {"text": "in zdarova"});

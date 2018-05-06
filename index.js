@@ -186,6 +186,7 @@ app.post("/addRem", (req, res) => {
         let ar = [];
         let rem;
 
+        // noinspection JSAnnotator
         try {
             let rems = await Reminder.find({'messengerId': messengerId});
 
@@ -211,8 +212,13 @@ app.post("/addRem", (req, res) => {
 
             await Reminder.create(rem);
 
-            // if (validateDate(timeAndDateString))
-            timeAndDate = validateAndSetDate(timeAndDateString);
+
+            try {
+                // if (validateDate(timeAndDateString))
+                timeAndDate = validateAndSetDate(timeAndDateString);
+            }catch (e) {
+                res.send([{"text": "Wrong date or time. Try again"}]);
+            }
 
             let qwe = await Reminder.findOne({"messengerId": messengerId, "remId": userReminderId});
             console.log(qwe);
@@ -586,16 +592,22 @@ function trySend(mid, smt) {
 
 function validateAndSetDate(timeAndDateString) {
 
+    let when = new Date();
+
     if (dateAndTime.isValid(timeAndDateString, "DD.MM.YYYY HH.mm"))
-        return dateAndTime.parse(timeAndDateString, "DD.MM.YYYY HH.mm");
+        when = dateAndTime.parse(timeAndDateString, "DD.MM.YYYY HH.mm");
 
     else if (dateAndTime.isValid(timeAndDateString, "D.MM.YYYY HH.mm"))
-        return dateAndTime.parse(timeAndDateString, "D.MM.YYYY HH.mm");
+        when = dateAndTime.parse(timeAndDateString, "D.MM.YYYY HH.mm");
 
     else if (dateAndTime.isValid(timeAndDateString, "DD.MM.YYYY H.mm"))
-        return dateAndTime.parse(timeAndDateString, "DD.MM.YYYY H.mm");
+        when = dateAndTime.parse(timeAndDateString, "DD.MM.YYYY H.mm");
 
     else if (dateAndTime.isValid(timeAndDateString, "D.MM.YYYY H.mm"))
-        return dateAndTime.parse(timeAndDateString, "D.MM.YYYY H.mm");
-    else return "wrong"
+        when = dateAndTime.parse(timeAndDateString, "D.MM.YYYY H.mm");
+    else when = "wrong";
+
+    when.setHours(when.getHours() + 3);
+
+    return when;
 }

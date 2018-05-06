@@ -93,7 +93,7 @@ app.post("/getRems", (req, res) => {
             }
 
             if (message.length === 0)
-                res.send([{"text": "You have no reminders " + body["timezone"]}]);
+                res.send([{"text": "You have no reminders "}]);
             else res.send(message);
             // else res.send([{"text": req.toString()}]);
 
@@ -169,6 +169,7 @@ app.post("/getRems", (req, res) => {
 async function fireReminder(reminderId) {
     let rem = await Reminder.findOne(reminderId);
     callSendAPI(rem.messengerId, {"text": "Hey, it's time for \"" + rem.event + "\""});
+    trySend(rem.messengerId, "dobryi ranok");
 //    TODO: accept/snooze buttons
 }
 
@@ -218,11 +219,19 @@ app.post("/addRem", (req, res) => {
 
             let reminderId = qwe["_id"];
 
+            let CronJob = require('cron').CronJob;
 
-            schedule.scheduleJob(timeAndDate, () => {
-                fireReminder(reminderId)
-                console.log(" ty loh " + reminderId);
-            });
+
+
+                new CronJob(timeAndDate, function() {
+                    fireReminder(reminderId);
+                }, null, true, 'Europe/Kiev');
+
+
+            // schedule.scheduleJob(timeAndDate, () => {
+            //     fireReminder(reminderId)
+            //     console.log(" ty loh " + reminderId);
+            // });
 
             mongoose.connection.close();
 
@@ -381,7 +390,7 @@ app.get("/loh", (req, res) => {
             console.log('cron');
             trySend("1844369452275489", "pizda");
             callSendAPI("1844369452275489", {"text": "zdarova"});
-        }, null, true, 'America/Los_Angeles');
+        }, null, true, 'Europe/Kiev');
     }
 
     trySend("1844369452275489", "pizda");

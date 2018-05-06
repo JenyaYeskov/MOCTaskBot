@@ -165,7 +165,6 @@ app.post("/getRems", (req, res) => {
 // });
 
 
-
 async function fireReminder(reminderId) {
     let rem = await Reminder.findOne(reminderId);
     callSendAPI(rem.messengerId, {"text": "Hey, it's time for \"" + rem.event + "\""});
@@ -210,13 +209,12 @@ app.post("/addRem", (req, res) => {
             let timeAndDate;
             let timeAndDateString = body.date + " " + body.time;
 
-            await Reminder.create(rem);
-
 
             try {
                 // if (validateDate(timeAndDateString))
                 timeAndDate = validateAndSetDate(timeAndDateString);
-            }catch (e) {
+                await Reminder.create(rem);
+            } catch (e) {
                 res.send([{"text": "Wrong date or time. Try again"}]);
             }
 
@@ -228,10 +226,9 @@ app.post("/addRem", (req, res) => {
             let CronJob = require('cron').CronJob;
 
 
-
-                new CronJob(timeAndDate, function() {
-                    fireReminder(reminderId);
-                }, null, true, 'Europe/Kiev');
+            new CronJob(timeAndDate, function () {
+                fireReminder(reminderId);
+            }, null, true, 'Europe/Kiev');
 
 
             // schedule.scheduleJob(timeAndDate, () => {
@@ -391,8 +388,8 @@ app.get("/loh", (req, res) => {
     for (let i = 0; i < 59; i = i + 5) {
         let q = i + ' * * * * *';
         let d = new Date();
-            d.setMinutes(d.getMinutes() + 1);
-        new CronJob(d, function() {
+        d.setMinutes(d.getMinutes() + 1);
+        new CronJob(d, function () {
             console.log('cron');
             trySend("1844369452275489", "pizda");
             callSendAPI("1844369452275489", {"text": "zdarova"});

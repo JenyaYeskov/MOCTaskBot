@@ -93,7 +93,7 @@ app.post("/getRems", (req, res) => {
             }
 
             if (message.length === 0)
-                res.send([{"text": "You have no reminders"}]);
+                res.send([{"text": "You have no reminders " + body["timezone"]}]);
             else res.send(message);
             // else res.send([{"text": req.toString()}]);
 

@@ -12,6 +12,7 @@ const
     app = express().use(bodyParser.json()),
     util = require('util'),
     schedule = require('node-schedule'),
+    CronJob = require('cron').CronJob,
     dateAndTime = require('date-and-time');
 
 let db = mongoose.connection;
@@ -223,25 +224,24 @@ app.post("/addRem", (req, res) => {
 
             let reminderId = qwe["_id"];
 
-            let CronJob = require('cron').CronJob;
-
 
             new CronJob(timeAndDate, function () {
                 fireReminder(reminderId);
             }, null, true, 'Europe/Kiev');
-
 
             // schedule.scheduleJob(timeAndDate, () => {
             //     fireReminder(reminderId)
             //     console.log(" ty loh " + reminderId);
             // });
 
-            mongoose.connection.close();
 
             res.send([{"text": "Done " + userReminderId}]);
         }
         catch (e) {
             console.error(e);
+            mongoose.connection.close();
+        }
+        finally {
             mongoose.connection.close();
         }
     });
@@ -391,8 +391,8 @@ app.get("/loh", (req, res) => {
         d.setMinutes(d.getMinutes() + 1);
         new CronJob(d, function () {
             console.log('cron');
-            trySend("1844369452275489", "pizda");
-            callSendAPI("1844369452275489", {"text": "zdarova"});
+            trySend("1844369452275489", "pizda2");
+            callSendAPI("1844369452275489", {"text": "zdarova2"});
         }, null, true, 'Europe/Kiev');
     }
 

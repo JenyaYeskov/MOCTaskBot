@@ -391,15 +391,14 @@ app.get("/loh", (req, res) => {
         d.setMinutes(d.getMinutes() + 1);
         new CronJob(d, function () {
             console.log('cron');
-            trySend("1844369452275489", "pizda2");
+            trySend("1844369452275489", "pizda2 " + d + "  " + d.getHours());
             callSendAPI("1844369452275489", {"text": "zdarova2"});
         }, null, true, 'Europe/Kiev');
     }
 
     trySend("1844369452275489", "pizda");
     callSendAPI("1844369452275489", {"text": "zdarova"});
-    res.send("hz")
-    // handleMessage(messengerId, {"text": "loshara"})
+    res.send("hz");
 });
 
 

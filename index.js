@@ -385,8 +385,9 @@ app.get("/loh", (req, res) => {
     let nodeCron = require('node-cron');
     let CronJob = require('cron').CronJob;
 
-    for (let i = 0; i < 59; i = i + 5) {
-        let q = i + ' * * * * *';
+    // for (let i = 0; i < 59; i = i + 5) {
+    //     let q = i + ' * * * * *';
+    // }
         let d = new Date();
         d.setMinutes(d.getMinutes() + 1);
         new CronJob(d, function () {
@@ -394,7 +395,21 @@ app.get("/loh", (req, res) => {
             trySend("1844369452275489", "pizda2 " + d + "  " + d.getHours());
             callSendAPI("1844369452275489", {"text": "zdarova2"});
         }, null, true, 'Europe/Kiev');
-    }
+
+    // for (let i = 0; i < 59; i = i + 5) {
+    //     let q = i + ' * * * * *';
+    //     let d = new Date();
+    //     d.setMinutes(d.getMinutes() + 1);
+    //     let myJob = new CronJob({
+    //         cronTime: d,
+    //         onTick: function () {
+    //             console.log('cron');
+    //             trySend("1844369452275489", "pizda2 " + d + "  " + d.getHours());
+    //             callSendAPI("1844369452275489", {"text": "zdarova2"});
+    //         }, start: false
+    //     });
+    //     myJob.start();
+    // }
 
     trySend("1844369452275489", "pizda");
     callSendAPI("1844369452275489", {"text": "zdarova"});

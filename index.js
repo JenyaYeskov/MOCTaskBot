@@ -208,7 +208,7 @@ app.post("/addRem", (req, res) => {
             });
 
             let timeAndDate;
-            let timeAndDateString = body.date + " " + parseFloat(body.time) - body["timezone"];
+            let timeAndDateString = body.date + " " + (parseFloat(body.time) - body["timezone"]).toString();
 
 
             try {
@@ -241,6 +241,7 @@ app.post("/addRem", (req, res) => {
         catch (e) {
             console.error(e);
             mongoose.connection.close();
+            res.send([{"text": "Something went wrong. Try again  " }]);
         }
         finally {
             mongoose.connection.close();

@@ -597,19 +597,19 @@ function validateAndSetDate(timeAndDateString) {
     let when = new Date();
 
     if (dateAndTime.isValid(timeAndDateString, "DD.MM.YYYY HH.mm"))
-        when = dateAndTime.parse(timeAndDateString, "DD.MM.YYYY HH.mm");
+        when = dateAndTime.parse(timeAndDateString, "DD.MM.YYYY HH.mm", true);
 
     else if (dateAndTime.isValid(timeAndDateString, "D.MM.YYYY HH.mm"))
-        when = dateAndTime.parse(timeAndDateString, "D.MM.YYYY HH.mm");
+        when = dateAndTime.parse(timeAndDateString, "D.MM.YYYY HH.mm", true);
 
     else if (dateAndTime.isValid(timeAndDateString, "DD.MM.YYYY H.mm"))
-        when = dateAndTime.parse(timeAndDateString, "DD.MM.YYYY H.mm");
+        when = dateAndTime.parse(timeAndDateString, "DD.MM.YYYY H.mm", true);
 
     else if (dateAndTime.isValid(timeAndDateString, "D.MM.YYYY H.mm"))
-        when = dateAndTime.parse(timeAndDateString, "D.MM.YYYY H.mm");
+        when = dateAndTime.parse(timeAndDateString, "D.MM.YYYY H.mm", true);
     else when = "wrong";
 
-    when.setHours(when.getHours() + 3);
+    // when.setHours(when.getHours() + 3);
 
     return when;
 }

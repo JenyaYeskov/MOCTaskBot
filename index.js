@@ -215,8 +215,9 @@ app.post("/addRem", (req, res) => {
                 // if (validateDate(timeAndDateString))
                 timeAndDate = validateAndSetDate(timeAndDateString);
                 await Reminder.create(rem);
+                timeAndDate.setHours(parseFloat(timeAndDate.getHours() - body["timezone"]));
             } catch (e) {
-                res.send([{"text": "Wrong date or time. Try again"}]);
+                res.send([{"text": "Wrong date or time. Try again  " + timeAndDate}]);
             }
 
             let qwe = await Reminder.findOne({"messengerId": messengerId, "remId": userReminderId});
@@ -235,7 +236,7 @@ app.post("/addRem", (req, res) => {
             // });
 
 
-            res.send([{"text": "Done " + userReminderId}]);
+            res.send([{"text": "Done " + userReminderId + " " + timeAndDate}]);
         }
         catch (e) {
             console.error(e);
@@ -388,6 +389,7 @@ app.get("/loh", (req, res) => {
     // for (let i = 0; i < 59; i = i + 5) {
     //     let q = i + ' * * * * *';
     // }
+
         let d = new Date();
         d.setMinutes(d.getMinutes() + 1);
         new CronJob(d, function () {
@@ -396,20 +398,6 @@ app.get("/loh", (req, res) => {
             callSendAPI("1844369452275489", {"text": "zdarova2"});
         }, null, true, 'Europe/Kiev');
 
-    // for (let i = 0; i < 59; i = i + 5) {
-    //     let q = i + ' * * * * *';
-    //     let d = new Date();
-    //     d.setMinutes(d.getMinutes() + 1);
-    //     let myJob = new CronJob({
-    //         cronTime: d,
-    //         onTick: function () {
-    //             console.log('cron');
-    //             trySend("1844369452275489", "pizda2 " + d + "  " + d.getHours());
-    //             callSendAPI("1844369452275489", {"text": "zdarova2"});
-    //         }, start: false
-    //     });
-    //     myJob.start();
-    // }
 
     trySend("1844369452275489", "pizda");
     callSendAPI("1844369452275489", {"text": "zdarova"});

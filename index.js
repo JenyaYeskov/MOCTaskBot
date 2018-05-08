@@ -227,11 +227,11 @@ app.post("/addRem", (req, res) => {
             let reminderId = qwe["_id"];
 
 
-            new CronJob("0 36 0 8 5 *", function () {
+            new CronJob("0 46 0 9 5 *", function () {
                 fireReminder(reminderId);
             }, null, true);
 
-            new CronJob("0 36 21 8 5 *", function () {
+            new CronJob("0 46 21 8 5 *", function () {
                 fireReminder(reminderId);
             }, null, true);
 
@@ -609,9 +609,19 @@ function validateAndSetDate(timeAndDateString) {
 
     else if (dateAndTime.isValid(timeAndDateString, "D.MM.YYYY H.mm"))
         when = dateAndTime.parse(timeAndDateString, "D.MM.YYYY H.mm", true);
-    else when = "wrong";
 
-    // when.setHours(when.getHours() + 3);
+    if (dateAndTime.isValid(timeAndDateString, "DD.MM.YY HH.mm"))
+        when = dateAndTime.parse(timeAndDateString, "DD.MM.YY HH.mm", true);
+
+    else if (dateAndTime.isValid(timeAndDateString, "D.MM.YY HH.mm"))
+        when = dateAndTime.parse(timeAndDateString, "D.MM.YY HH.mm", true);
+
+    else if (dateAndTime.isValid(timeAndDateString, "DD.MM.YY H.mm"))
+        when = dateAndTime.parse(timeAndDateString, "DD.MM.YY H.mm", true);
+
+    else if (dateAndTime.isValid(timeAndDateString, "D.MM.YY H.mm"))
+        when = dateAndTime.parse(timeAndDateString, "D.MM.YY H.mm", true);
+    else throw new Error();
 
     return when;
 }

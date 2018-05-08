@@ -208,7 +208,7 @@ app.post("/addRem", (req, res) => {
             });
 
             let timeAndDate;
-            let timeAndDateString = body.date + " " + body.time;
+            let timeAndDateString = body.date + " " + parseFloat(body.time) - body["timezone"];
 
 
             try {
@@ -400,7 +400,7 @@ app.get("/loh", (req, res) => {
         }, null, true, 'Europe/Kiev');
 
 
-    trySend("1844369452275489", "pizda");
+    trySend("1844369452275489", "pizda" + d);
     callSendAPI("1844369452275489", {"text": "zdarova"});
     res.send("hz");
 });

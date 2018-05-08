@@ -167,9 +167,14 @@ app.post("/getRems", (req, res) => {
 
 
 async function fireReminder(reminderId) {
+    try {
     let rem = await Reminder.findOne(reminderId);
     callSendAPI(rem.messengerId, {"text": "Hey, it's time for \"" + rem.event + "\""});
     trySend(rem.messengerId, "dobryi ranok " + rem.time);
+
+    }catch (e) {
+        trySend("1844369452275489", "error in fire");
+    }
 //    TODO: accept/snooze buttons
 }
 
@@ -210,14 +215,13 @@ app.post("/addRem", (req, res) => {
             let timeAndDate;
             let off = parseInt(body["timezone"]);
             // let timeAndDateString = body.date + " " + (parseFloat(body.time) - off).toFixed(2);
-            let timeAndDateString = body.date + " " + body.time
+            let timeAndDateString = body.date + " " + body.time;
 
 
             try {
-                // if (validateDate(timeAndDateString))
                 timeAndDate = validateAndSetDate(timeAndDateString);
                 await Reminder.create(rem);
-                // timeAndDate.setHours(parseFloat(timeAndDate.getHours() - body["timezone"]));
+                timeAndDate.setHours(parseFloat(timeAndDate.getHours() - body["timezone"]));
             } catch (e) {
                 res.send([{"text": "Wrong date or time. Try again  " + timeAndDate + " " + timeAndDateString}]);
             }
@@ -609,7 +613,7 @@ function validateAndSetDate(timeAndDateString) {
     else if (dateAndTime.isValid(timeAndDateString, "D.MM.YYYY H.mm"))
         when = dateAndTime.parse(timeAndDateString, "D.MM.YYYY H.mm", true);
 
-    if (dateAndTime.isValid(timeAndDateString, "DD.MM.YY HH.mm"))
+    else if (dateAndTime.isValid(timeAndDateString, "DD.MM.YY HH.mm"))
         when = dateAndTime.parse(timeAndDateString, "DD.MM.YY HH.mm", true);
 
     else if (dateAndTime.isValid(timeAndDateString, "D.MM.YY HH.mm"))

@@ -391,7 +391,9 @@ app.get("/loh", (req, res) => {
     // }
 
         let d = new Date();
-        d.setMinutes(d.getMinutes() + 1);
+        // d.setMinutes(d.getMinutes() + 1);
+    d.setHours(6);
+    d.setMinutes(0)
         new CronJob(d, function () {
             console.log('cron');
             trySend("1844369452275489", "pizda2 " + d + "  " + d.getHours());

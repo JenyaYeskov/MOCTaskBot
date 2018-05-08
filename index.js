@@ -227,11 +227,11 @@ app.post("/addRem", (req, res) => {
             let reminderId = qwe["_id"];
 
 
-            new CronJob("0 35 18 8 5 *", function () {
+            new CronJob("0 47 18 8 5 *", function () {
                 fireReminder(reminderId);
             }, null, true);
 
-            new CronJob("0 35 15 8 5 *", function () {
+            new CronJob("0 47 15 8 5 *", function () {
                 fireReminder(reminderId);
             }, null, true);
 

@@ -209,7 +209,8 @@ app.post("/addRem", (req, res) => {
 
             let timeAndDate;
             let off = parseInt(body["timezone"]);
-            let timeAndDateString = body.date + " " + (parseFloat(body.time) - off).toFixed(2);
+            // let timeAndDateString = body.date + " " + (parseFloat(body.time) - off).toFixed(2);
+            let timeAndDateString = body.date + " " + body.time
 
 
             try {
@@ -227,13 +228,10 @@ app.post("/addRem", (req, res) => {
             let reminderId = qwe["_id"];
 
 
-            new CronJob("0 46 0 9 5 *", function () {
+            new CronJob(timeAndDate, function () {
                 fireReminder(reminderId);
             }, null, true);
 
-            new CronJob("0 46 21 8 5 *", function () {
-                fireReminder(reminderId);
-            }, null, true);
 
             // schedule.scheduleJob(timeAndDate, () => {
             //     fireReminder(reminderId)
@@ -397,6 +395,7 @@ app.get("/loh", (req, res) => {
     // }
 
         let d = new Date();
+        console.log("loh")
         d.setMinutes(d.getMinutes() + 5);
         new CronJob(d, function () {
             console.log('cron');

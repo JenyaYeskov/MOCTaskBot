@@ -209,7 +209,7 @@ app.post("/addRem", (req, res) => {
 
             let timeAndDate;
             let off = parseInt(body["timezone"]);
-            let timeAndDateString = body.date + " " + parseFloat(body.time) - off;
+            let timeAndDateString = body.date + " " + (parseFloat(body.time) - off).toPrecision(3);
 
 
             try {

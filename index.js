@@ -227,9 +227,13 @@ app.post("/addRem", (req, res) => {
             let reminderId = qwe["_id"];
 
 
-            new CronJob(timeAndDate, function () {
+            new CronJob("0 35 18 8 5 *", function () {
                 fireReminder(reminderId);
-            }, null, true, 'Europe/Kiev');
+            }, null, true);
+
+            new CronJob("0 35 15 8 5 *", function () {
+                fireReminder(reminderId);
+            }, null, true);
 
             // schedule.scheduleJob(timeAndDate, () => {
             //     fireReminder(reminderId)

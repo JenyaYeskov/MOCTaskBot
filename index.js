@@ -399,7 +399,7 @@ app.get("/loh", (req, res) => {
             console.log('cron');
             trySend("1844369452275489", "pizda2 " + d + "  " + d.getHours());
             callSendAPI("1844369452275489", {"text": "zdarova2"});
-        }, null, true, 'Europe/Kiev');
+        }, null, true);
 
 
     trySend("1844369452275489", "pizda" + d);

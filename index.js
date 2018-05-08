@@ -400,7 +400,6 @@ app.get("/loh", (req, res) => {
             callSendAPI("1844369452275489", {"text": "zdarova2"});
         }, null, true);
 
-
     trySend("1844369452275489", "pizda" + d);
     callSendAPI("1844369452275489", {"text": "zdarova"});
     res.send("hz");

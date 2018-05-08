@@ -208,7 +208,7 @@ app.post("/addRem", (req, res) => {
             });
 
             let timeAndDate;
-            let timeAndDateString = body.date + " " + (parseFloat(body.time) - parseFloat(body["timezone"])).toString();
+            let timeAndDateString = body.date + " " + (parseFloat(body.time) - parseFloat(body["timezone"]));
 
 
             try {
@@ -217,7 +217,7 @@ app.post("/addRem", (req, res) => {
                 await Reminder.create(rem);
                 // timeAndDate.setHours(parseFloat(timeAndDate.getHours() - body["timezone"]));
             } catch (e) {
-                res.send([{"text": "Wrong date or time. Try again  " + timeAndDate}]);
+                res.send([{"text": "Wrong date or time. Try again  " + timeAndDate + " " + timeAndDateString}]);
             }
 
             let qwe = await Reminder.findOne({"messengerId": messengerId, "remId": userReminderId});

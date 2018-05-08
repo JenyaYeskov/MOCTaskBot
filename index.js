@@ -215,7 +215,7 @@ app.post("/addRem", (req, res) => {
                 // if (validateDate(timeAndDateString))
                 timeAndDate = validateAndSetDate(timeAndDateString);
                 await Reminder.create(rem);
-                timeAndDate.setHours(parseFloat(timeAndDate.getHours() - body["timezone"]));
+                // timeAndDate.setHours(parseFloat(timeAndDate.getHours() - body["timezone"]));
             } catch (e) {
                 res.send([{"text": "Wrong date or time. Try again  " + timeAndDate}]);
             }

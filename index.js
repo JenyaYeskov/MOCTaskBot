@@ -23,6 +23,14 @@ let remSchema = mongoose.Schema({
     time: String,
     event: String
 });
+
+let eventSchema = mongoose.Schema({
+    event: {},
+    remId: String
+});
+
+let Event = mongoose.model('events', eventSchema);
+
 let Reminder = mongoose.model('rems', remSchema);
 
 app.use(bodyParser.urlencoded({extended: false}));
@@ -168,11 +176,11 @@ app.post("/getRems", (req, res) => {
 
 async function fireReminder(reminderId) {
     try {
-    let rem = await Reminder.findOne(reminderId);
-    callSendAPI(rem.messengerId, {"text": "Hey, it's time for \"" + rem.event + "\""});
-    trySend(rem.messengerId, "dobryi ranok " + rem.time);
+        let rem = await Reminder.findOne(reminderId);
+        callSendAPI(rem.messengerId, {"text": "Hey, it's time for \"" + rem.event + "\""});
+        trySend(rem.messengerId, "dobryi ranok " + rem.time);
 
-    }catch (e) {
+    } catch (e) {
         trySend("1844369452275489", "error in fire");
     }
 //    TODO: accept/snooze buttons
@@ -232,6 +240,19 @@ app.post("/addRem", (req, res) => {
             let reminderId = qwe["_id"];
 
 
+            try {
+                await Event.create(new CronJob({
+                        cronTime: timeAndDate,
+                        onTick: function () {
+                            fireReminder(reminderId);
+                        },
+                        start: true
+                    })
+                )
+            }
+            catch (e) {
+                res.send([{"text": "hueta"}])
+            }
             new CronJob(timeAndDate, function () {
                 fireReminder(reminderId);
             }, null, true);
@@ -248,7 +269,7 @@ app.post("/addRem", (req, res) => {
         catch (e) {
             console.error(e);
             mongoose.connection.close();
-            res.send([{"text": "Something went wrong. Try again  " }]);
+            res.send([{"text": "Something went wrong. Try again  "}]);
         }
         finally {
             mongoose.connection.close();
@@ -394,21 +415,34 @@ app.get("/loh", (req, res) => {
     let nodeCron = require('node-cron');
     let CronJob = require('cron').CronJob;
 
+    runRem();
     // for (let i = 0; i < 59; i = i + 5) {
     //     let q = i + ' * * * * *';
     // }
 
-        let d = new Date();
-        console.log("loh")
-        d.setMinutes(d.getMinutes() + 5);
-        new CronJob(d, function () {
-            console.log('cron');
-            trySend("1844369452275489", "pizda2 " + d + "  " + d.getHours());
-            callSendAPI("1844369452275489", {"text": "zdarova2"});
-        }, null, true);
 
-    trySend("1844369452275489", "pizda" + d);
-    callSendAPI("1844369452275489", {"text": "zdarova"});
+    //     let d = new Date();
+    //     console.log("loh")
+    //     d.setMinutes(d.getMinutes() + 5);
+    //     new CronJob(d, function () {
+    //         console.log('cron');
+    //         trySend("1844369452275489", "pizda2 " + d + "  " + d.getHours());
+    //         callSendAPI("1844369452275489", {"text": "zdarova2"});
+    //     }, null, true);
+    //
+    // trySend("1844369452275489", "pizda" + d);
+    // callSendAPI("1844369452275489", {"text": "zdarova"});
+
+
+    mongoose.connect(uri);
+
+    db.on('error', console.error.bind(console, 'connection error:'));
+
+    db.once('open', async function callback() {
+
+    });
+
+
     res.send("hz");
 });
 
@@ -594,6 +628,31 @@ function trySend(mid, smt) {
     //         console.error("Unable to send message:" + err);
     //     }
     // });
+}
+
+function runRem() {
+    mongoose.connect(uri);
+
+    db.on('error', console.error.bind(console, 'connection error:'));
+
+    db.once('open', async function callback() {
+
+        try {
+            new CronJob("1 * * * * *", async () => {
+
+                let events = await Event.find();
+
+                events.forEach(event => {
+                    if (!event.running)
+                        event.start();
+                });
+            })
+
+        } catch (e) {
+            trySend("1844369452275489", "huinya poluchylas");
+        }
+
+    });
 }
 
 

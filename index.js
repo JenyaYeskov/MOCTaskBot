@@ -25,7 +25,7 @@ let remSchema = mongoose.Schema({
 });
 
 let eventSchema = mongoose.Schema({
-    event: Object
+    event: {}
 });
 
 let Event = mongoose.model('events', eventSchema);
@@ -239,12 +239,15 @@ app.post("/addRem", (req, res) => {
             let reminderId = qwe["_id"];
 
             try {
+                let qwe = new CronJob({
+                    cronTime: timeAndDate,
+                    onTick: function () {
+                        fireReminder(reminderId);
+                    }, start: true
+                });
+
                 let ev = await new Event({
-                    event: new CronJob({
-                        cronTime: timeAndDate,
-                        onTick: function () {
-                            fireReminder(reminderId);
-                        }, start: true})
+                    event: qwe
                 });
 
                 await Event.create(ev);

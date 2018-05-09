@@ -238,16 +238,16 @@ app.post("/addRem", (req, res) => {
 
             let reminderId = qwe["_id"];
 
-
             try {
-                await Event.create(new CronJob({
+                let ev = await new Event({
+                    event: new CronJob({
                         cronTime: timeAndDate,
                         onTick: function () {
                             fireReminder(reminderId);
-                        },
-                        start: true
-                    })
-                )
+                        }, start: true})
+                });
+
+                await Event.create(ev);
             }
             catch (e) {
                 res.send([{"text": "hueta"}])

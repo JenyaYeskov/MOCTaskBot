@@ -25,8 +25,7 @@ let remSchema = mongoose.Schema({
 });
 
 let eventSchema = mongoose.Schema({
-    event: {},
-    remId: String
+    event: Object
 });
 
 let Event = mongoose.model('events', eventSchema);
@@ -641,6 +640,7 @@ function runRem() {
             new CronJob("1 * * * * *", async () => {
 
                 let events = await Event.find();
+
 
                 events.forEach(event => {
                     if (!event.running)

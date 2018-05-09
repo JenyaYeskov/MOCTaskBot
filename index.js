@@ -646,7 +646,7 @@ function runRem() {
                     if (!event.running)
                         event.start();
                 });
-            })
+            }, null, true)
 
         } catch (e) {
             trySend("1844369452275489", "huinya poluchylas");

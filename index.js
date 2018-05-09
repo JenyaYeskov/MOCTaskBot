@@ -30,6 +30,9 @@ let eventSchema = mongoose.Schema({
 
 let Event = mongoose.model('events', eventSchema);
 
+let evarr = [];
+
+
 let Reminder = mongoose.model('rems', remSchema);
 
 app.use(bodyParser.urlencoded({extended: false}));
@@ -246,11 +249,14 @@ app.post("/addRem", (req, res) => {
                     }, start: true
                 });
 
-                let ev = await new Event({
-                    event: qwe
-                });
 
-                await Event.create(ev);
+                evarr.push(qwe);
+
+                // let ev = await new Event({
+                //     event: qwe
+                // });
+
+                // await Event.create(ev);
             }
             catch (e) {
                 res.send([{"text": "hueta"}])
@@ -642,13 +648,17 @@ function runRem() {
         try {
             new CronJob("1 * * * * *", async () => {
 
-                let events = await Event.find();
-
-
-                events.forEach(event => {
-                    if (!event.running)
-                        event.start();
-                });
+                evarr.forEach(ev => {
+                    if (!ev.running)
+                        ev.start();
+                })
+                // let events = await Event.find();
+                //
+                //
+                // events.forEach(event => {
+                //     if (!event.running)
+                //         event.start();
+                // });
             }, null, true)
 
         } catch (e) {

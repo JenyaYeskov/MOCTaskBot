@@ -260,6 +260,8 @@ app.post("/addRem", (req, res) => {
                 res.send([{"text": "hueta"}])
             }
 
+            runRem();
+
             // new CronJob(timeAndDate, function () {
             //     fireReminder(reminderId);
             // }, null, true);
@@ -440,15 +442,6 @@ app.get("/loh", (req, res) => {
     //
     // trySend("1844369452275489", "pizda" + d);
     // callSendAPI("1844369452275489", {"text": "zdarova"});
-
-
-    mongoose.connect(uri);
-
-    db.on('error', console.error.bind(console, 'connection error:'));
-
-    db.once('open', async function callback() {
-
-    });
 
 
     res.send("hz");
@@ -639,11 +632,11 @@ function trySend(mid, smt) {
 }
 
 function runRem() {
-    mongoose.connect(uri);
-
-    db.on('error', console.error.bind(console, 'connection error:'));
-
-    db.once('open', async function callback() {
+    // mongoose.connect(uri);
+    //
+    // db.on('error', console.error.bind(console, 'connection error:'));
+    //
+    // db.once('open', async function callback() {
 
         try {
             new CronJob("1 * * * * *", async () => {
@@ -664,8 +657,11 @@ function runRem() {
         } catch (e) {
             trySend("1844369452275489", "huinya poluchylas");
         }
+        // finally {
+        //     mongoose.Connection.close()
+        // }
 
-    });
+    // });
 }
 
 
@@ -700,3 +696,4 @@ function validateAndSetDate(timeAndDateString) {
 
     return when;
 }
+

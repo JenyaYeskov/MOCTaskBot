@@ -443,7 +443,7 @@ app.get("/loh", (req, res) => {
     // callSendAPI("1844369452275489", {"text": "zdarova"});
 
 
-    res.send("hz");
+    res.send("loh");
 });
 
 
@@ -649,6 +649,9 @@ function runRem() {
                     if (rem.time === dateAndTime.format(new Date(), "HH.mm")) {
                         trySend("1844369452275489", "ebat")
                     }
+                    else if (rem.time === dateAndTime.format(new Date(), "H.mm")) {
+                        trySend("1844369452275489", "ebat")
+                    }
                 }
 
                 // todays.forEach(rem => {
@@ -657,7 +660,7 @@ function runRem() {
                 //     }
                 // });
 
-                trySend("1844369452275489", "rabotaem");
+                // trySend("1844369452275489", "rabotaem");
 
             } catch (e) {
                 trySend("1844369452275489", e);

@@ -630,29 +630,31 @@ function trySend(mid, smt) {
     // });
 }
 
-function runRem() {
+async function runRem() {
+
+    let todays;
 
     try {
+        mongoose.connect(uri);
+        db.once('open', async function callback() {
+            let par = dateAndTime.format(new Date(), "DD.MM.YYYY");
+            todays = await Reminder.find({'date': par});
+        });
+        mongoose.Connection.close();
+
         new CronJob("1 * * * * *", () => {
 
             try {
-                mongoose.connect(uri);
+                todays.forEach(rem => {
+                    if (rem.time === dateAndTime.format(new Date(), "HH.mm")) {
+                        trySend("1844369452275489", "ebat")
+                    }
+                });
 
-                db.on('error', console.error.bind(console, 'connection error:'));
+                trySend("1844369452275489", "rabotaem");
 
-                db.once('open', async function callback() {
-                    let par = dateAndTime.format(new Date(), "DD.MM.YYYY");
-                    let todays = await Reminder.find({'date': par});
-
-                    todays.forEach(rem => {
-                        if (rem.time === dateAndTime.format(new Date(), "HH.mm")) {
-                            trySend("1844369452275489", "ebat")
-                        }
-                    })
-                })
-
-            } finally {
-                mongoose.Connection.close();
+            } catch (e) {
+                trySend("1844369452275489", e);
             }
 
         }, null, true)
@@ -660,6 +662,13 @@ function runRem() {
     catch (e) {
 
         trySend("1844369452275489", "huinya poluchylas");
+    }
+    finally {
+        try {
+            mongoose.Connection.close();
+        } catch (e) {
+
+        }
     }
 
 

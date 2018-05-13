@@ -260,7 +260,6 @@ app.post("/addRem", (req, res) => {
                 res.send([{"text": "hueta"}])
             }
 
-            runRem();
 
             // new CronJob(timeAndDate, function () {
             //     fireReminder(reminderId);
@@ -699,3 +698,11 @@ function validateAndSetDate(timeAndDateString) {
     return when;
 }
 
+
+
+let now = new Date();
+let i = now.getMinutes();
+
+while (i >= new Date().getMinutes()) {
+
+}

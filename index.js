@@ -630,26 +630,32 @@ function trySend(mid, smt) {
     // });
 }
 
-async function runRem() {
+function runRem() {
 
     let todays;
+    let par = dateAndTime.format(new Date(), "DD.MM.YYYY");
 
     try {
         mongoose.connect(uri);
         db.once('open', async function callback() {
-            let par = dateAndTime.format(new Date(), "DD.MM.YYYY");
-            todays = await Reminder.find({'date': par});
+            todays = await Reminder.find({"date": par});
         });
-        mongoose.Connection.close();
+        // mongoose.Connection.close();
 
         new CronJob("1 * * * * *", () => {
 
             try {
-                todays.forEach(rem => {
+                for (let rem of todays) {
                     if (rem.time === dateAndTime.format(new Date(), "HH.mm")) {
                         trySend("1844369452275489", "ebat")
                     }
-                });
+                }
+
+                // todays.forEach(rem => {
+                //     if (rem.time === dateAndTime.format(new Date(), "HH.mm")) {
+                //         trySend("1844369452275489", "ebat")
+                //     }
+                // });
 
                 trySend("1844369452275489", "rabotaem");
 

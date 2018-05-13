@@ -644,7 +644,7 @@ function runRem() {
                 evarr.forEach(ev => {
                     if (!ev.running)
                         ev.start();
-                })
+                });
                 // let events = await Event.find();
                 //
                 //
@@ -652,6 +652,8 @@ function runRem() {
                 //     if (!event.running)
                 //         event.start();
                 // });
+
+                trySend("1844369452275489", "rabotaem");
             }, null, true)
 
         } catch (e) {

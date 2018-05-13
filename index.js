@@ -242,15 +242,13 @@ app.post("/addRem", (req, res) => {
             let reminderId = qwe["_id"];
 
             try {
-                let qwe = new CronJob({
+
+                evarr.push(new CronJob({
                     cronTime: timeAndDate,
                     onTick: function () {
                         fireReminder(reminderId);
                     }, start: true
-                });
-
-
-                evarr.push(qwe);
+                }));
 
                 // let ev = await new Event({
                 //     event: qwe
@@ -261,9 +259,10 @@ app.post("/addRem", (req, res) => {
             catch (e) {
                 res.send([{"text": "hueta"}])
             }
-            new CronJob(timeAndDate, function () {
-                fireReminder(reminderId);
-            }, null, true);
+
+            // new CronJob(timeAndDate, function () {
+            //     fireReminder(reminderId);
+            // }, null, true);
 
 
             // schedule.scheduleJob(timeAndDate, () => {
@@ -424,6 +423,7 @@ app.get("/loh", (req, res) => {
     let CronJob = require('cron').CronJob;
 
     runRem();
+
     // for (let i = 0; i < 59; i = i + 5) {
     //     let q = i + ' * * * * *';
     // }

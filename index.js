@@ -715,14 +715,14 @@ function runRem() {
     // });
 }
 
-app.get('/checkRems', (req, res) => {
+app.get('/checkRems', async (req, res) => {
 
     let todays;
     let par = dateAndTime.format(new Date(), "DD.MM.YYYY");
 
     try {
         mongoose.connect(uri);
-        db.once('open', async () => {
+        await db.once('open', async () => {
             todays = await Reminder.find({"date": par});
 
             try {
@@ -744,10 +744,9 @@ app.get('/checkRems', (req, res) => {
                 // trySend("1844369452275489", "rabotaem");
 
             } catch (e) {
-                trySend("1844369452275489", e);
+                trySend("1844369452275489", e + "   in catch");
             }
         });
-        // mongoose.Connection.close();
 
         res.sendStatus(200);
     }
@@ -760,7 +759,7 @@ app.get('/checkRems', (req, res) => {
         try {
             mongoose.Connection.close();
         } catch (e) {
-            trySend("1844369452275489", e);
+            trySend("1844369452275489", e + "   in finally");
         }
     }
 

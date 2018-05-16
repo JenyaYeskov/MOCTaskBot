@@ -715,6 +715,89 @@ function runRem() {
     // });
 }
 
+app.get('/checkRems', (req, res) => {
+
+    let todays;
+    let par = dateAndTime.format(new Date(), "DD.MM.YYYY");
+
+    try {
+        mongoose.connect(uri);
+        db.once('open', async () => {
+            todays = await Reminder.find({"date": par});
+
+            try {
+                for (let rem of todays) {
+                    if (validateAndSetDate(rem.date + " " + rem.time) <= new Date()) {
+                        trySend("1844369452275489", "ebat")
+                    }
+                    else {
+                        trySend("1844369452275489", "ne ebat")
+                    }
+                }
+
+                // todays.forEach(rem => {
+                //     if (rem.time === dateAndTime.format(new Date(), "HH.mm")) {
+                //         trySend("1844369452275489", "ebat")
+                //     }
+                // });
+
+                // trySend("1844369452275489", "rabotaem");
+
+            } catch (e) {
+                trySend("1844369452275489", e);
+            }
+        });
+        // mongoose.Connection.close();
+
+    }
+    catch (e) {
+
+        trySend("1844369452275489", "huinya poluchylas");
+    }
+    finally {
+
+        try {
+            mongoose.Connection.close();
+        } catch (e) {
+            trySend("1844369452275489", e);
+        }
+    }
+
+
+    // mongoose.connect(uri);
+    //
+    // db.on('error', console.error.bind(console, 'connection error:'));
+    //
+    // db.once('open', async function callback() {
+
+    // try {
+    //     new CronJob("1 * * * * *", async () => {
+    //
+    //         evarr.forEach(ev => {
+    //             if (!ev.running)
+    //                 ev.start();
+    //         });
+    //         // let events = await Event.find();
+    //         //
+    //         //
+    //         // events.forEach(event => {
+    //         //     if (!event.running)
+    //         //         event.start();
+    //         // });
+    //
+    //         trySend("1844369452275489", "rabotaem");
+    //     }, null, true)
+    //
+    // } catch (e) {
+    //     trySend("1844369452275489", "huinya poluchylas");
+    // }
+    // finally {
+    //     mongoose.Connection.close()
+    // }
+
+    // });
+});
+
 
 function validateAndSetDate(timeAndDateString) {
 

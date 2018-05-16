@@ -729,10 +729,10 @@ app.get('/checkRems', async (req, res) => {
                 for (let rem of todays) {
 
                     if (new Date().setHours(0) <= new Date()) {
-                        trySend("1844369452275489", "ebat")
+                        trySend("1844369452275489", "ebat " + rem.event)
                     }
                     else {
-                        trySend("1844369452275489", "ne ebat")
+                        trySend("1844369452275489", "ne ebat"  + rem.event)
                     }
                 }
 

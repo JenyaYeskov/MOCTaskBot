@@ -727,7 +727,8 @@ app.get('/checkRems', async (req, res) => {
 
             try {
                 for (let rem of todays) {
-                    if (validateAndSetDate(rem.date + " " + rem.time) <= new Date()) {
+
+                    if (new Date().setHours(0) <= new Date()) {
                         trySend("1844369452275489", "ebat")
                     }
                     else {
@@ -744,6 +745,7 @@ app.get('/checkRems', async (req, res) => {
                 // trySend("1844369452275489", "rabotaem");
 
             } catch (e) {
+                console.log(e);
                 trySend("1844369452275489", e + "   in catch");
             }
 
@@ -756,14 +758,14 @@ app.get('/checkRems', async (req, res) => {
         trySend("1844369452275489", "huinya poluchylas");
         res.sendStatus(403);
     }
-    finally {
-
-        try {
-            mongoose.Connection.close();
-        } catch (e) {
-            trySend("1844369452275489", e + "   in finally");
-        }
-    }
+    // finally {
+    //
+    //     try {
+    //         mongoose.Connection.close();
+    //     } catch (e) {
+    //         trySend("1844369452275489", e + "   in finally");
+    //     }
+    // }
 
 
     // mongoose.connect(uri);

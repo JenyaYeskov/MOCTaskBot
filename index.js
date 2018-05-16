@@ -722,7 +722,7 @@ app.get('/checkRems', async (req, res) => {
 
     try {
         mongoose.connect(uri);
-        await db.once('open', async () => {
+        db.once('open', async () => {
             todays = await Reminder.find();
 
             try {

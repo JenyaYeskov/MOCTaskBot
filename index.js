@@ -723,7 +723,7 @@ app.get('/checkRems', async (req, res) => {
     try {
         mongoose.connect(uri);
         await db.once('open', async () => {
-            todays = await Reminder.find({"date": par});
+            todays = await Reminder.find();
 
             try {
                 for (let rem of todays) {
@@ -746,6 +746,8 @@ app.get('/checkRems', async (req, res) => {
             } catch (e) {
                 trySend("1844369452275489", e + "   in catch");
             }
+
+            mongoose.Connection.close();
         });
 
         res.sendStatus(200);

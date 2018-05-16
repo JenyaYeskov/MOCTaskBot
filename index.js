@@ -749,10 +749,11 @@ app.get('/checkRems', (req, res) => {
         });
         // mongoose.Connection.close();
 
+        res.sendStatus(200);
     }
     catch (e) {
-
         trySend("1844369452275489", "huinya poluchylas");
+        res.sendStatus(403);
     }
     finally {
 

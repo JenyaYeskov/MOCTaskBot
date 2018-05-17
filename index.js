@@ -728,7 +728,7 @@ app.get('/checkRems', async (req, res) => {
             try {
                 for (let rem of todays) {
 
-                    let h = validateAndSetDate(rem.date + " " + rem.time);
+                    let h = dateAndTime.parse(rem.date + " " + rem.time, "DD.MM.YYYY HH.mm", true);
 
                     if (h - new Date() < 0) {
                         trySend("1844369452275489", "ebat " + rem.event)

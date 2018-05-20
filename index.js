@@ -423,7 +423,10 @@ app.get("/loh", (req, res) => {
     let nodeCron = require('node-cron');
     let CronJob = require('cron').CronJob;
 
-    runRem();
+    setInterval(() => {
+        trySend("1844369452275489", "in loh setint");
+        runRem();
+    }, 30000);
 
     // for (let i = 0; i < 59; i = i + 5) {
     //     let q = i + ' * * * * *';
@@ -632,44 +635,47 @@ function trySend(mid, smt) {
 
 function runRem() {
 
+    trySend("1844369452275489", "in runrem");
+
     let todays;
     let par = dateAndTime.format(new Date(), "DD.MM.YYYY");
 
-    try {
-        mongoose.connect(uri);
-        db.once('open', async function callback() {
-            todays = await Reminder.find({"date": par});
-        });
-        // mongoose.Connection.close();
+    setInterval(() => {
 
-        // new CronJob("1 * * * * *", () => {
-        //
-        //     try {
-        //         for (let rem of todays) {
-        //             if (rem.time === dateAndTime.format(new Date(), "HH.mm")) {
-        //                 trySend("1844369452275489", "ebat")
-        //             }
-        //             else if (rem.time === dateAndTime.format(new Date(), "H.mm")) {
-        //                 trySend("1844369452275489", "ne ebat")
-        //             }
-        //         }
-        //
-        //         // todays.forEach(rem => {
-        //         //     if (rem.time === dateAndTime.format(new Date(), "HH.mm")) {
-        //         //         trySend("1844369452275489", "ebat")
-        //         //     }
-        //         // });
-        //
-        //         // trySend("1844369452275489", "rabotaem");
-        //
-        //     } catch (e) {
-        //         trySend("1844369452275489", e);
-        //     }
-        //
-        // }, null, true)
+        try {
+            mongoose.connect(uri);
+            db.once('open', async function callback() {
+                todays = await Reminder.find({"date": par});
+            });
+            // mongoose.Connection.close();
+
+            // new CronJob("1 * * * * *", () => {
+            //
+            //     try {
+            //         for (let rem of todays) {
+            //             if (rem.time === dateAndTime.format(new Date(), "HH.mm")) {
+            //                 trySend("1844369452275489", "ebat")
+            //             }
+            //             else if (rem.time === dateAndTime.format(new Date(), "H.mm")) {
+            //                 trySend("1844369452275489", "ne ebat")
+            //             }
+            //         }
+            //
+            //         // todays.forEach(rem => {
+            //         //     if (rem.time === dateAndTime.format(new Date(), "HH.mm")) {
+            //         //         trySend("1844369452275489", "ebat")
+            //         //     }
+            //         // });
+            //
+            //         // trySend("1844369452275489", "rabotaem");
+            //
+            //     } catch (e) {
+            //         trySend("1844369452275489", e);
+            //     }
+            //
+            // }, null, true)
 
 
-        setInterval(() => {
             try {
                 for (let rem of todays) {
                     if (rem.time === dateAndTime.format(new Date(), "HH.mm")) {
@@ -691,20 +697,21 @@ function runRem() {
             } catch (e) {
                 trySend("1844369452275489", e);
             }
-        }, 30000);
 
-    }
-    catch (e) {
-
-        trySend("1844369452275489", "huinya poluchylas run");
-    }
-    finally {
-        try {
-            mongoose.Connection.close();
-        } catch (e) {
 
         }
-    }
+        catch (e) {
+
+            trySend("1844369452275489", "huinya poluchylas run");
+        }
+        finally {
+            try {
+                mongoose.Connection.close();
+            } catch (e) {
+
+            }
+        }
+    }, 30000);
 
 
     // mongoose.connect(uri);

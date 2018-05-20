@@ -602,10 +602,10 @@ async function runRem() {
             try {
                 for (let rem of todays) {
                     if (rem.time === dateAndTime.format(new Date(), "HH.mm")) {
-                        trySend("1844369452275489", "ebat run " + rem.event, rem["messenger user id"])
+                        trySend("1844369452275489", "ebat run " + rem.event, rem["messengerId"])
                     }
                     else if (rem.time === dateAndTime.format(new Date(), "H.mm")) {
-                        trySend("1844369452275489", "ebat run2 " + rem.event, rem["messenger user id"])
+                        trySend("1844369452275489", "ebat run2 " + rem.event, rem["messengerId"])
                     }
                 }
 

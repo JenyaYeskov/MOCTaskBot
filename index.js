@@ -902,6 +902,8 @@ async function deletion(messengerId, remId, res) {
         }
         catch (e) {
             console.error(e);
+        }
+        finally {
             mongoose.connection.close();
         }
     })

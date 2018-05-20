@@ -24,14 +24,6 @@ let remSchema = mongoose.Schema({
     event: String
 });
 
-let eventSchema = mongoose.Schema({
-    event: {}
-});
-
-let Event = mongoose.model('events', eventSchema);
-
-let evarr = [];
-
 
 let Reminder = mongoose.model('rems', remSchema);
 
@@ -335,37 +327,6 @@ app.post("/addRem", (req, res) => {
 
 app.post("/delete", (req, res) => {
 
-    // mongoose.connect(uri);
-    //
-    // db.on('error', console.error.bind(console, 'connection error:'));
-    //
-    // db.once('open', async function callback() {
-    //
-    //     try {
-    //         let body = req.body;
-    //         let messengerId = body["messenger user id"];
-    //         let remId = body.remId;
-    //
-    //         if (!(remId.toUpperCase() === "ALL")) {
-    //
-    //             await Reminder.remove({"messengerId": messengerId, "remId": remId});
-    //
-    //             mongoose.connection.close();
-    //             res.send([{"text": "Done " + remId}]);
-    //         }
-    //         else {
-    //             await Reminder.remove({"messengerId": messengerId});
-    //
-    //             mongoose.connection.close();
-    //             res.send([{"text": "Done all " + remId}]);
-    //         }
-    //     }
-    //     catch (e) {
-    //         console.error(e);
-    //         mongoose.connection.close();
-    //     }
-    // })
-
     let body = req.body;
     let messengerId = body["messenger user id"];
     let remId = body.remId;
@@ -373,37 +334,22 @@ app.post("/delete", (req, res) => {
     deletion(messengerId, remId, res);
 });
 
-// app.post("/delete", (req, res) => {
-//
-//     mongoose.connect(uri);
-//
-//     db.on('error', console.error.bind(console, 'connection error:'));
-//
-//     db.once('open', function callback() {
-//         let body = req.body;
-//         let messengerId = body["messenger user id"];
-//         let remId = body.remId;
-//
-//         if (!(remId.toUpperCase() === "ALL")) {
-//             Reminder.remove({"messengerId": messengerId, "remId": remId}).then(() => {
-//                 mongoose.connection.close();
-//                 res.send([{"text": "Done " + remId}]);
-//
-//             }).catch(err => {
-//                 console.log(err)
-//             });
-//         }
-//         else {
-//             Reminder.remove({"messengerId": messengerId}).then(() => {
-//                 mongoose.connection.close();
-//                 res.send([{"text": "Done all " + remId}]);
-//
-//             }).catch(err => {
-//                 console.log(err)
-//             });
-//         }
-//     })
-// });
+
+app.post("/acceptOrSnooze", (req, res) => {
+    let body = req.body;
+    let messengerId = body["messenger user id"];
+    let acceptOrSnooze = body["acceptOrSnooze"];
+    
+    if (acceptOrSnooze.toLowerCase() === "accept"){
+
+    } else if (acceptOrSnooze.toLowerCase() === "snooze") {
+
+    }else {
+
+    }
+
+});
+
 
 app.get("/", function (req, res) {
     res.send("deployed");
@@ -432,7 +378,7 @@ app.get("/loh", (req, res) => {
     setInterval(() => {
         trySend("1844369452275489", "in loh setint");
         runRem();
-    }, 30000);
+    }, 60000);
 
     // for (let i = 0; i < 59; i = i + 5) {
     //     let q = i + ' * * * * *';
@@ -608,11 +554,11 @@ function callSendAPI(sender_psid, response) {
     });
 }
 
-function trySend(mid, smt) {
+function trySend(mid, smt, remId) {
     let token = "qwYLsCSz8hk4ytd6CPKP4C0oalstMnGdpDjF8YFHPHCieKNc0AfrnjVs91fGuH74";
 
     request({
-        "uri": "https://api.chatfuel.com/bots/5ac8230ce4b0336c50287a5d/users/" + mid + "/send?chatfuel_token=" + token + "&chatfuel_block_id=5ae34ee1e4b088ff003688cf&what=" + smt,
+        "uri": "https://api.chatfuel.com/bots/5ac8230ce4b0336c50287a5d/users/" + mid + "/send?chatfuel_token=" + token + "&chatfuel_block_id=5ae34ee1e4b088ff003688cf&what=" + smt + "&DBRemID=" + remId,
         "headers": {"Content-Type": "application/json"},
         "method": "POST"
         // "json": request_body
@@ -656,20 +602,12 @@ async function runRem() {
             try {
                 for (let rem of todays) {
                     if (rem.time === dateAndTime.format(new Date(), "HH.mm")) {
-                        trySend("1844369452275489", "ebat run " + rem.event)
+                        trySend("1844369452275489", "ebat run " + rem.event, rem["messenger user id"])
                     }
                     else if (rem.time === dateAndTime.format(new Date(), "H.mm")) {
                         trySend("1844369452275489", "ne ebat run")
                     }
                 }
-
-                // todays.forEach(rem => {
-                //     if (rem.time === dateAndTime.format(new Date(), "HH.mm")) {
-                //         trySend("1844369452275489", "ebat")
-                //     }
-                // });
-
-                // trySend("1844369452275489", "rabotaem");
 
             } catch (e) {
                 trySend("1844369452275489", e);
@@ -706,15 +644,10 @@ async function runRem() {
 
     }
     catch (e) {
-
         trySend("1844369452275489", "huinya poluchylas run" + e);
     }
     finally {
-        try {
-            mongoose.Connection.close();
-        } catch (e) {
-
-        }
+        mongoose.Connection.close();
     }
     // }, 30000);
 

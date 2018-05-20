@@ -350,13 +350,14 @@ app.post("/acceptOrSnooze", (req, res) => {
             db.once('open', async function callback() {
                 await Reminder.remove({"messengerId": DBRemID});
 
+                mongoose.connection.close();
                 res.sendStatus(200);
             });
         } catch (e) {
             trySend(messengerId, e);
             res.sendStatus(500)
         } finally {
-            mongoose.connection.close();
+            // mongoose.connection.close();
         }
 
     } else if (acceptOrSnooze.toLowerCase() === "snooze") {

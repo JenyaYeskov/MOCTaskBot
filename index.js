@@ -640,7 +640,7 @@ function runRem() {
     let todays;
     let par = dateAndTime.format(new Date(), "DD.MM.YYYY");
 
-    setInterval(() => {
+    // setInterval(() => {
 
         try {
             mongoose.connect(uri);
@@ -711,7 +711,7 @@ function runRem() {
 
             }
         }
-    }, 30000);
+    // }, 30000);
 
 
     // mongoose.connect(uri);

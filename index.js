@@ -233,24 +233,24 @@ app.post("/addRem", (req, res) => {
 
             let reminderId = qwe["_id"];
 
-            try {
-
-                evarr.push(new CronJob({
-                    cronTime: timeAndDate,
-                    onTick: function () {
-                        fireReminder(reminderId);
-                    }, start: true
-                }));
-
-                // let ev = await new Event({
-                //     event: qwe
-                // });
-
-                // await Event.create(ev);
-            }
-            catch (e) {
-                res.send([{"text": "hueta"}])
-            }
+            // try {
+            //
+            //     evarr.push(new CronJob({
+            //         cronTime: timeAndDate,
+            //         onTick: function () {
+            //             fireReminder(reminderId);
+            //         }, start: true
+            //     }));
+            //
+            //     // let ev = await new Event({
+            //     //     event: qwe
+            //     // });
+            //
+            //     // await Event.create(ev);
+            // }
+            // catch (e) {
+            //     res.send([{"text": "hueta"}])
+            // }
 
 
             // new CronJob(timeAndDate, function () {

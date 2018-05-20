@@ -633,7 +633,7 @@ function trySend(mid, smt) {
     // });
 }
 
-function runRem() {
+async function runRem() {
 
     trySend("1844369452275489", "in runrem");
 
@@ -642,75 +642,75 @@ function runRem() {
 
     // setInterval(() => {
 
+    try {
+        await mongoose.connect(uri);
+        db.once('open', async function callback() {
+            todays = await Reminder.find({"date": par});
+        });
+        // mongoose.Connection.close();
+
+        // new CronJob("1 * * * * *", () => {
+        //
+        //     try {
+        //         for (let rem of todays) {
+        //             if (rem.time === dateAndTime.format(new Date(), "HH.mm")) {
+        //                 trySend("1844369452275489", "ebat")
+        //             }
+        //             else if (rem.time === dateAndTime.format(new Date(), "H.mm")) {
+        //                 trySend("1844369452275489", "ne ebat")
+        //             }
+        //         }
+        //
+        //         // todays.forEach(rem => {
+        //         //     if (rem.time === dateAndTime.format(new Date(), "HH.mm")) {
+        //         //         trySend("1844369452275489", "ebat")
+        //         //     }
+        //         // });
+        //
+        //         // trySend("1844369452275489", "rabotaem");
+        //
+        //     } catch (e) {
+        //         trySend("1844369452275489", e);
+        //     }
+        //
+        // }, null, true)
+
+
         try {
-            mongoose.connect(uri);
-            db.once('open', async function callback() {
-                todays = await Reminder.find({"date": par});
-            });
-            // mongoose.Connection.close();
-
-            // new CronJob("1 * * * * *", () => {
-            //
-            //     try {
-            //         for (let rem of todays) {
-            //             if (rem.time === dateAndTime.format(new Date(), "HH.mm")) {
-            //                 trySend("1844369452275489", "ebat")
-            //             }
-            //             else if (rem.time === dateAndTime.format(new Date(), "H.mm")) {
-            //                 trySend("1844369452275489", "ne ebat")
-            //             }
-            //         }
-            //
-            //         // todays.forEach(rem => {
-            //         //     if (rem.time === dateAndTime.format(new Date(), "HH.mm")) {
-            //         //         trySend("1844369452275489", "ebat")
-            //         //     }
-            //         // });
-            //
-            //         // trySend("1844369452275489", "rabotaem");
-            //
-            //     } catch (e) {
-            //         trySend("1844369452275489", e);
-            //     }
-            //
-            // }, null, true)
-
-
-            try {
-                for (let rem of todays) {
-                    if (rem.time === dateAndTime.format(new Date(), "HH.mm")) {
-                        trySend("1844369452275489", "ebat run " + rem.event)
-                    }
-                    else if (rem.time === dateAndTime.format(new Date(), "H.mm")) {
-                        trySend("1844369452275489", "ne ebat run")
-                    }
+            for (let rem of todays) {
+                if (rem.time === dateAndTime.format(new Date(), "HH.mm")) {
+                    trySend("1844369452275489", "ebat run " + rem.event)
                 }
-
-                // todays.forEach(rem => {
-                //     if (rem.time === dateAndTime.format(new Date(), "HH.mm")) {
-                //         trySend("1844369452275489", "ebat")
-                //     }
-                // });
-
-                // trySend("1844369452275489", "rabotaem");
-
-            } catch (e) {
-                trySend("1844369452275489", e);
+                else if (rem.time === dateAndTime.format(new Date(), "H.mm")) {
+                    trySend("1844369452275489", "ne ebat run")
+                }
             }
 
+            // todays.forEach(rem => {
+            //     if (rem.time === dateAndTime.format(new Date(), "HH.mm")) {
+            //         trySend("1844369452275489", "ebat")
+            //     }
+            // });
+
+            // trySend("1844369452275489", "rabotaem");
+
+        } catch (e) {
+            trySend("1844369452275489", e);
+        }
+
+
+    }
+    catch (e) {
+
+        trySend("1844369452275489", "huinya poluchylas run");
+    }
+    finally {
+        try {
+            mongoose.Connection.close();
+        } catch (e) {
 
         }
-        catch (e) {
-
-            trySend("1844369452275489", "huinya poluchylas run");
-        }
-        finally {
-            try {
-                mongoose.Connection.close();
-            } catch (e) {
-
-            }
-        }
+    }
     // }, 30000);
 
 

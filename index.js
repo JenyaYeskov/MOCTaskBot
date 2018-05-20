@@ -376,7 +376,7 @@ app.get("/loh", (req, res) => {
     let CronJob = require('cron').CronJob;
 
     setInterval(() => {
-        trySend("1844369452275489", "in loh setint");
+        // trySend("1844369452275489", "in loh setint");
         runRem();
     }, 60000);
 
@@ -587,7 +587,7 @@ function trySend(mid, smt, remId) {
 
 async function runRem() {
 
-    trySend("1844369452275489", "in runrem");
+    trySend("1844369452275489", "in runrem", "kkk");
 
     let todays;
     let par = dateAndTime.format(new Date(), "DD.MM.YYYY");

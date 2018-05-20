@@ -620,18 +620,10 @@ async function runRem() {
         db.once('open', async function callback() {
             todays = await Reminder.find({"date": par});
 
-            try {
-                for (let rem of todays) {
-                    if (rem.time === dateAndTime.format(new Date(), "HH.mm")) {
-                        trySend(rem.messengerId, "time to \"" + rem.event + "\"", rem["_id"])
-                    }
+            for (let rem of todays) {
+                if (rem.time === dateAndTime.format(new Date(), "HH.mm")) {
+                    trySend(rem.messengerId, "time to \"" + rem.event + "\"", rem["_id"])
                 }
-
-            } catch (e) {
-                trySend("1844369452275489", e);
-            }
-            finally {
-                mongoose.Connection.close();
             }
         });
         // mongoose.Connection.close();

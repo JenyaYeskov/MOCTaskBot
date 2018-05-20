@@ -351,6 +351,8 @@ app.post("/acceptOrSnooze", (req, res) => {
                 await Reminder.remove({"_id": DBRemID});
 
                 mongoose.connection.close();
+
+                trySend(messengerId, "done");
                 res.sendStatus(200);
             });
         } catch (e) {
@@ -627,6 +629,9 @@ async function runRem() {
 
             } catch (e) {
                 trySend("1844369452275489", e);
+            }
+            finally {
+                mongoose.Connection.close();
             }
         });
         // mongoose.Connection.close();

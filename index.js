@@ -348,7 +348,7 @@ app.post("/acceptOrSnooze", (req, res) => {
             db.on('error', console.error.bind(console, 'connection error:'));
 
             db.once('open', async function callback() {
-                await Reminder.remove({"messengerId": DBRemID});
+                await Reminder.remove({"_id": DBRemID});
 
                 mongoose.connection.close();
                 res.sendStatus(200);

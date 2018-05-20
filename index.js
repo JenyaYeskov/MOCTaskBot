@@ -642,15 +642,41 @@ function runRem() {
         });
         // mongoose.Connection.close();
 
-        new CronJob("1 * * * * *", () => {
+        // new CronJob("1 * * * * *", () => {
+        //
+        //     try {
+        //         for (let rem of todays) {
+        //             if (rem.time === dateAndTime.format(new Date(), "HH.mm")) {
+        //                 trySend("1844369452275489", "ebat")
+        //             }
+        //             else if (rem.time === dateAndTime.format(new Date(), "H.mm")) {
+        //                 trySend("1844369452275489", "ne ebat")
+        //             }
+        //         }
+        //
+        //         // todays.forEach(rem => {
+        //         //     if (rem.time === dateAndTime.format(new Date(), "HH.mm")) {
+        //         //         trySend("1844369452275489", "ebat")
+        //         //     }
+        //         // });
+        //
+        //         // trySend("1844369452275489", "rabotaem");
+        //
+        //     } catch (e) {
+        //         trySend("1844369452275489", e);
+        //     }
+        //
+        // }, null, true)
 
+
+        setInterval(() => {
             try {
                 for (let rem of todays) {
                     if (rem.time === dateAndTime.format(new Date(), "HH.mm")) {
-                        trySend("1844369452275489", "ebat")
+                        trySend("1844369452275489", "ebat run " + rem.event)
                     }
                     else if (rem.time === dateAndTime.format(new Date(), "H.mm")) {
-                        trySend("1844369452275489", "ebat")
+                        trySend("1844369452275489", "ne ebat run")
                     }
                 }
 
@@ -665,12 +691,12 @@ function runRem() {
             } catch (e) {
                 trySend("1844369452275489", e);
             }
+        }, 30000);
 
-        }, null, true)
     }
     catch (e) {
 
-        trySend("1844369452275489", "huinya poluchylas");
+        trySend("1844369452275489", "huinya poluchylas run");
     }
     finally {
         try {
@@ -728,14 +754,14 @@ app.get('/checkRems', async (req, res) => {
             try {
                 for (let rem of todays) {
 
-                    let hh =await validateAndSetDate(rem.date + " " + rem.time);
+                    let hh = await validateAndSetDate(rem.date + " " + rem.time);
                     let h = dateAndTime.parse(rem.date + " " + rem.time, "DD.MM.YYYY HH.mm", true);
 
                     if (hh - new Date() < 0) {
                         trySend("1844369452275489", "ebat " + rem.event)
                     }
                     else {
-                        trySend("1844369452275489", "ne ebat "  + rem.event)
+                        trySend("1844369452275489", "ne ebat " + rem.event)
                     }
                 }
 

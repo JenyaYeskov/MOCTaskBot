@@ -339,12 +339,30 @@ app.post("/acceptOrSnooze", (req, res) => {
     let body = req.body;
     let messengerId = body["messenger user id"];
     let acceptOrSnooze = body["acceptOrSnooze"];
-    
-    if (acceptOrSnooze.toLowerCase() === "accept"){
+    let DBRemID = body["DBRemID"];
+
+    if (acceptOrSnooze.toLowerCase() === "accept") {
+        try {
+            mongoose.connect(uri);
+
+            db.on('error', console.error.bind(console, 'connection error:'));
+
+            db.once('open', async function callback() {
+                await Reminder.remove({"messengerId": DBRemID});
+
+                res.sendStatus(200);
+            });
+        } catch (e) {
+            trySend(messengerId, e);
+            res.sendStatus(500)
+        } finally {
+            mongoose.connection.close();
+        }
 
     } else if (acceptOrSnooze.toLowerCase() === "snooze") {
 
-    }else {
+
+    } else {
 
     }
 
@@ -554,11 +572,11 @@ function callSendAPI(sender_psid, response) {
     });
 }
 
-function trySend(mid, smt, remId) {
+function trySend(mid, smt, DBRemID) {
     let token = "qwYLsCSz8hk4ytd6CPKP4C0oalstMnGdpDjF8YFHPHCieKNc0AfrnjVs91fGuH74";
 
     request({
-        "uri": "https://api.chatfuel.com/bots/5ac8230ce4b0336c50287a5d/users/" + mid + "/send?chatfuel_token=" + token + "&chatfuel_block_id=5ae34ee1e4b088ff003688cf&what=" + smt + "&DBRemID=" + remId,
+        "uri": "https://api.chatfuel.com/bots/5ac8230ce4b0336c50287a5d/users/" + mid + "/send?chatfuel_token=" + token + "&chatfuel_block_id=5ae34ee1e4b088ff003688cf&what=" + smt + "&DBRemID=" + DBRemID,
         "headers": {"Content-Type": "application/json"},
         "method": "POST"
         // "json": request_body
@@ -602,10 +620,7 @@ async function runRem() {
             try {
                 for (let rem of todays) {
                     if (rem.time === dateAndTime.format(new Date(), "HH.mm")) {
-                        trySend("1844369452275489", "ebat run " + rem.event, rem["messengerId"])
-                    }
-                    else if (rem.time === dateAndTime.format(new Date(), "H.mm")) {
-                        trySend("1844369452275489", "ebat run2 " + rem.event, rem["messengerId"])
+                        trySend(rem.messengerId, "time to \"" + rem.event + "\"", rem["_id"])
                     }
                 }
 

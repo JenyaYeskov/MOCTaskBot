@@ -646,6 +646,28 @@ async function runRem() {
         await mongoose.connect(uri);
         db.once('open', async function callback() {
             todays = await Reminder.find({"date": par});
+
+            try {
+                for (let rem of todays) {
+                    if (rem.time === dateAndTime.format(new Date(), "HH.mm")) {
+                        trySend("1844369452275489", "ebat run " + rem.event)
+                    }
+                    else if (rem.time === dateAndTime.format(new Date(), "H.mm")) {
+                        trySend("1844369452275489", "ne ebat run")
+                    }
+                }
+
+                // todays.forEach(rem => {
+                //     if (rem.time === dateAndTime.format(new Date(), "HH.mm")) {
+                //         trySend("1844369452275489", "ebat")
+                //     }
+                // });
+
+                // trySend("1844369452275489", "rabotaem");
+
+            } catch (e) {
+                trySend("1844369452275489", e);
+            }
         });
         // mongoose.Connection.close();
 
@@ -676,33 +698,13 @@ async function runRem() {
         // }, null, true)
 
 
-        try {
-            for (let rem of todays) {
-                if (rem.time === dateAndTime.format(new Date(), "HH.mm")) {
-                    trySend("1844369452275489", "ebat run " + rem.event)
-                }
-                else if (rem.time === dateAndTime.format(new Date(), "H.mm")) {
-                    trySend("1844369452275489", "ne ebat run")
-                }
-            }
 
-            // todays.forEach(rem => {
-            //     if (rem.time === dateAndTime.format(new Date(), "HH.mm")) {
-            //         trySend("1844369452275489", "ebat")
-            //     }
-            // });
-
-            // trySend("1844369452275489", "rabotaem");
-
-        } catch (e) {
-            trySend("1844369452275489", e);
-        }
 
 
     }
     catch (e) {
 
-        trySend("1844369452275489", "huinya poluchylas run");
+        trySend("1844369452275489", "huinya poluchylas run" + e);
     }
     finally {
         try {

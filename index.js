@@ -587,7 +587,7 @@ function trySend(mid, smt, remId) {
 
 async function runRem() {
 
-    trySend("1844369452275489", "in runrem", "kkk");
+    // trySend("1844369452275489", "in runrem", "kkk");
 
     let todays;
     let par = dateAndTime.format(new Date(), "DD.MM.YYYY");
@@ -605,7 +605,7 @@ async function runRem() {
                         trySend("1844369452275489", "ebat run " + rem.event, rem["messenger user id"])
                     }
                     else if (rem.time === dateAndTime.format(new Date(), "H.mm")) {
-                        trySend("1844369452275489", "ne ebat run")
+                        trySend("1844369452275489", "ebat run2 " + rem.event, rem["messenger user id"])
                     }
                 }
 

@@ -15,6 +15,8 @@ const
     CronJob = require('cron').CronJob,
     dateAndTime = require('date-and-time');
 
+let active = false,
+    running;
 let db = mongoose.connection;
 let remSchema = mongoose.Schema({
     remId: Number,
@@ -363,10 +365,10 @@ app.post("/acceptOrSnooze", (req, res) => {
         }
 
     } else if (acceptOrSnooze.toLowerCase() === "snooze") {
-
+        //TODO: snoozing
 
     } else {
-
+        trySend(messengerId, "unknown input")
     }
 
 });
@@ -396,10 +398,14 @@ app.get("/loh", (req, res) => {
     let nodeCron = require('node-cron');
     let CronJob = require('cron').CronJob;
 
-    setInterval(() => {
-        // trySend("1844369452275489", "in loh setint");
-        runRem();
-    }, 60000);
+    if (!active) {
+        running = setInterval(() => {
+            // trySend("1844369452275489", "in loh setint");
+            runRem();
+        }, 60000);
+
+        active = true;
+    }
 
     // for (let i = 0; i < 59; i = i + 5) {
     //     let q = i + ' * * * * *';
@@ -422,6 +428,11 @@ app.get("/loh", (req, res) => {
     res.send("loh");
 });
 
+app.get("/stop", (req, res) => {
+    if (active)
+        clearInterval(running);
+    res.send("stopped");
+});
 
 app.post("/webhook", (req, res) => {
 
@@ -486,7 +497,6 @@ app.get('/webhook', (req, res) => {
 });
 
 
-// Handles messages events
 function handleMessage(sender_psid, received_message) {
     let response;
 
@@ -533,7 +543,6 @@ function handleMessage(sender_psid, received_message) {
 
 }
 
-// Handles messaging_postbacks events
 function handlePostback(sender_psid, received_postback) {
     let response;
 
@@ -550,7 +559,6 @@ function handlePostback(sender_psid, received_postback) {
     callSendAPI(sender_psid, response);
 }
 
-// Sends response messages via the Send API
 function callSendAPI(sender_psid, response) {
     // Construct the message body
     let request_body = {

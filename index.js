@@ -172,7 +172,7 @@ app.post("/getRems", (req, res) => {
 
 async function fireReminder(reminderId) {
     try {
-        let rem = await Reminder.findOne(reminderId);
+        let rem = await Reminder.findById(reminderId);
         callSendAPI(rem.messengerId, {"text": "Hey, it's time for \"" + rem.event + "\""});
         trySend(rem.messengerId, "dobryi ranok " + rem.time);
 
@@ -365,7 +365,31 @@ app.post("/acceptOrSnooze", (req, res) => {
         }
 
     } else if (acceptOrSnooze.toLowerCase() === "snooze") {
-        //TODO: snoozing
+        try {
+            mongoose.connect(uri);
+
+            db.on('error', console.error.bind(console, 'connection error:'));
+
+            db.once('open', async function callback() {
+                let qwe = await Reminder.findById(DBRemID);
+
+                let temp = dateAndTime.parse(qwe.date + " " + qwe.time, "DD.MM.YYYY HH.mm");
+                temp.setMinutes(temp.getMinutes() + 10);
+
+                await Reminder.findByIdAndUpdate(DBRemID, {
+                    "date": dateAndTime.format(temp, "DD.MM.YYYY"),
+                    "time": dateAndTime.format(temp, "HH.mm")
+                });
+
+                trySend(messengerId, "done");
+                res.sendStatus(200);
+            });
+        } catch (e) {
+            trySend(messengerId, e);
+            res.sendStatus(500)
+        } finally {
+            mongoose.connection.close();
+        }
 
     } else {
         trySend(messengerId, "unknown input")

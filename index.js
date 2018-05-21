@@ -333,7 +333,7 @@ app.post("/delete", (req, res) => {
     let messengerId = body["messenger user id"];
     let remId = body.remId;
 
-    deletion(messengerId, remId, res);
+    deleteReminder(messengerId, remId, res);
 });
 
 
@@ -344,52 +344,10 @@ app.post("/acceptOrSnooze", (req, res) => {
     let DBRemID = body["DBRemID"];
 
     if (acceptOrSnooze.toLowerCase() === "accept") {
-        try {
-            mongoose.connect(uri);
-
-            db.on('error', console.error.bind(console, 'connection error:'));
-
-            db.once('open', async function callback() {
-                await Reminder.remove({"_id": DBRemID});
-
-                mongoose.connection.close();
-
-                trySend(messengerId, "done");
-                res.sendStatus(200);
-            });
-        } catch (e) {
-            trySend(messengerId, e);
-            res.sendStatus(500)
-        } finally {
-            // mongoose.connection.close();
-        }
+        acceptReminder(DBRemID, messengerId, res);
 
     } else if (acceptOrSnooze.toLowerCase() === "snooze") {
-        try {
-            mongoose.connect(uri);
-
-            db.on('error', console.error.bind(console, 'connection error:'));
-
-            db.once('open', async function callback() {
-                let qwe = await Reminder.findById(DBRemID);
-
-                let temp = dateAndTime.parse(qwe.date + " " + qwe.time, "DD.MM.YYYY HH.mm");
-                temp.setMinutes(temp.getMinutes() + 10);
-
-                await Reminder.findByIdAndUpdate(DBRemID, {
-                    "date": dateAndTime.format(temp, "DD.MM.YYYY"),
-                    "time": dateAndTime.format(temp, "HH.mm")
-                });
-
-                trySend(messengerId, "done");
-                res.sendStatus(200);
-            });
-        } catch (e) {
-            trySend(messengerId, e);
-            res.sendStatus(500)
-        } finally {
-            mongoose.connection.close();
-        }
+        snoozeReminder(DBRemID, messengerId, res);
 
     } else {
         trySend(messengerId, "unknown input")
@@ -449,8 +407,8 @@ app.get("/loh", (req, res) => {
     // trySend("1844369452275489", "pizda" + d);
     // callSendAPI("1844369452275489", {"text": "zdarova"});
 
-    res.sendStatus(200);
     res.send("loh");
+    res.sendStatus(200);
 });
 
 app.get("/stop", (req, res) => {
@@ -650,6 +608,8 @@ async function runRem() {
 
     try {
         await mongoose.connect(uri);
+        db.on('error', console.error.bind(console, 'connection error:'));
+
         db.once('open', async function callback() {
             todays = await Reminder.find({"date": par});
 
@@ -856,27 +816,22 @@ function validateAndSetDate(timeAndDateString) {
 }
 
 
-async function deletion(messengerId, remId, res) {
-
+async function deleteReminder(messengerId, remId, res) {
     mongoose.connect(uri);
-
     db.on('error', console.error.bind(console, 'connection error:'));
 
     db.once('open', async function callback() {
 
         try {
-
             if (remId.toUpperCase() === "ALL") {
                 await Reminder.remove({"messengerId": messengerId});
-
-                mongoose.connection.close();
                 res.send([{"text": "Done all " + remId}]);
+                res.sendStatus(200);
             }
             else {
                 await Reminder.remove({"messengerId": messengerId, "remId": remId});
-
-                mongoose.connection.close();
                 res.send([{"text": "Done " + remId}]);
+                res.sendStatus(200);
             }
         }
         catch (e) {
@@ -886,4 +841,55 @@ async function deletion(messengerId, remId, res) {
             mongoose.connection.close();
         }
     })
+}
+
+
+async function snoozeReminder(DBRemID, messengerId, res) {
+    try {
+        mongoose.connect(uri);
+
+        db.on('error', console.error.bind(console, 'connection error:'));
+
+        db.once('open', async function callback() {
+            let qwe = await Reminder.findById(DBRemID);
+
+            let temp = dateAndTime.parse(qwe.date + " " + qwe.time, "DD.MM.YYYY HH.mm");
+            temp.setMinutes(temp.getMinutes() + 2);
+
+            await Reminder.findByIdAndUpdate(DBRemID, {
+                "date": dateAndTime.format(temp, "DD.MM.YYYY"),
+                "time": dateAndTime.format(temp, "HH.mm")
+            });
+
+            trySend(messengerId, "Reminder snoozed. Will show up again ai 10 minutes");
+            res.sendStatus(200);
+        });
+    } catch (e) {
+        trySend(messengerId, e);
+        res.sendStatus(500)
+    } finally {
+        mongoose.connection.close();
+    }
+}
+
+async function acceptReminder(DBRemID, messengerId, res) {
+    try {
+        mongoose.connect(uri);
+
+        db.on('error', console.error.bind(console, 'connection error:'));
+
+        db.once('open', async function callback() {
+            await Reminder.remove({"_id": DBRemID});
+
+            mongoose.connection.close();
+
+            trySend(messengerId, "done");
+            res.sendStatus(200);
+        });
+    } catch (e) {
+        trySend(messengerId, e);
+        res.sendStatus(500)
+    } finally {
+        mongoose.connection.close();
+    }
 }

@@ -398,14 +398,15 @@ app.get("/loh", (req, res) => {
     let nodeCron = require('node-cron');
     let CronJob = require('cron').CronJob;
 
-    if (!active) {
-        running = setInterval(() => {
-            // trySend("1844369452275489", "in loh setint");
-            runRem();
-        }, 60000);
+    clearInterval(running);
+    // if (!active) {
+    running = setInterval(() => {
+        // trySend("1844369452275489", "in loh setint");
+        runRem();
+    }, 55000);
 
-        active = true;
-    }
+    active = true;
+    // }
 
     // for (let i = 0; i < 59; i = i + 5) {
     //     let q = i + ' * * * * *';

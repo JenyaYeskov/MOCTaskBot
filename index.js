@@ -424,7 +424,7 @@ app.get("/loh", (req, res) => {
     // trySend("1844369452275489", "pizda" + d);
     // callSendAPI("1844369452275489", {"text": "zdarova"});
 
-
+    res.sendStatus(200);
     res.send("loh");
 });
 

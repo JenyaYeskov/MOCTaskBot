@@ -24,7 +24,7 @@ let remSchema = mongoose.Schema({
     date: String,
     time: String,
     event: String,
-    timeInUTC: Date
+    timeInUTC: String
 });
 
 

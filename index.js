@@ -653,7 +653,7 @@ async function runRem() {
         trySend("1844369452275489", "huinya poluchylas run" + e);
     }
     finally {
-        mongoose.Connection.close();
+        // mongoose.Connection.close();
     }
     // }, 30000);
 

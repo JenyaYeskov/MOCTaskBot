@@ -23,7 +23,8 @@ let remSchema = mongoose.Schema({
     messengerId: String,
     date: String,
     time: String,
-    event: String
+    event: String,
+    timeInUTC: Date
 });
 
 
@@ -195,7 +196,6 @@ app.post("/addRem", (req, res) => {
         let ar = [];
         let rem;
 
-        // noinspection JSAnnotator
         try {
             let rems = await Reminder.find({'messengerId': messengerId});
 
@@ -208,32 +208,32 @@ app.post("/addRem", (req, res) => {
                 userReminderId = userReminderId + 1;
             }
 
-            rem = await new Reminder({
-                messengerId: body["messenger user id"],
-                date: body.date,
-                time: body.time,
-                event: body.what,
-                remId: userReminderId
-            });
 
             let timeAndDate;
-            let off = parseInt(body["timezone"]);
             // let timeAndDateString = body.date + " " + (parseFloat(body.time) - off).toFixed(2);
             let timeAndDateString = body.date + " " + body.time;
 
 
             try {
                 timeAndDate = validateAndSetDate(timeAndDateString);
-                await Reminder.create(rem);
                 timeAndDate.setHours(parseFloat(timeAndDate.getHours() - body["timezone"]));
+
+                rem = await new Reminder({
+                    messengerId: body["messenger user id"],
+                    date: body.date,
+                    time: body.time,
+                    event: body.what,
+                    remId: userReminderId,
+                    timeInUTC: timeAndDate
+                });
+                await Reminder.create(rem);
             } catch (e) {
                 res.send([{"text": "Wrong date or time. Try again  " + timeAndDate + " " + timeAndDateString}]);
             }
 
-            let qwe = await Reminder.findOne({"messengerId": messengerId, "remId": userReminderId});
-            console.log(qwe);
-
-            let reminderId = qwe["_id"];
+            // let qwe = await Reminder.findOne({"messengerId": messengerId, "remId": userReminderId});
+            // console.log(qwe);
+            // let reminderId = qwe["_id"];
 
             // try {
             //
@@ -270,7 +270,6 @@ app.post("/addRem", (req, res) => {
         }
         catch (e) {
             console.error(e);
-            mongoose.connection.close();
             res.send([{"text": "Something went wrong. Try again  "}]);
         }
         finally {
@@ -278,53 +277,6 @@ app.post("/addRem", (req, res) => {
         }
     });
 });
-
-
-//promise based version
-// app.post("/addRem", (req, res) => {
-//
-//     mongoose.connect(uri);
-//
-//     db.on('error', console.error.bind(console, 'connection error:'));
-//
-//     db.once('open', function callback() {
-//         let body = req.body;
-//         let id;
-//         let ar = [];
-//         let rem;
-//
-//         Reminder.find({'messengerId': body["messenger user id"]}).then(rems => {
-//             id = rems.length + 1;
-//
-//             rems.forEach(r => {
-//                 ar.push(r.remId);
-//             });
-//
-//         }).then(() => {
-//             while (ar.includes(id)) {
-//                 id = id + 1;
-//             }
-//
-//         }).then(() => {
-//             rem = new Reminder({
-//                 messengerId: body["messenger user id"],
-//                 date: body.date,
-//                 time: body.time,
-//                 event: body.what,
-//                 remId: id
-//             });
-//
-//         }).then(() => {
-//             Reminder.create(rem)
-//         }).then(() => {
-//             mongoose.connection.close();
-//         }).then(() => {
-//             res.send([{"text": "Done " + id}]);
-//         }).catch(err => {
-//             console.log(err)
-//         });
-//     });
-// });
 
 
 app.post("/delete", (req, res) => {
@@ -598,13 +550,14 @@ async function runRem() {
 
         db.once('open', async () => {
             todays = await Reminder.find({"date": par});
+            mongoose.Connection.close();
 
             for (let rem of todays) {
-                if (rem.time === dateAndTime.format(new Date(), "HH.mm")) {
+                let n = new Date(rem.timeInUTC);
+                if (n <= new Date()) {
                     fire(rem.messengerId, "time to \"" + rem.event + "\"", rem["_id"])
                 }
             }
-            // mongoose.Connection.close();
         });
 
         // new CronJob("1 * * * * *", () => {
@@ -839,12 +792,17 @@ async function snoozeReminder(DBRemID, messengerId, res) {
         db.once('open', async function callback() {
             let qwe = await Reminder.findById(DBRemID);
 
-            let temp = dateAndTime.parse(qwe.date + " " + qwe.time, "DD.MM.YYYY HH.mm");
-            temp.setMinutes(temp.getMinutes() + 2);
+            // let temp = dateAndTime.parse(qwe.date + " " + qwe.time, "DD.MM.YYYY HH.mm");
+            // temp.setMinutes(temp.getMinutes() + 2);
+            //
+            // await Reminder.findByIdAndUpdate(DBRemID, {
+            //     "date": dateAndTime.format(temp, "DD.MM.YYYY"),
+            //     "time": dateAndTime.format(temp, "HH.mm")
+            // });
 
             await Reminder.findByIdAndUpdate(DBRemID, {
-                "date": dateAndTime.format(temp, "DD.MM.YYYY"),
-                "time": dateAndTime.format(temp, "HH.mm")
+                "timeInUTC": new Date(qwe.timeInUTC).setMinutes(new Date(qwe.timeInUTC).getMinutes() + 2),
+                // "time": dateAndTime.format(temp, "HH.mm")
             });
 
             mongoose.connection.close();

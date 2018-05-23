@@ -847,7 +847,9 @@ async function snoozeReminder(DBRemID, messengerId, res) {
                 "time": dateAndTime.format(temp, "HH.mm")
             });
 
-            trySend(messengerId, "Reminder snoozed. Will show up again ai 10 minutes");
+            mongoose.connection.close();
+            res.send([{"text": "Reminder snoozed. Will show up again in 10 minutes"}]);
+            // trySend(messengerId, "Reminder snoozed. Will show up again in 10 minutes");
             // res.sendStatus(200);
         });
     } catch (e) {
@@ -869,7 +871,8 @@ async function acceptReminder(DBRemID, messengerId, res) {
 
             mongoose.connection.close();
 
-            trySend(messengerId, "done");
+            res.send([{"text": "done"}]);
+            // trySend(messengerId, "done");
             // res.sendStatus(200);
         });
     } catch (e) {

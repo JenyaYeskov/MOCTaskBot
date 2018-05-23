@@ -607,10 +607,10 @@ async function runRem() {
     // setInterval(() => {
 
     try {
-        await mongoose.connect(uri);
+        mongoose.connect(uri);
         db.on('error', console.error.bind(console, 'connection error:'));
 
-        db.once('open', async function callback() {
+        db.once('open', async () => {
             todays = await Reminder.find({"date": par});
 
             for (let rem of todays) {
@@ -619,7 +619,7 @@ async function runRem() {
                 }
             }
         });
-        // mongoose.Connection.close();
+        mongoose.Connection.close();
 
         // new CronJob("1 * * * * *", () => {
         //

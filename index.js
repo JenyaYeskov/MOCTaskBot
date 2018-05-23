@@ -618,8 +618,8 @@ async function runRem() {
                     trySend(rem.messengerId, "time to \"" + rem.event + "\"", rem["_id"])
                 }
             }
+            mongoose.Connection.close();
         });
-        mongoose.Connection.close();
 
         // new CronJob("1 * * * * *", () => {
         //

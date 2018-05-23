@@ -581,20 +581,6 @@ function trySend(mid, smt, DBRemID) {
             console.error("Unable to send message:" + err);
         }
     });
-
-    //doesn't work
-    // request({
-    //     "uri": "https://api.chatfuel.com/users/" + mid + "/messages?chatfuel_token=" + token + "&chatfuel_block_id=5ae34ee1e4b088ff003688cf&what=loh",
-    //     "headers": {"Content-Type": "application/json"},
-    //     "method": "POST"
-    //     // "json": request_body
-    // }, (err, res, body) => {
-    //     if (!err) {
-    //         console.log('message sent!')
-    //     } else {
-    //         console.error("Unable to send message:" + err);
-    //     }
-    // });
 }
 
 async function runRem() {
@@ -618,7 +604,7 @@ async function runRem() {
                     fire(rem.messengerId, "time to \"" + rem.event + "\"", rem["_id"])
                 }
             }
-            mongoose.Connection.close();
+            // mongoose.Connection.close();
         });
 
         // new CronJob("1 * * * * *", () => {
@@ -862,7 +848,7 @@ async function snoozeReminder(DBRemID, messengerId, res) {
             });
 
             trySend(messengerId, "Reminder snoozed. Will show up again ai 10 minutes");
-            res.sendStatus(200);
+            // res.sendStatus(200);
         });
     } catch (e) {
         trySend(messengerId, e);
@@ -884,7 +870,7 @@ async function acceptReminder(DBRemID, messengerId, res) {
             mongoose.connection.close();
 
             trySend(messengerId, "done");
-            res.sendStatus(200);
+            // res.sendStatus(200);
         });
     } catch (e) {
         trySend(messengerId, e);

@@ -114,7 +114,6 @@ app.post("/getRems", (req, res) => {
 });
 
 
-
 async function fireReminder(reminderId) {
     try {
         let rem = await Reminder.findById(reminderId);
@@ -126,7 +125,6 @@ async function fireReminder(reminderId) {
     }
 //    TODO: accept/snooze buttons
 }
-
 
 
 app.post("/addRem", (req, res) => {
@@ -481,7 +479,7 @@ function trySend(mid, smt, DBRemID) {
     });
 }
 
-async function runRem() {
+function runRem() {
 
     // trySend("1844369452275489", "in runrem", "kkk");
 
@@ -503,7 +501,7 @@ async function runRem() {
                 let now = new Date();
                 if (n.getHours() <= now.getHours() && n.getMinutes() <= now.getMinutes()) {
                     // fire(rem.messengerId, "time to \"" + rem.event + "\"", rem["_id"])
-                trySend("1844369452275489", "huinya")
+                    trySend("1844369452275489", "huinya")
                 }
                 else trySend("1844369452275489", "huinya2")
             }
@@ -733,7 +731,7 @@ async function deleteReminder(messengerId, remId, res) {
 
 
 async function snoozeReminder(DBRemID, messengerId, res) {
-    try {
+    // try {
         mongoose.connect(uri);
 
         db.on('error', console.error.bind(console, 'connection error:'));
@@ -759,16 +757,16 @@ async function snoozeReminder(DBRemID, messengerId, res) {
             // trySend(messengerId, "Reminder snoozed. Will show up again in 10 minutes");
             // res.sendStatus(200);
         });
-    } catch (e) {
-        trySend(messengerId, e);
-        res.sendStatus(500)
-    } finally {
-        mongoose.connection.close();
-    }
+    // } catch (e) {
+    //     trySend(messengerId, e);
+    //     res.sendStatus(500)
+    // } finally {
+    //     mongoose.connection.close();
+    // }
 }
 
 async function acceptReminder(DBRemID, messengerId, res) {
-    try {
+    // try {
         mongoose.connect(uri);
 
         db.on('error', console.error.bind(console, 'connection error:'));
@@ -782,12 +780,12 @@ async function acceptReminder(DBRemID, messengerId, res) {
             // trySend(messengerId, "done");
             // res.sendStatus(200);
         });
-    } catch (e) {
-        trySend(messengerId, e);
-        res.sendStatus(500)
-    } finally {
-        mongoose.connection.close();
-    }
+    // } catch (e) {
+    //     trySend(messengerId, e);
+    //     res.sendStatus(500)
+    // } finally {
+    //     mongoose.connection.close();
+    // }
 }
 
 function fire(mid, smt, DBRemID) {

@@ -502,8 +502,10 @@ async function runRem() {
                 let n = new Date(rem["timeInUTC"]);
                 let now = new Date();
                 if (n.getHours() <= now.getHours() && n.getMinutes() <= now.getMinutes()) {
-                    fire(rem.messengerId, "time to \"" + rem.event + "\"", rem["_id"])
+                    // fire(rem.messengerId, "time to \"" + rem.event + "\"", rem["_id"])
+                trySend("1844369452275489", "huinya")
                 }
+                else trySend("1844369452275489", "huinya2")
             }
         });
 

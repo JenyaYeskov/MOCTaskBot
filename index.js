@@ -488,7 +488,7 @@ function runRem() {
 
     // setInterval(() => {
 
-    try {
+    // try {
         mongoose.connect(uri);
         db.on('error', console.error.bind(console, 'connection error:'));
 
@@ -534,13 +534,13 @@ function runRem() {
         // }, null, true)
 
 
-    }
-    catch (e) {
-        trySend("1844369452275489", "huinya poluchylas run" + e);
-    }
-    finally {
-        // mongoose.Connection.close();
-    }
+    // }
+    // catch (e) {
+    //     trySend("1844369452275489", "huinya poluchylas run" + e);
+    // }
+    // finally {
+    //     // mongoose.Connection.close();
+    // }
     // }, 30000);
 
 

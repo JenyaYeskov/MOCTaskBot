@@ -267,7 +267,7 @@ app.post("/addRem", (req, res) => {
 
 
             res.send([{"text": "Done " + userReminderId + " " + timeAndDate +" "
-                + new Date(rem.timeInUTC).setFullYear(2007)}]);
+                + new Date(rem.timeInUTC).setFullYear(2007).toString()}]);
         }
         catch (e) {
             console.error(e);

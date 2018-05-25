@@ -507,12 +507,12 @@ function runRem() {
             let n = new Date(rem["timeInUTC"]);
             let now = new Date();
             if (n.getHours() <= now.getHours() && n.getMinutes() <= now.getMinutes()) {
-                // fire(rem.messengerId, "time to \"" + rem.event + "\"", rem["_id"])
+                fire(rem.messengerId, "time to \"" + rem.event + "\"", rem["_id"])
                 console.log("in if");
-                trySend("1844369452275489", "huinya")
+                // trySend("1844369452275489", "huinya")
             }
             else {
-                trySend("1844369452275489", "huinya2");
+                trySend("1844369452275489", "huinya2 " + rem["timeInUTC"]);
                 console.log("in else");
             }
         }

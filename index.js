@@ -276,10 +276,12 @@ app.get("/loh", (req, res) => {
     let nodeCron = require('node-cron');
     let CronJob = require('cron').CronJob;
 
+    console.log("in loh");
     clearInterval(running);
     // if (!active) {
     running = setInterval(() => {
         // trySend("1844369452275489", "in loh setint");
+        console.log("in set int");
         runRem();
     }, 55000);
 
@@ -481,6 +483,7 @@ function trySend(mid, smt, DBRemID) {
 
 function runRem() {
 
+    console.log("in runrem");
     // trySend("1844369452275489", "in runrem", "kkk");
 
     let todays;
@@ -489,49 +492,55 @@ function runRem() {
     // setInterval(() => {
 
     // try {
-        mongoose.connect(uri);
-        db.on('error', console.error.bind(console, 'connection error:'));
+    mongoose.connect(uri);
+    db.on('error', console.error.bind(console, 'connection error:'));
 
-        db.once('open', async () => {
-            todays = await Reminder.find({"date": par});
-            mongoose.Connection.close();
+    db.once('open', async () => {
+        console.log("in open");
+        todays = await Reminder.find({"date": par});
+        mongoose.Connection.close();
 
-            for (let rem of todays) {
-                let n = new Date(rem["timeInUTC"]);
-                let now = new Date();
-                if (n.getHours() <= now.getHours() && n.getMinutes() <= now.getMinutes()) {
-                    // fire(rem.messengerId, "time to \"" + rem.event + "\"", rem["_id"])
-                    trySend("1844369452275489", "huinya")
-                }
-                else trySend("1844369452275489", "huinya2")
+        for (let rem of todays) {
+            console.log("in for");
+            let n = new Date(rem["timeInUTC"]);
+            let now = new Date();
+            if (n.getHours() <= now.getHours() && n.getMinutes() <= now.getMinutes()) {
+                // fire(rem.messengerId, "time to \"" + rem.event + "\"", rem["_id"])
+                console.log("in if");
+                trySend("1844369452275489", "huinya")
             }
-        });
+            else {
+                trySend("1844369452275489", "huinya2");
+                console.log("in else");
+            }
+        }
+    });
 
-        // new CronJob("1 * * * * *", () => {
-        //
-        //     try {
-        //         for (let rem of todays) {
-        //             if (rem.time === dateAndTime.format(new Date(), "HH.mm")) {
-        //                 trySend("1844369452275489", "ebat")
-        //             }
-        //             else if (rem.time === dateAndTime.format(new Date(), "H.mm")) {
-        //                 trySend("1844369452275489", "ne ebat")
-        //             }
-        //         }
-        //
-        //         // todays.forEach(rem => {
-        //         //     if (rem.time === dateAndTime.format(new Date(), "HH.mm")) {
-        //         //         trySend("1844369452275489", "ebat")
-        //         //     }
-        //         // });
-        //
-        //         // trySend("1844369452275489", "rabotaem");
-        //
-        //     } catch (e) {
-        //         trySend("1844369452275489", e);
-        //     }
-        //
-        // }, null, true)
+    // new CronJob("1 * * * * *", () => {
+    //
+    //     try {
+    //         for (let rem of todays) {
+    //             if (rem.time === dateAndTime.format(new Date(), "HH.mm")) {
+    //                 trySend("1844369452275489", "ebat")
+    //             }
+    //             else if (rem.time === dateAndTime.format(new Date(), "H.mm")) {
+    //                 trySend("1844369452275489", "ne ebat")
+    //             }
+    //         }
+    //
+    //         // todays.forEach(rem => {
+    //         //     if (rem.time === dateAndTime.format(new Date(), "HH.mm")) {
+    //         //         trySend("1844369452275489", "ebat")
+    //         //     }
+    //         // });
+    //
+    //         // trySend("1844369452275489", "rabotaem");
+    //
+    //     } catch (e) {
+    //         trySend("1844369452275489", e);
+    //     }
+    //
+    // }, null, true)
 
 
     // }
@@ -732,31 +741,31 @@ async function deleteReminder(messengerId, remId, res) {
 
 async function snoozeReminder(DBRemID, messengerId, res) {
     // try {
-        mongoose.connect(uri);
+    mongoose.connect(uri);
 
-        db.on('error', console.error.bind(console, 'connection error:'));
+    db.on('error', console.error.bind(console, 'connection error:'));
 
-        db.once('open', async function callback() {
-            let qwe = await Reminder.findById(DBRemID);
+    db.once('open', async function callback() {
+        let qwe = await Reminder.findById(DBRemID);
 
-            // let temp = dateAndTime.parse(qwe.date + " " + qwe.time, "DD.MM.YYYY HH.mm");
-            // temp.setMinutes(temp.getMinutes() + 2);
-            //
-            // await Reminder.findByIdAndUpdate(DBRemID, {
-            //     "date": dateAndTime.format(temp, "DD.MM.YYYY"),
-            //     "time": dateAndTime.format(temp, "HH.mm")
-            // });
+        // let temp = dateAndTime.parse(qwe.date + " " + qwe.time, "DD.MM.YYYY HH.mm");
+        // temp.setMinutes(temp.getMinutes() + 2);
+        //
+        // await Reminder.findByIdAndUpdate(DBRemID, {
+        //     "date": dateAndTime.format(temp, "DD.MM.YYYY"),
+        //     "time": dateAndTime.format(temp, "HH.mm")
+        // });
 
-            await Reminder.findByIdAndUpdate(DBRemID, {
-                "timeInUTC": new Date(qwe.timeInUTC).setMinutes(new Date(qwe.timeInUTC).getMinutes() + 2),
-                // "time": dateAndTime.format(temp, "HH.mm")
-            });
-
-            mongoose.connection.close();
-            res.send([{"text": "Reminder snoozed. Will show up again in 10 minutes"}]);
-            // trySend(messengerId, "Reminder snoozed. Will show up again in 10 minutes");
-            // res.sendStatus(200);
+        await Reminder.findByIdAndUpdate(DBRemID, {
+            "timeInUTC": new Date(qwe.timeInUTC).setMinutes(new Date(qwe.timeInUTC).getMinutes() + 2),
+            // "time": dateAndTime.format(temp, "HH.mm")
         });
+
+        mongoose.connection.close();
+        res.send([{"text": "Reminder snoozed. Will show up again in 10 minutes"}]);
+        // trySend(messengerId, "Reminder snoozed. Will show up again in 10 minutes");
+        // res.sendStatus(200);
+    });
     // } catch (e) {
     //     trySend(messengerId, e);
     //     res.sendStatus(500)
@@ -767,19 +776,19 @@ async function snoozeReminder(DBRemID, messengerId, res) {
 
 async function acceptReminder(DBRemID, messengerId, res) {
     // try {
-        mongoose.connect(uri);
+    mongoose.connect(uri);
 
-        db.on('error', console.error.bind(console, 'connection error:'));
+    db.on('error', console.error.bind(console, 'connection error:'));
 
-        db.once('open', async function callback() {
-            await Reminder.remove({"_id": DBRemID});
+    db.once('open', async function callback() {
+        await Reminder.remove({"_id": DBRemID});
 
-            mongoose.connection.close();
+        mongoose.connection.close();
 
-            res.send([{"text": "done"}]);
-            // trySend(messengerId, "done");
-            // res.sendStatus(200);
-        });
+        res.send([{"text": "done"}]);
+        // trySend(messengerId, "done");
+        // res.sendStatus(200);
+    });
     // } catch (e) {
     //     trySend(messengerId, e);
     //     res.sendStatus(500)

@@ -494,13 +494,22 @@ function runRem() {
     // setInterval(() => {
 
     // try {
-    mongoose.connect(uri).catch(()=>{console.log("cached")});
+    mongoose.connect(uri).catch(() => {
+        console.log("cached")
+    });
     db.on('error', console.error.bind(console, 'connection error:'));
 
     db.once('open', async () => {
         console.log("in open");
-        todays = await Reminder.find({"date": par});
-        mongoose.Connection.close().catch(()=>{console.log("cached in close")});
+
+        try {
+            todays = await Reminder.find({"date": par});
+            mongoose.Connection.close().catch(() => {
+                console.log("cached in close")
+            });
+        } catch (e) {
+            console.log("cached in")
+        }
 
         for (let rem of todays) {
             console.log("in for");

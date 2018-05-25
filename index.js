@@ -494,7 +494,7 @@ function runRem() {
     // setInterval(() => {
 
     // try {
-    mongoose.connect(uri);
+    mongoose.connect(uri).catch(()=>{console.log("cached")});
     db.on('error', console.error.bind(console, 'connection error:'));
 
     db.once('open', async () => {

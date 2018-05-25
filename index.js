@@ -276,16 +276,17 @@ app.get("/loh", (req, res) => {
     let nodeCron = require('node-cron');
     let CronJob = require('cron').CronJob;
 
-    trySend("1844369452275489", "in loh")
+    // trySend("1844369452275489", "in loh")
     console.log("in loh");
     clearInterval(running);
     // if (!active) {
     running = setInterval(() => {
-        // trySend("1844369452275489", "in loh setint");
+        let n = new Date();
+        trySend("1844369452275489", n.getHours() + "."+n.getMinutes());
         console.log("in set int");
         runRem();
 
-    }, 55000);
+    }, 60000);
 
     active = true;
     // }
@@ -508,7 +509,7 @@ function runRem() {
                 console.log("cached in close")
             });
         } catch (e) {
-            console.log("cached in")
+            console.log("cached in " + e)
         }
 
         for (let rem of todays) {
@@ -521,7 +522,7 @@ function runRem() {
                 // trySend("1844369452275489", "huinya")
             }
             else {
-                trySend("1844369452275489", "huinya2 " + rem["timeInUTC"]);
+                // trySend("1844369452275489", "huinya2 " + rem["timeInUTC"]);
                 console.log("in else");
             }
         }

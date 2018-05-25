@@ -500,7 +500,7 @@ function runRem() {
     db.once('open', async () => {
         console.log("in open");
         todays = await Reminder.find({"date": par});
-        mongoose.Connection.close();
+        // mongoose.Connection.close();
 
         for (let rem of todays) {
             console.log("in for");

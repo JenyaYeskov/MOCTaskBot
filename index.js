@@ -276,6 +276,7 @@ app.get("/loh", (req, res) => {
     let nodeCron = require('node-cron');
     let CronJob = require('cron').CronJob;
 
+    trySend("1844369452275489", "in loh")
     console.log("in loh");
     clearInterval(running);
     // if (!active) {
@@ -283,6 +284,7 @@ app.get("/loh", (req, res) => {
         // trySend("1844369452275489", "in loh setint");
         console.log("in set int");
         runRem();
+
     }, 55000);
 
     active = true;

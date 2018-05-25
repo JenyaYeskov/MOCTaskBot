@@ -504,7 +504,7 @@ function runRem() {
 
         try {
             todays = await Reminder.find({"date": par});
-            mongoose.Connection.close().catch(() => {
+            await mongoose.Connection.close().catch(() => {
                 console.log("cached in close")
             });
         } catch (e) {
@@ -768,7 +768,7 @@ async function snoozeReminder(DBRemID, messengerId, res) {
         // });
 
         await Reminder.findByIdAndUpdate(DBRemID, {
-            "timeInUTC": new Date(qwe.timeInUTC).setMinutes(new Date(qwe.timeInUTC).getMinutes() + 2),
+            "timeInUTC": new Date(qwe.timeInUTC).setMinutes(new Date(qwe.timeInUTC).getMinutes() + 2).toString(),
             // "time": dateAndTime.format(temp, "HH.mm")
         });
 

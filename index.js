@@ -506,7 +506,7 @@ function runRem() {
             console.log("in for");
             let n = new Date(rem["timeInUTC"]);
             let now = new Date();
-            if (n.getHours() <= now.getHours() && n.getMinutes() <= now.getMinutes()) {
+            if (n <= now) {
                 fire(rem.messengerId, "time to \"" + rem.event + "\"", rem["_id"])
                 console.log("in if");
                 // trySend("1844369452275489", "huinya")

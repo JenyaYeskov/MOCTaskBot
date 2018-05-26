@@ -768,13 +768,15 @@ async function snoozeReminder(DBRemID, messengerId, res) {
         //     "time": dateAndTime.format(temp, "HH.mm")
         // });
 
+        let old = new Date(qwe.timeInUTC);
+        let n = old.setMinutes(old.getMinutes() + 2).toString();
         await Reminder.findByIdAndUpdate(DBRemID, {
-            "timeInUTC": new Date(qwe.timeInUTC).setMinutes(new Date(qwe.timeInUTC).getMinutes() + 2).toString(),
+            "timeInUTC": n
             // "time": dateAndTime.format(temp, "HH.mm")
         });
 
         mongoose.connection.close();
-        res.send([{"text": "Reminder snoozed. Will show up again in 10 minutes"}]);
+        res.send([{"text": "Reminder snoozed. It will show up again in 10 minutes"}]);
         // trySend(messengerId, "Reminder snoozed. Will show up again in 10 minutes");
         // res.sendStatus(200);
     });

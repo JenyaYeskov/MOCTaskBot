@@ -282,7 +282,7 @@ app.get("/loh", (req, res) => {
     // if (!active) {
     running = setInterval(() => {
         let n = new Date();
-        trySend("1844369452275489", n.getHours() + "."+n.getMinutes());
+        // trySend("1844369452275489", n.getHours() + "."+n.getMinutes());
         console.log("in set int");
         runRem();
 

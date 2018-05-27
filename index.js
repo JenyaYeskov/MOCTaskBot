@@ -281,7 +281,7 @@ app.get("/loh", (req, res) => {
     clearInterval(running);
     // if (!active) {
     running = setInterval(() => {
-        let n = new Date();
+        // let n = new Date();
         // trySend("1844369452275489", n.getHours() + "."+n.getMinutes());
         console.log("in set int");
         runRem();
@@ -505,7 +505,7 @@ function runRem() {
 
         try {
             todays = await Reminder.find({"date": par});
-            await mongoose.Connection.close().catch(() => {
+            mongoose.Connection.close().catch(() => {
                 console.log("cached in close")
             });
         } catch (e) {

@@ -505,7 +505,7 @@ function runRem() {
 
         try {
             todays = await Reminder.find({"date": par});
-            mongoose.Connection.close().catch(() => {
+            mongoose.connection.close().catch(() => {
                 console.log("cached in close")
             });
         } catch (e) {

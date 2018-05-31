@@ -514,7 +514,10 @@ function runRem() {
 
         for (let rem of todays) {
             console.log("in for");
-            let n = new Date(parseInt(rem["timeInUTC"]));
+            let n;
+            if (isNaN(parseInt(rem["timeInUTC"])))
+                n = new Date(rem["timeInUTC"]);
+            else n = new Date(parseInt(rem["timeInUTC"]);
             console.log("fire n   " + n);
             let now = new Date();
 

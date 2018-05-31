@@ -773,7 +773,10 @@ async function snoozeReminder(DBRemID, messengerId, res) {
         //     "time": dateAndTime.format(temp, "HH.mm")
         // });
 
-        let old = new Date(qwe.timeInUTC);
+        let old;
+        if (isNaN(parseInt(qwe.timeInUTC)))
+            old = new Date(qwe.timeInUTC);
+        else old = new Date(parseInt(qwe.timeInUTC));
         console.log("old   " + old);
         let n = old.setMinutes(old.getMinutes() + 2);
         console.log("n   " + n);

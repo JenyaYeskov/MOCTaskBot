@@ -517,7 +517,7 @@ function runRem() {
             let n;
             if (isNaN(parseInt(rem["timeInUTC"])))
                 n = new Date(rem["timeInUTC"]);
-            else n = new Date(parseInt(rem["timeInUTC"]);
+            else n = new Date(parseInt(rem["timeInUTC"]));
             console.log("fire n   " + n);
             let now = new Date();
 

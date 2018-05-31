@@ -514,7 +514,7 @@ function runRem() {
 
         for (let rem of todays) {
             console.log("in for");
-            let n = new Date(rem["timeInUTC"]);
+            let n = new Date(parseInt(rem["timeInUTC"]));
             console.log("fire n   " + n);
             let now = new Date();
 
@@ -772,7 +772,7 @@ async function snoozeReminder(DBRemID, messengerId, res) {
 
         let old = new Date(qwe.timeInUTC);
         console.log("old   " + old);
-        let n = old.setMinutes(old.getMinutes() + 2).toString();
+        let n = old.setMinutes(old.getMinutes() + 2);
         console.log("n   " + n);
 
         await Reminder.findByIdAndUpdate(DBRemID, {

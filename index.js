@@ -276,7 +276,8 @@ app.get("/loh", (req, res) => {
     let nodeCron = require('node-cron');
     let CronJob = require('cron').CronJob;
 
-    // trySend("1844369452275489", "in loh")
+    trySend("1844369452275489", "in loh");
+
     console.log("in loh");
     clearInterval(running);
     // if (!active) {
@@ -495,9 +496,8 @@ function runRem() {
     // setInterval(() => {
 
     // try {
-    mongoose.connect(uri).catch(() => {
-        console.log("cached")
-    });
+    mongoose.connect(uri);
+
     db.on('error', console.error.bind(console, 'connection error:'));
 
     db.once('open', async () => {
@@ -505,9 +505,7 @@ function runRem() {
 
         try {
             todays = await Reminder.find({"date": par});
-            mongoose.connection.close().catch(() => {
-                console.log("cached in close")
-            });
+            mongoose.connection.close();
         } catch (e) {
             console.log("cached in " + e)
         }

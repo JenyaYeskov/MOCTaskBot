@@ -32,7 +32,7 @@ let Reminder = mongoose.model('rems', remSchema);
 
 app.use(bodyParser.urlencoded({extended: false}));
 
-app.listen(process.env.PORT || 5858, () => console.log('webhook is listening'));
+app.listen(process.env.PORT || 58588, () => console.log('webhook is listening'));
 
 
 app.post("/getRems", (req, res) => {
@@ -136,7 +136,7 @@ app.post("/addRem", (req, res) => {
     db.once('open', async function callback() {
         let body = req.body;
         let userReminderId;
-        let messengerId = body["messenger user id"];
+        let messengerId = body["messenger user xxid"];
         let ar = [];
         let rem;
 

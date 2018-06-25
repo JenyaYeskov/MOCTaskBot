@@ -276,7 +276,7 @@ app.get("/loh", (req, res) => {
     let nodeCron = require('node-cron');
     let CronJob = require('cron').CronJob;
 
-    trySend("1844369452275489", "in loh", "bkb");
+    trySend("1844369452275489", "in loh");
 
     console.log("in loh");
     clearInterval(running);
@@ -472,7 +472,7 @@ function trySend(mid, smt, DBRemID) {
     let token = "qwYLsCSz8hk4ytd6CPKP4C0oalstMnGdpDjF8YFHPHCieKNc0AfrnjVs91fGuH74";
 
     request({
-        "uri": "https://api.chatfuel.com/bots/5ac8230ce4b0336c50287a5d/users/" + mid + "/send?chatfuel_token=" + token + "&chatfuel_block_id=5ae34ee1e4b088ff003688cf&what=" + smt + "&DBRemID=" + DBRemID,
+        "uri": "https://api.chatfuel.com/bots/5ac8230ce4b0336c50287a5d/users/" + mid + "/send?chatfuel_token=" + token + "&chatfuel_block_id=5ae34ee1e4b088ff003688cf&what=" + smt ,
         "headers": {"Content-Type": "application/json"},
         "method": "POST"
         // "json": request_body

@@ -276,7 +276,7 @@ app.get("/loh", (req, res) => {
     let nodeCron = require('node-cron');
     let CronJob = require('cron').CronJob;
 
-    trySend("1844369452275489", "in loh");
+    trySend("1844369452275489", "in loh", "bkb");
 
     console.log("in loh");
     clearInterval(running);

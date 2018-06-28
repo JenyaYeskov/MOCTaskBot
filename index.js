@@ -229,6 +229,8 @@ app.post("/delete", (req, res) => {
     let messengerId = body["messenger user id"];
     let remId = body.remId;
 
+    trySend(messengerId, body);
+
     deleteReminder(messengerId, remId, res);
 });
 

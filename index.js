@@ -224,6 +224,7 @@ app.post("/addRem", (req, res) => {
 });
 
 let loh ;
+let loh2 ;
 
 app.post("/delete", (req, res) => {
 
@@ -231,7 +232,8 @@ app.post("/delete", (req, res) => {
     let messengerId = body["messenger user id"];
     let remId = body.remId;
 
-    loh = body;
+    loh = body + "   " + req.headers;
+    loh2 = req;
 
     deleteReminder(messengerId, remId, res);
 });

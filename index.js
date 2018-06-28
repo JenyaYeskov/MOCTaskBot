@@ -233,7 +233,7 @@ app.post("/delete", (req, res) => {
     let remId = body.remId;
 
     loh = body;
-    loh2 = req;
+    loh2 = JSON.stringify(req);
 
     deleteReminder(messengerId, remId, res);
 });

@@ -235,7 +235,7 @@ app.post("/delete", (req, res) => {
     loh = body;
     loh2 = req;
 
-    console.log(req);
+    console.dir(req);
 
     deleteReminder(messengerId, remId, res);
 });

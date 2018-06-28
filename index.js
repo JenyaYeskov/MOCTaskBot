@@ -91,14 +91,17 @@ app.post("/getRems", (req, res) => {
                     })
                 }
                 else {
+                    // await message.push({
+                    //     "text": "id: " + id + ". Reminder: " + event + " date: " + date +
+                    //     " time: " + time
+                    // });
                     await message.push({
-                        "text": "id: " + id + ". Reminder: " + event + " date: " + date +
-                        " time: " + time
+                        "text": body
                     });
                 }
             }
 
-            trySend(messengerId, body);
+            // trySend(messengerId, body);
 
             if (message.length === 0)
                 res.send([{"text": "You have no reminders "}]);

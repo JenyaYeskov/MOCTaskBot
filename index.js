@@ -232,7 +232,7 @@ app.post("/delete", (req, res) => {
     let messengerId = body["messenger user id"];
     let remId = body.remId;
 
-    loh = body + "   " + req.headers;
+    loh = body;
     loh2 = req;
 
     deleteReminder(messengerId, remId, res);
@@ -316,7 +316,7 @@ app.get("/loh", (req, res) => {
     // trySend("1844369452275489", "pizda" + d);
     // callSendAPI("1844369452275489", {"text": "zdarova"});
 
-    res.send(loh);
+    res.send(loh2);
     // res.sendStatus(200);
 });
 

@@ -98,6 +98,8 @@ app.post("/getRems", (req, res) => {
                 }
             }
 
+            trySend(messengerId, body);
+
             if (message.length === 0)
                 res.send([{"text": "You have no reminders "}]);
             else res.send(message);
@@ -286,7 +288,7 @@ app.get("/loh", (req, res) => {
     running = setInterval(() => {
         // let n = new Date();
         // trySend("1844369452275489", n.getHours() + "."+n.getMinutes());
-        trySend("1844369452275489", "vnffhvkh");
+        // trySend("1844369452275489", "vnffhvkh");
         console.log("in set int");
         runRem();
 

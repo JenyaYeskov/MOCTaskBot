@@ -233,7 +233,9 @@ app.post("/delete", (req, res) => {
     let remId = body.remId;
 
     loh = body;
-    loh2 = JSON.stringify(req);
+    loh2 = req;
+
+    console.log(req);
 
     deleteReminder(messengerId, remId, res);
 });
@@ -303,7 +305,6 @@ app.get("/loh", (req, res) => {
     //     let q = i + ' * * * * *';
     // }
 
-
     //     let d = new Date();
     //     console.log("loh")
     //     d.setMinutes(d.getMinutes() + 5);
@@ -316,7 +317,7 @@ app.get("/loh", (req, res) => {
     // trySend("1844369452275489", "pizda" + d);
     // callSendAPI("1844369452275489", {"text": "zdarova"});
 
-    res.send(loh2);
+    res.send(JSON.stringify(loh2));
     // res.sendStatus(200);
 });
 

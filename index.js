@@ -91,17 +91,13 @@ app.post("/getRems", (req, res) => {
                     })
                 }
                 else {
-                    // await message.push({
-                    //     "text": "id: " + id + ". Reminder: " + event + " date: " + date +
-                    //     " time: " + time
-                    // });
                     await message.push({
-                        "text": body
+                        "text": "id: " + id + ". Reminder: " + event + " date: " + date +
+                        " time: " + time
                     });
+
                 }
             }
-
-            // trySend(messengerId, body);
 
             if (message.length === 0)
                 res.send([{"text": "You have no reminders "}]);
@@ -227,6 +223,7 @@ app.post("/addRem", (req, res) => {
     });
 });
 
+let loh ;
 
 app.post("/delete", (req, res) => {
 
@@ -234,7 +231,7 @@ app.post("/delete", (req, res) => {
     let messengerId = body["messenger user id"];
     let remId = body.remId;
 
-    trySend(messengerId, body);
+    loh = body;
 
     deleteReminder(messengerId, remId, res);
 });
@@ -317,8 +314,8 @@ app.get("/loh", (req, res) => {
     // trySend("1844369452275489", "pizda" + d);
     // callSendAPI("1844369452275489", {"text": "zdarova"});
 
-    // res.send("loh");
-    res.sendStatus(200);
+    res.send(loh);
+    // res.sendStatus(200);
 });
 
 app.get("/stop", (req, res) => {

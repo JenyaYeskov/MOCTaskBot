@@ -28,7 +28,7 @@ let remSchema = new mongoose.Schema({
 });
 
 
-let Reminder = require('/models/reminderModel');
+let Reminder = require('./models/reminderModel');
 
 app.use(bodyParser.urlencoded({extended: false}));
 

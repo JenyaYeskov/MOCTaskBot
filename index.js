@@ -18,7 +18,7 @@ const
 let active = false,
     running;
 let db = mongoose.connection;
-let remSchema = mongoose.Schema({
+let remSchema = new mongoose.Schema({
     remId: Number,
     messengerId: String,
     date: String,
@@ -223,19 +223,12 @@ app.post("/addRem", (req, res) => {
     });
 });
 
-let loh ;
-let loh2 ;
 
 app.post("/delete", (req, res) => {
 
     let body = req.body;
     let messengerId = body["messenger user id"];
     let remId = body.remId;
-
-    loh = body;
-    loh2 = req;
-
-    console.dir(req);
 
     deleteReminder(messengerId, remId, res);
 });
@@ -317,8 +310,7 @@ app.get("/loh", (req, res) => {
     // trySend("1844369452275489", "pizda" + d);
     // callSendAPI("1844369452275489", {"text": "zdarova"});
 
-    res.send(JSON.stringify(loh2));
-    // res.sendStatus(200);
+    res.sendStatus(200);
 });
 
 app.get("/stop", (req, res) => {

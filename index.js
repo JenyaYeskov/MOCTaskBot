@@ -18,14 +18,14 @@ const
 let active = false,
     running;
 let db = mongoose.connection;
-let remSchema = new mongoose.Schema({
-    remId: Number,
-    messengerId: String,
-    date: String,
-    time: String,
-    event: String,
-    timeInUTC: String
-});
+// let remSchema = new mongoose.Schema({
+//     remId: Number,
+//     messengerId: String,
+//     date: String,
+//     time: String,
+//     event: String,
+//     timeInUTC: String
+// });
 
 
 let Reminder = require('./models/reminderModel');
@@ -78,17 +78,19 @@ app.post("/getRems", (req, res) => {
                 id = rem.remId;
 
                 if (body["todays"].toLowerCase() === "todays") {
-                    dateParser(date, (remDate) => {
-                        // let remDate = await dateParserPromise(date);
-                        // let rd = util.promisify(dateParser);
-                        // let remDate = await rd(date);
+                    // dateParser(date, (remDate) => {
+                    // let remDate = await dateParserPromise(date);
+                    // let rd = util.promisify(dateParser);
+                    // let remDate = await rd(date);
 
-                        if (dateAndTime.isSameDay(new Date(), remDate))
-                            message.push({
-                                "text": "id: " + id + ". Reminder: " + event + " date: " + date +
-                                " time: " + time
-                            });
-                    })
+                    let remDate = await dateAndTime.parse(date, "DD.MM.YYYY");
+
+                    if (dateAndTime.isSameDay(new Date(), remDate))
+                        message.push({
+                            "text": "id: " + id + ". Reminder: " + event + " date: " + date +
+                            " time: " + time
+                        });
+                    // })
                 }
                 else {
                     await message.push({
@@ -137,7 +139,7 @@ app.post("/addRem", (req, res) => {
     db.once('open', async function callback() {
         let body = req.body;
         let userReminderId;
-        let messengerId = body["messenger user xxid"];
+        let messengerId = body["messenger user id"];
         let ar = [];
         let rem;
 

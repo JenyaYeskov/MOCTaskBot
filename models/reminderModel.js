@@ -90,6 +90,7 @@ exports.addReminder = async (body) => {
                         "text": "Wrong date or time. Try again  " + ReminderTimeAndDate + " "
                         + timeAndDateString
                     }]);
+                    return;
                 }
 
                 let reminder = makeReminder(body, userReminderId, ReminderTimeAndDate);

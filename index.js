@@ -28,7 +28,7 @@ let db = mongoose.connection;
 // });
 
 
-let Reminder = require('./models/reminderModel');
+let Reminder = require('./models/reminderSchema');
 
 app.use(bodyParser.urlencoded({extended: false}));
 
@@ -47,10 +47,10 @@ app.post("/getRems", (req, res) => {
     db.once('open', async function callback() {
         let message = [];
 
-        function dateParser(date, callback) {
-
-            callback(dateAndTime.parse(date, "DD.MM.YYYY"));
-        }
+        // function dateParser(date, callback) {
+        //
+        //     callback(dateAndTime.parse(date, "DD.MM.YYYY"));
+        // }
 
         // function dateParserPromise(date) {
         //
@@ -831,7 +831,6 @@ async function acceptReminder(DBRemID, messengerId, res) {
 
 function fire(mid, smt, DBRemID) {
     let token = "qwYLsCSz8hk4ytd6CPKP4C0oalstMnGdpDjF8YFHPHCieKNc0AfrnjVs91fGuH74";
-
 
     request({
         "uri": "https://api.chatfuel.com/bots/5ac8230ce4b0336c50287a5d/users/" + mid

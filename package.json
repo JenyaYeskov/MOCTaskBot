@@ -2,10 +2,10 @@
   "name": "moctaskbot",
   "version": "1.0.0",
   "description": "fb chatbot for MOC task",
-  "main": "index.js",
+  "main": "app.js",
   "scripts": {
     "test": "test",
-    "start": "node index.js"
+    "start": "node app.js"
   },
   "repository": {
     "type": "git",

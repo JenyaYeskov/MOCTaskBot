@@ -19,7 +19,7 @@ let active = false,
     running;
 let db = mongoose.connection;
 // let remSchema = new mongoose.Schema({
-//     remId: Number,
+//     userReminderId: Number,
 //     messengerId: String,
 //     date: String,
 //     time: String,
@@ -75,7 +75,7 @@ app.post("/getRems", (req, res) => {
                 date = rem.date;
                 time = rem.time;
                 event = rem.event;
-                id = rem.remId;
+                id = rem.userReminderId;
 
                 if (body["todays"].toLowerCase() === "todays") {
                     // dateParser(date, (remDate) => {
@@ -149,7 +149,7 @@ app.post("/addRem", (req, res) => {
             userReminderId = rems.length + 1;
 
             for (let r of rems) {
-                await ar.push(r.remId);
+                await ar.push(r.userReminderId);
             }
             while (ar.includes(userReminderId)) {
                 userReminderId = userReminderId + 1;
@@ -170,7 +170,7 @@ app.post("/addRem", (req, res) => {
                     date: body.date,
                     time: body.time,
                     event: body.what,
-                    remId: userReminderId,
+                    userReminderId: userReminderId,
                     timeInUTC: timeAndDate
                 });
                 await Reminder.create(rem);
@@ -178,7 +178,7 @@ app.post("/addRem", (req, res) => {
                 res.send([{"text": "Wrong date or time. Try again  " + timeAndDate + " " + timeAndDateString}]);
             }
 
-            // let qwe = await Reminder.findOne({"messengerId": messengerId, "remId": userReminderId});
+            // let qwe = await Reminder.findOne({"messengerId": messengerId, "userReminderId": userReminderId});
             // console.log(qwe);
             // let reminderId = qwe["_id"];
 
@@ -230,7 +230,7 @@ app.post("/delete", (req, res) => {
 
     let body = req.body;
     let messengerId = body["messenger user id"];
-    let remId = body.remId;
+    let remId = body.userReminderId;
 
     deleteReminder(messengerId, remId, res);
 });
@@ -748,7 +748,7 @@ async function deleteReminder(messengerId, remId, res) {
                 res.sendStatus(200);
             }
             else {
-                await Reminder.remove({"messengerId": messengerId, "remId": remId});
+                await Reminder.remove({"messengerId": messengerId, "userReminderId": remId});
                 res.send([{"text": "Done " + remId}]);
                 res.sendStatus(200);
             }

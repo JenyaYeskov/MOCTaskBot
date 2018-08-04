@@ -1,7 +1,7 @@
 let mongoose = require('mongoose');
 
 let remSchema = new mongoose.Schema({
-    remId: Number,
+    userReminderId: Number,
     messengerId: String,
     date: String,
     time: String,

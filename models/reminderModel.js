@@ -7,139 +7,127 @@ const mongoose = require("mongoose"),
 let Reminder = require('./reminderSchema');
 let db = mongoose.connection;
 
-exports.getReminders = async (body, res) => {
-    let result;
+exports.getReminders = async (body) => {
     let messengerId = body["messenger user id"];
     mongoose.connect(uri);
     db.on('error', console.error.bind(console, 'connection error:'));
-    console.log("in get rems");
 
-    try {
-        result =
-            await db.once('open', async () => {
-                console.log("in once");
-                let message = [];
-
-                try {
-                    let rems = await Reminder.find({'messengerId': messengerId});
-                    mongoose.connection.close();
-                    for (let rem of rems) {
-
-                        let date = rem.date,
-                            time = rem.time,
-                            event = rem.event,
-                            id = rem.remId;
-
-                        if (body["todays"].toLowerCase() === "todays") {
-
-                            let remDate = await dateAndTime.parse(date, "DD.MM.YYYY");
-
-                            if (dateAndTime.isSameDay(new Date(), remDate))
-                                message.push({
-                                    "text": "id: " + id + ". Reminder: " + event + " date: " + date +
-                                    " time: " + time
-                                });
-                        }
-                        else {
-                            await message.push({
-                                "text": "id: " + id + ". Reminder: " + event + " date: " + date +
-                                " time: " + time + "    loh"
-                            });
-                        }
-                    }
-
-                    console.log(message);
-
-                    if (message.length === 0)
-                        res.send([{"text": "You have no reminders "}]);
-                    else res.send(message);
-
-                }
-                catch (e) {
-                    console.error(e);
-                    res.send([{"text": "error"}]);
-                } finally {
-                    // mongoose.connection.close();
-                }
-            })
-        // .catch((e) => {
-        //     console.error(e);
-        //     return [{"text": "error"}];
-        // });
-    }
-    catch (e) {
-        console.error(e);
-        result = [{"text": "error"}];
-    }
-
-    // return result;
-};
-
-exports.addReminder = (body, res) => {
-    mongoose.connect(uri);
-
-    db.on('error', console.error.bind(console, 'connection error:'));
-
-    db.once('open', async function callback() {
-        // let body = req.body;
-        let userReminderId;
-        let messengerId = body["messenger user id"];
-        let ar = [];
-        let rem;
-
-        try {
-            let rems = await Reminder.find({'messengerId': messengerId});
-
-            userReminderId = rems.length + 1;
-
-            for (let r of rems) {
-                await ar.push(r.remId);
-            }
-            while (ar.includes(userReminderId)) {
-                userReminderId = userReminderId + 1;
-            }
-
-
-            let timeAndDate;
-            // let timeAndDateString = body.date + " " + (parseFloat(body.time) - off).toFixed(2);
-            let timeAndDateString = body.date + " " + body.time;
-
-
+    return new Promise(async (resolve, reject) => {
+        db.once('open', async () => {
             try {
-                timeAndDate = validateAndSetDate(timeAndDateString);
-                timeAndDate.setHours(parseFloat(timeAndDate.getHours() - body["timezone"]));
+                let message = [];
+                let UserReminders = await Reminder.find({'messengerId': messengerId});
 
-                rem = await new Reminder({
-                    messengerId: body["messenger user id"],
-                    date: body.date,
-                    time: body.time,
-                    event: body.what,
-                    remId: userReminderId,
-                    timeInUTC: timeAndDate
-                });
-                await Reminder.create(rem);
-            } catch (e) {
-                res.send(([{
-                    "text": "Wrong date or time. Try again  " + timeAndDate + " "
-                    + timeAndDateString
-                }]));
+                for (let reminder of UserReminders) {
+
+                    let date = reminder.date,
+                        time = reminder.time,
+                        event = reminder.event,
+                        userReminderId = reminder.userReminderId;
+
+                    if (body["todays"].toLowerCase() === "todays") {
+                        let reminderDate = dateAndTime.parse(date, "DD.MM.YYYY");
+
+                        if (dateAndTime.isSameDay(new Date(), reminderDate))
+                            message.push(createReminderMessageString(userReminderId, event, date, time));
+                    }
+                    else {
+                        message.push(createReminderMessageString(userReminderId, event, date, time));
+                    }
+                }
+
+                if (message.length === 0)
+                    resolve([{"text": "You have no reminders "}]);
+                else resolve(message);
             }
-
-            res.send(([{"text": "Done " + userReminderId + " " + timeAndDate}]));
-        }
-        catch (e) {
-            console.error(e);
-            res.send(([{"text": "Something went wrong. Try again  "}]));
-        }
-        finally {
-            mongoose.connection.close();
-        }
+            catch (e) {
+                console.error(e);
+                reject([{"text": "error"}]);
+            }
+            finally {
+                mongoose.connection.close();
+            }
+        })
     });
 };
 
+function createReminderMessageString(id, event, date, time) {
+    return {
+        "text": "id: " + id + ". Reminder: " + event + " date: " + date +
+        " time: " + time
+    }
+}
+
+function makeReminder(body, userReminderId, ReminderTimeAndDate) {
+    return new Reminder({
+        messengerId: body["messenger user id"],
+        date: body.date,
+        time: body.time,
+        event: body.what,
+        userReminderId: userReminderId,
+        timeInUTC: ReminderTimeAndDate
+    });
+}
+
+exports.addReminder = async (body) => {
+    mongoose.connect(uri);
+    db.on('error', console.error.bind(console, 'connection error:'));
+
+    return new Promise(async (resolve, reject) => {
+        db.once('open', async () => {
+            try {
+                let userReminders = await Reminder.find({'messengerId': body["messenger user id"]});
+                let userReminderId = createUserReminderId(userReminders);
+                let ReminderTimeAndDate;
+                let timeAndDateString = body.date + " " + body.time;
+
+                try {
+                    ReminderTimeAndDate = validateAndSetDate(timeAndDateString);
+                    ReminderTimeAndDate.setHours(parseFloat(ReminderTimeAndDate.getHours() - body["timezone"]));
+                } catch (e) {
+                    console.error(e);
+                    reject([{
+                        "text": "Wrong date or time. Try again  " + ReminderTimeAndDate + " "
+                        + timeAndDateString
+                    }]);
+                }
+
+                let reminder = makeReminder(body, userReminderId, ReminderTimeAndDate);
+
+                Reminder.create(reminder);
+
+                resolve([{"text": "Done " + userReminderId + " " + ReminderTimeAndDate}]);
+            }
+            catch (e) {
+                console.error(e);
+                reject([{"text": "Something went wrong. Try again  "}]);
+            }
+            finally {
+                mongoose.connection.close();
+            }
+        });
+    })
+};
+
+function createUserReminderId(userReminders) {
+    let idArray = [];
+
+    let userReminderId = userReminders.length + 1;
+
+    for (let reminder of userReminders) {
+        idArray.push(reminder.userReminderId);
+    }
+
+    while (idArray.includes(userReminderId)) {
+        userReminderId = userReminderId + 1;
+    }
+
+    return userReminderId;
+}
+
 exports.delete = (body, res) => {
     let messengerId = body["messenger user id"];
-    let remId = body.remId;
+    let remId = body.userReminderId;
 
     deleteReminder(messengerId, remId, res);
 };
@@ -153,12 +141,12 @@ async function deleteReminder(messengerId, remId, res) {
         try {
             if (remId.toUpperCase() === "ALL") {
                 await Reminder.remove({"messengerId": messengerId});
-                res.send( ([{"text": "Done all " + remId}]));
+                res.send(([{"text": "Done all " + remId}]));
                 // res.sendStatus(200);
             }
             else {
-                await Reminder.remove({"messengerId": messengerId, "remId": remId});
-                res.send( ([{"text": "Done " + remId}]));
+                await Reminder.remove({"messengerId": messengerId, "userReminderId": remId});
+                res.send(([{"text": "Done " + remId}]));
                 // res.sendStatus(200);
             }
         }
@@ -199,7 +187,7 @@ async function acceptReminder(DBRemID, messengerId, res) {
 
         mongoose.connection.close();
 
-        res.send( ([{"text": "done"}]));
+        res.send(([{"text": "done"}]));
         // trySend(messengerId, "done");
         // res.sendStatus(200);
     });
@@ -242,7 +230,7 @@ async function snoozeReminder(DBRemID, messengerId, res) {
         });
 
         mongoose.connection.close();
-        res.send( ([{"text": "Reminder snoozed. It will show up again in 10 minutes"}]));
+        res.send(([{"text": "Reminder snoozed. It will show up again in 10 minutes"}]));
         // trySend(messengerId, "Reminder snoozed. Will show up again in 10 minutes");
         // res.sendStatus(200);
     });
@@ -352,6 +340,7 @@ function validateAndSetDate(timeAndDateString) {
 }
 
 exports.loh = () => {
+    let running;
     console.log("in loh");
     clearInterval(running);
     running = setInterval(() => {

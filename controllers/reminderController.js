@@ -1,15 +1,23 @@
 let reminder = require("../models/reminderModel");
 
 exports.getReminders = async (req, res) => {
-    // let response = await reminder.getReminders(req.body);
+    let responseMessage = await reminder.getReminders(req.body).catch((e) => {
+        console.error(e);
+        return (e);
+    });
     // console.log(response + " jjj");
-    // res.send( response);
+    res.send(responseMessage);
     // reminder.getReminders(req.body).then(res => res.json()).then((qwe) => {res.send(qwe)});
-    reminder.getReminders(req.body, res);
+    // reminder.getReminders(req.body, res);
 };
 
-exports.addReminder = (req, res) => {
-    res.send(reminder.addReminder(req.body, res));
+exports.addReminder = async (req, res) => {
+    let responseMessage = await reminder.addReminder(req.body).catch((e) => {
+        console.error(e);
+        return (e);
+    });
+
+    res.send(responseMessage);
 };
 
 exports.deleteReminder = (req, res) => {

@@ -43,7 +43,7 @@ exports.getReminders = async (body, res) => {
                         else {
                             await message.push({
                                 "text": "id: " + id + ". Reminder: " + event + " date: " + date +
-                                " time: " + time
+                                " time: " + time + "    loh"
                             });
                         }
                     }
@@ -137,7 +137,7 @@ exports.addReminder = (body, res) => {
     });
 };
 
-exports.delete = (body) => {
+exports.delete = (body, res) => {
     let messengerId = body["messenger user id"];
     let remId = body.remId;
 
@@ -171,7 +171,7 @@ async function deleteReminder(messengerId, remId, res) {
     })
 }
 
-exports.acceptOrSnooze = (body) => {
+exports.acceptOrSnooze = (body, res) => {
     // let body = req.body;
     let messengerId = body["messenger user id"];
     let acceptOrSnooze = body["acceptOrSnooze"];

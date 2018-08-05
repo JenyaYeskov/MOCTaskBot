@@ -126,37 +126,37 @@ function createUserReminderId(userReminders) {
     return userReminderId;
 }
 
-exports.delete = (body, res) => {
+exports.delete = (body) => {
     let messengerId = body["messenger user id"];
-    let remId = body.userReminderId;
+    let userReminderId = body.userReminderId;
 
-    deleteReminder(messengerId, remId, res);
+    deleteReminder(messengerId, userReminderId);
 };
 
-async function deleteReminder(messengerId, remId, res) {
+async function deleteReminder(messengerId, userReminderId) {
     mongoose.connect(uri);
     db.on('error', console.error.bind(console, 'connection error:'));
 
-    db.once('open', async function callback() {
-
-        try {
-            if (remId.toUpperCase() === "ALL") {
-                await Reminder.remove({"messengerId": messengerId});
-                res.send(([{"text": "Done all " + remId}]));
-                // res.sendStatus(200);
+    return new Promise(async (resolve, reject) => {
+        db.once('open', async () => {
+            try {
+                if (userReminderId.toUpperCase() === "ALL") {
+                    Reminder.remove({"messengerId": messengerId});
+                    resolve([{"text": "Done all " + userReminderId}]);
+                }
+                else {
+                    Reminder.remove({"messengerId": messengerId, "userReminderId": userReminderId});
+                    resolve([{"text": "Done " + userReminderId}]);
+                }
             }
-            else {
-                await Reminder.remove({"messengerId": messengerId, "userReminderId": remId});
-                res.send(([{"text": "Done " + remId}]));
-                // res.sendStatus(200);
+            catch (e) {
+                console.error(e);
+                reject([{"text": "Something went wrong. Try again"}]);
             }
-        }
-        catch (e) {
-            console.error(e);
-        }
-        finally {
-            mongoose.connection.close();
-        }
+            finally {
+                mongoose.connection.close();
+            }
+        })
     })
 }
 

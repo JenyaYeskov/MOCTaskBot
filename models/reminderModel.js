@@ -210,7 +210,9 @@ async function snoozeReminder(DBRemID) {
 
                 let oldTime = getTimeFromStringOrNumber(reminder["timeInUTC"]);
 
-                let newTime = new Date().getMinutes() + 2;
+                let newTime = oldTime.setMinutes(oldTime.getMinutes() + 2);
+
+                // let newTime = new Date().getMinutes() + 2
 
                 await Reminder.findByIdAndUpdate(DBRemID, {
                     "timeInUTC": newTime

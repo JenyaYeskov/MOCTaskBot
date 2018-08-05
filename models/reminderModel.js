@@ -63,7 +63,7 @@ function makeReminder(body, userReminderId, ReminderTimeAndDate) {
         messengerId: body["messenger user id"],
         date: body.date,
         time: body.time,
-        event: body.what,
+        event: body.event,
         userReminderId: userReminderId,
         timeInUTC: ReminderTimeAndDate
     });
@@ -126,7 +126,7 @@ function createUserReminderId(userReminders) {
     return userReminderId;
 }
 
-exports.delete = (body) => {
+exports.delete = async (body) => {
     let messengerId = body["messenger user id"];
     let userReminderId = body.userReminderId;
 
@@ -164,140 +164,114 @@ async function deleteReminder(messengerId, userReminderId) {
 }
 
 exports.acceptOrSnooze = async (body) => {
-    let messengerId = body["messenger user id"];
     let acceptOrSnooze = body["acceptOrSnooze"];
     let DBRemID = body["DBRemID"];
 
-    if (acceptOrSnooze.toLowerCase() === "accept") {
-        acceptReminder(DBRemID, messengerId, res);
+    return new Promise(async (resolve, reject) => {
+        if (acceptOrSnooze.toLowerCase() === "accept") {
+            resolve(acceptReminder(DBRemID));
 
-    } else if (acceptOrSnooze.toLowerCase() === "snooze") {
-        snoozeReminder(DBRemID, messengerId, res);
+        } else if (acceptOrSnooze.toLowerCase() === "snooze") {
+            resolve(snoozeReminder(DBRemID));
 
-    } else {
-        trySend(messengerId, "unknown input")
-    }
+        } else {
+            reject([{"text": "Unknown input"}])
+        }
+    })
 };
 
-async function acceptReminder(DBRemID, messengerId, res) {
-    // try {
+async function acceptReminder(DBRemID) {
     mongoose.connect(uri);
-
     db.on('error', console.error.bind(console, 'connection error:'));
 
-    db.once('open', async function callback() {
-        await Reminder.remove({"_id": DBRemID});
-
-        mongoose.connection.close();
-
-        res.send(([{"text": "done"}]));
-        // trySend(messengerId, "done");
-        // res.sendStatus(200);
-    });
-    // } catch (e) {
-    //     trySend(messengerId, e);
-    //     res.sendStatus(500)
-    // } finally {
-    //     mongoose.connection.close();
-    // }
+    return new Promise(async (resolve, reject) => {
+        db.once('open', async function callback() {
+            try {
+                await Reminder.remove({"_id": DBRemID});
+                resolve([{"text": "done"}]);
+            } catch (e) {
+                console.log(e);
+                reject(e.toString());
+            } finally {
+                mongoose.connection.close();
+            }
+        });
+    })
 }
 
-async function snoozeReminder(DBRemID, messengerId, res) {
-    // try {
+async function snoozeReminder(DBRemID) {
     mongoose.connect(uri);
-
     db.on('error', console.error.bind(console, 'connection error:'));
 
-    db.once('open', async function callback() {
-        let qwe = await Reminder.findById(DBRemID);
+    return new Promise(async (resolve, reject) => {
+        db.once('open', async () => {
+            try {
+                let reminder = await Reminder.findById(DBRemID);
 
-        // let temp = dateAndTime.parse(qwe.date + " " + qwe.time, "DD.MM.YYYY HH.mm");
-        // temp.setMinutes(temp.getMinutes() + 2);
-        //
-        // await Reminder.findByIdAndUpdate(DBRemID, {
-        //     "date": dateAndTime.format(temp, "DD.MM.YYYY"),
-        //     "time": dateAndTime.format(temp, "HH.mm")
-        // });
+                let oldTime = getTimeFromStringOrNumber(reminder["timeInUTC"]);
 
-        let old;
-        if (isNaN(parseInt(qwe.timeInUTC)))
-            old = new Date(qwe.timeInUTC);
-        else old = new Date(parseInt(qwe.timeInUTC));
-        console.log("old   " + old);
-        let n = old.setMinutes(old.getMinutes() + 2);
-        console.log("n   " + n);
+                let newTime = oldTime.setMinutes(oldTime.getMinutes() + 10);
 
-        await Reminder.findByIdAndUpdate(DBRemID, {
-            "timeInUTC": n
-            // "time": dateAndTime.format(temp, "HH.mm")
+                await Reminder.findByIdAndUpdate(DBRemID, {
+                    "timeInUTC": newTime
+                });
+
+                resolve([{"text": "Reminder snoozed. It will show up again in 10 minutes"}]);
+            } catch (e) {
+                console.log(e);
+                reject(e.toString());
+            } finally {
+                mongoose.connection.close();
+            }
         });
+    })
+}
 
-        mongoose.connection.close();
-        res.send(([{"text": "Reminder snoozed. It will show up again in 10 minutes"}]));
-        // trySend(messengerId, "Reminder snoozed. Will show up again in 10 minutes");
-        // res.sendStatus(200);
-    });
-    // } catch (e) {
-    //     trySend(messengerId, e);
-    //     res.sendStatus(500)
-    // } finally {
-    //     mongoose.connection.close();
-    // }
+function getTimeFromStringOrNumber(time) {
+    if (isNaN(parseInt(time)))
+        return new Date(time);
+    else return new Date(parseInt(time));
 }
 
 function runRem() {
-    console.log("in runrem");
-    // trySend("1844369452275489", "in runrem", "kkk");
+    let today = dateAndTime.format(new Date(), "DD.MM.YYYY");
 
-    let todays;
-    let par = dateAndTime.format(new Date(), "DD.MM.YYYY");
-
-    // setInterval(() => {
-
-    // try {
     mongoose.connect(uri);
-
     db.on('error', console.error.bind(console, 'connection error:'));
 
     db.once('open', async () => {
-        console.log("in open");
-
         try {
-            todays = await Reminder.find({"date": par});
-            mongoose.connection.close();
+            let todaysReminders;
+            todaysReminders = await Reminder.find({"date": today});
+
+            for (let reminder of todaysReminders) {
+
+                let reminderTime = getTimeFromStringOrNumber(reminder["timeInUTC"]);
+
+                let now = new Date();
+
+                if (reminderTime <= now) {
+                    fireReminder(reminder.messengerId, "time to \"" + reminder.event + "\"", reminder["_id"]);
+                }
+                else {
+                    console.log("in else");
+                }
+            }
         } catch (e) {
-            console.log("cached in " + e)
+            console.log(e)
         }
-
-        for (let rem of todays) {
-            console.log("in for");
-            let n;
-            if (isNaN(parseInt(rem["timeInUTC"])))
-                n = new Date(rem["timeInUTC"]);
-            else n = new Date(parseInt(rem["timeInUTC"]));
-            console.log("fire n   " + n);
-            let now = new Date();
-
-            if (n <= now) {
-                fire(rem.messengerId, "time to \"" + rem.event + "\"", rem["_id"]);
-                console.log("in if");
-                // trySend("1844369452275489", "huinya")
-            }
-            else {
-                // trySend("1844369452275489", "huinya2 " + rem["timeInUTC"]);
-                console.log("in else");
-            }
+        finally {
+            mongoose.connection.close();
         }
     });
 }
 
-function fire(mid, smt, DBRemID) {
+function fireReminder(messengerId, message, DBRemID) {
     let token = "qwYLsCSz8hk4ytd6CPKP4C0oalstMnGdpDjF8YFHPHCieKNc0AfrnjVs91fGuH74";
 
-
     request({
-        "uri": "https://api.chatfuel.com/bots/5ac8230ce4b0336c50287a5d/users/" + mid
-        + "/send?chatfuel_token=" + token + "&chatfuel_block_id=5b059420e4b0c78a75f4c2ab&what=" + smt
+        "uri": "https://api.chatfuel.com/bots/5ac8230ce4b0336c50287a5d/users/" + messengerId
+        + "/send?chatfuel_token=" + token + "&chatfuel_block_id=5b059420e4b0c78a75f4c2ab&what=" + message
         + "&DBRemID=" + DBRemID,
         "headers": {"Content-Type": "application/json"},
         "method": "POST"
@@ -342,19 +316,24 @@ function validateAndSetDate(timeAndDateString) {
     return when;
 }
 
+let interval;
 exports.loh = () => {
-    let running;
-    console.log("in loh");
-    clearInterval(running);
-    running = setInterval(() => {
-        // let n = new Date();
-        console.log("in set int");
-        runRem();
 
-    }, 60000);
+    return new Promise(async (resolve, reject) => {
+        try {
+            clearInterval(interval);
+            interval = setInterval(() => {
+                runRem()
 
-    return 200;
-    // res.sendStatus(200);
+            }, 10000);
+
+            console.log("refreshed");
+
+            resolve(200)
+        } catch (e) {
+            reject(e.toString())
+        }
+    })
 };
 
 function trySend(mid, smt) {

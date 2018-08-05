@@ -36,10 +36,13 @@ exports.acceptOrSnooze = async (req, res) => {
     res.send(responseMessage);
 };
 
-exports.loh = (req, res) => {
+exports.loh = async (req, res) => {
 
-    if (reminder.loh() === 200)
-        res.sendStatus(200);
-    else res.send("status != 200");
+    let responseMessage = await reminder.loh(req.body).catch((e) => {
+        console.error(e);
+        return (e);
+    });
+
+    res.send(responseMessage);
 
 };

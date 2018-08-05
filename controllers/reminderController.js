@@ -5,10 +5,8 @@ exports.getReminders = async (req, res) => {
         console.error(e);
         return (e);
     });
-    // console.log(response + " jjj");
+
     res.send(responseMessage);
-    // reminder.getReminders(req.body).then(res => res.json()).then((qwe) => {res.send(qwe)});
-    // reminder.getReminders(req.body, res);
 };
 
 exports.addReminder = async (req, res) => {
@@ -29,8 +27,13 @@ exports.deleteReminder = async (req, res) => {
     res.send(responseMessage);
 };
 
-exports.acceptOrSnooze = (req, res) => {
-    res.send(reminder.acceptOrSnooze(req.body));
+exports.acceptOrSnooze = async (req, res) => {
+    let responseMessage = await reminder.acceptOrSnooze(req.body).catch((e) => {
+        console.error(e);
+        return (e);
+    });
+
+    res.send(responseMessage);
 };
 
 exports.loh = (req, res) => {

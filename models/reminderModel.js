@@ -130,7 +130,7 @@ exports.delete = (body) => {
     let messengerId = body["messenger user id"];
     let userReminderId = body.userReminderId;
 
-   return deleteReminder(messengerId, userReminderId);
+    return deleteReminder(messengerId, userReminderId);
 };
 
 async function deleteReminder(messengerId, userReminderId) {
@@ -141,11 +141,14 @@ async function deleteReminder(messengerId, userReminderId) {
         db.once('open', async () => {
             try {
                 if (userReminderId.toUpperCase() === "ALL") {
-                    Reminder.remove({"messengerId": messengerId});
+                    await Reminder.remove({"messengerId": messengerId});
                     resolve([{"text": "Done all " + userReminderId}]);
                 }
                 else {
-                    Reminder.remove({"messengerId": messengerId, "userReminderId": userReminderId});
+                    await Reminder.remove({
+                        "messengerId": messengerId,
+                        "userReminderId": userReminderId
+                    });
                     resolve([{"text": "Done " + userReminderId}]);
                 }
             }
@@ -160,8 +163,7 @@ async function deleteReminder(messengerId, userReminderId) {
     })
 }
 
-exports.acceptOrSnooze = (body, res) => {
-    // let body = req.body;
+exports.acceptOrSnooze = async (body) => {
     let messengerId = body["messenger user id"];
     let acceptOrSnooze = body["acceptOrSnooze"];
     let DBRemID = body["DBRemID"];

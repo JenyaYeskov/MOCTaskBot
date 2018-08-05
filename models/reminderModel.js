@@ -130,7 +130,7 @@ exports.delete = (body) => {
     let messengerId = body["messenger user id"];
     let userReminderId = body.userReminderId;
 
-    deleteReminder(messengerId, userReminderId);
+   return deleteReminder(messengerId, userReminderId);
 };
 
 async function deleteReminder(messengerId, userReminderId) {

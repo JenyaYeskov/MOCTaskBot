@@ -20,8 +20,13 @@ exports.addReminder = async (req, res) => {
     res.send(responseMessage);
 };
 
-exports.deleteReminder = (req, res) => {
-    res.send(reminder.delete(req.body));
+exports.deleteReminder = async (req, res) => {
+    let responseMessage = await reminder.delete(req.body).catch((e) => {
+        console.error(e);
+        return (e);
+    });
+
+    res.send(responseMessage);
 };
 
 exports.acceptOrSnooze = (req, res) => {

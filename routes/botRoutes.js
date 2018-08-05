@@ -11,7 +11,9 @@ router.post("/delete", reminderController.deleteReminder);
 
 router.post("/acceptOrSnooze", reminderController.acceptOrSnooze);
 
-router.get("/loh", reminderController.loh);
+router.get("/start", reminderController.start);
+
+router.get("/stop", reminderController.stop);
 
 router.get("/", (req, res) => {res.send("deployed")});
 

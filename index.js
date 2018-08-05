@@ -209,7 +209,7 @@ app.post("/addRem", (req, res) => {
 
             // schedule.scheduleJob(timeAndDate, () => {
             //     fireReminder(reminderId)
-            //     console.log(" ty loh " + reminderId);
+            //     console.log(" ty start " + reminderId);
             // });
 
 
@@ -260,7 +260,7 @@ app.get("/", function (req, res) {
 });
 
 
-app.get("/loh", (req, res) => {
+app.get("/start", (req, res) => {
     // let body = req.body;
     // let messengerId = body["messenger user id"];
 
@@ -270,7 +270,7 @@ app.get("/loh", (req, res) => {
     //     d.setMinutes(d.getMinutes() + 1)
     //
     //     schedule.scheduleJob(d, function()  {
-    //         console.log(" ty loh " );
+    //         console.log(" ty start " );
     //         trySend("1844369452275489", "hui");
     //         handleMessage("1844369452275489", {"text": "zdarova"});
     //         res.send("norm")
@@ -279,9 +279,9 @@ app.get("/loh", (req, res) => {
     let nodeCron = require('node-cron');
     let CronJob = require('cron').CronJob;
 
-    trySend("1844369452275489", "in loh");
+    trySend("1844369452275489", "in start");
 
-    console.log("in loh");
+    console.log("in start");
     clearInterval(running);
     // if (!active) {
     running = setInterval(() => {
@@ -301,7 +301,7 @@ app.get("/loh", (req, res) => {
     // }
 
     //     let d = new Date();
-    //     console.log("loh")
+    //     console.log("start")
     //     d.setMinutes(d.getMinutes() + 5);
     //     new CronJob(d, function () {
     //         console.log('cron');

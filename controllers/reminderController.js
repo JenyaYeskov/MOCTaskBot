@@ -36,13 +36,20 @@ exports.acceptOrSnooze = async (req, res) => {
     res.send(responseMessage);
 };
 
-exports.loh = async (req, res) => {
-
-    let responseMessage = await reminder.loh(req.body).catch((e) => {
+exports.start = async (req, res) => {
+    let responseMessage = await reminder.start().catch((e) => {
         console.error(e);
         return (e);
     });
 
     res.send(responseMessage);
+};
 
+exports.stop = async (req, res) => {
+    let responseMessage = await reminder.stop().catch((e) => {
+        console.error(e);
+        return (e);
+    });
+
+    res.send(responseMessage);
 };

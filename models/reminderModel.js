@@ -317,19 +317,33 @@ function validateAndSetDate(timeAndDateString) {
 }
 
 let interval;
-exports.loh = () => {
+exports.start = () => {
 
     return new Promise(async (resolve, reject) => {
         try {
             clearInterval(interval);
             interval = setInterval(() => {
                 runRem()
+            }, 10000);
 
-            }, 60000);
+            console.log("started");
 
-            console.log("refreshed");
+            resolve("started")
+        } catch (e) {
+            reject(e.toString())
+        }
+    })
+};
 
-            resolve(200)
+exports.stop = () => {
+
+    return new Promise(async (resolve, reject) => {
+        try {
+            clearInterval(interval);
+
+            console.log("stopped");
+
+            resolve("stopped")
         } catch (e) {
             reject(e.toString())
         }

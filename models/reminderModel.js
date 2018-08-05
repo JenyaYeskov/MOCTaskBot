@@ -325,7 +325,7 @@ exports.loh = () => {
             interval = setInterval(() => {
                 runRem()
 
-            }, 10000);
+            }, 60000);
 
             console.log("refreshed");
 

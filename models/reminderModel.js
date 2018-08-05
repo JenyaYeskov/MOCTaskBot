@@ -206,19 +206,13 @@ async function snoozeReminder(DBRemID) {
     return new Promise(async (resolve, reject) => {
         db.once('open', async () => {
             try {
-                let reminder = await Reminder.findById(DBRemID);
-
-                let oldTime = getTimeFromStringOrNumber(reminder["timeInUTC"]);
-
-                // let newTime = oldTime.setMinutes(oldTime.getMinutes() + 2);
-
-                let newTime = new Date().setMinutes(new Date().getMinutes() + 1);
+                let newTime = new Date().setMinutes(new Date().getMinutes() + 10);
 
                 await Reminder.findByIdAndUpdate(DBRemID, {
                     "timeInUTC": newTime
                 });
 
-                resolve([{"text": "Reminder snoozed. It will show up again in 10 minutes   " + newTime}]);
+                resolve([{"text": "Reminder snoozed. It will show up again in 10 minutes"}]);
             } catch (e) {
                 console.log(e);
                 reject(e.toString());
@@ -253,7 +247,7 @@ function runRem() {
                 let now = new Date();
 
                 if (reminderTime <= now) {
-                    fireReminder(reminder.messengerId, "time to \"" + reminder.event + "\"", reminder["_id"]);
+                    fireReminder(reminder.messengerId, "time to \"" + reminder.event + "\"");
                 }
                 else {
                     console.log("in else");
@@ -268,13 +262,12 @@ function runRem() {
     });
 }
 
-function fireReminder(messengerId, message, DBRemID) {
-    let token = "qwYLsCSz8hk4ytd6CPKP4C0oalstMnGdpDjF8YFHPHCieKNc0AfrnjVs91fGuH74";
+function doMessageRequest(messengerId, message, chatfuelBlockId) {
+    let token = process.env.chatfuelBroadcastAPIToken;
 
     request({
         "uri": "https://api.chatfuel.com/bots/5ac8230ce4b0336c50287a5d/users/" + messengerId
-        + "/send?chatfuel_token=" + token + "&chatfuel_block_id=5b059420e4b0c78a75f4c2ab&what=" + message
-        + "&DBRemID=" + DBRemID,
+        + "/send?chatfuel_token=" + token + "&chatfuel_block_id=" + chatfuelBlockId + "&what=" + message,
         "headers": {"Content-Type": "application/json"},
         "method": "POST"
         // "json": request_body
@@ -285,6 +278,11 @@ function fireReminder(messengerId, message, DBRemID) {
             console.error("Unable to send message:" + err);
         }
     });
+}
+
+function fireReminder(messengerId, message) {
+    let chatfuelBlockId = "5b059420e4b0c78a75f4c2ab";
+    doMessageRequest(messengerId, message, chatfuelBlockId);
 }
 
 function validateAndSetDate(timeAndDateString) {
@@ -320,13 +318,12 @@ function validateAndSetDate(timeAndDateString) {
 
 let interval;
 exports.start = () => {
-
     return new Promise(async (resolve, reject) => {
         try {
             clearInterval(interval);
             interval = setInterval(() => {
                 runRem()
-            }, 10000);
+            }, 60000);
 
             console.log("started");
 
@@ -338,7 +335,6 @@ exports.start = () => {
 };
 
 exports.stop = () => {
-
     return new Promise(async (resolve, reject) => {
         try {
             clearInterval(interval);
@@ -352,73 +348,7 @@ exports.stop = () => {
     })
 };
 
-function trySend(mid, smt) {
-    let token = "qwYLsCSz8hk4ytd6CPKP4C0oalstMnGdpDjF8YFHPHCieKNc0AfrnjVs91fGuH74";
-
-    // fetch("https://api.chatfuel.com/bots/5ac8230ce4b0336c50287a5d/users/" + mid +
-    //     "/send?chatfuel_token=" + token + "&chatfuel_block_id=5ae34ee1e4b088ff003688cf&what=" + smt, {
-    //     "headers": {"Content-Type": "application/json"},
-    //     "method": "POST"
-    // });
-
-    request({
-        "uri": "https://api.chatfuel.com/bots/5ac8230ce4b0336c50287a5d/users/" + mid +
-        "/send?chatfuel_token=" + token + "&chatfuel_block_id=5ae34ee1e4b088ff003688cf&what=" + smt,
-        "headers": {"Content-Type": "application/json"},
-        "method": "POST"
-        // "json": request_body
-    }, (err, res, body) => {
-        if (!err) {
-            console.log('message sent!')
-        } else {
-            console.error("Unable to send message:" + err);
-        }
-    });
+function sendMessage(messengerId, message) {
+    let chatfuelBlockId = "5ae34ee1e4b088ff003688cf";
+    doMessageRequest(messengerId, message, chatfuelBlockId);
 }
-
-exports.checkRems = () => {
-    let todays;
-    let par = dateAndTime.format(new Date(), "DD.MM.YYYY");
-
-    try {
-        mongoose.connect(uri);
-        db.once('open', async () => {
-            todays = await Reminder.find();
-
-            try {
-                for (let rem of todays) {
-
-                    let hh = await validateAndSetDate(rem.date + " " + rem.time);
-                    let h = dateAndTime.parse(rem.date + " " + rem.time, "DD.MM.YYYY HH.mm", true);
-
-                    if (hh - new Date() < 0) {
-                        trySend("1844369452275489", "ebat " + rem.event)
-                    }
-                    else {
-                        trySend("1844369452275489", "ne ebat " + rem.event)
-                    }
-                }
-
-                // todays.forEach(rem => {
-                //     if (rem.time === dateAndTime.format(new Date(), "HH.mm")) {
-                //         trySend("1844369452275489", "ebat")
-                //     }
-                // });
-
-                // trySend("1844369452275489", "rabotaem");
-
-            } catch (e) {
-                console.log(e);
-                trySend("1844369452275489", e + "   in catch");
-            }
-
-            mongoose.Connection.close();
-        });
-
-        res.sendStatus(200);
-    }
-    catch (e) {
-        trySend("1844369452275489", "huinya poluchylas");
-        res.sendStatus(403);
-    }
-};

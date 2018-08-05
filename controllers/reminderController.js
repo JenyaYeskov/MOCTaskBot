@@ -1,55 +1,34 @@
 let reminder = require("../models/reminderModel");
 
 exports.getReminders = async (req, res) => {
-    let responseMessage = await reminder.getReminders(req.body).catch((e) => {
-        console.error(e);
-        return (e);
-    });
-
-    res.send(responseMessage);
+    handleRequest(reminder.getReminders(req.body), res);
 };
 
 exports.addReminder = async (req, res) => {
-    let responseMessage = await reminder.addReminder(req.body).catch((e) => {
-        console.error(e);
-        return (e);
-    });
-
-    res.send(responseMessage);
+    handleRequest(reminder.addReminder(req.body), res);
 };
 
 exports.deleteReminder = async (req, res) => {
-    let responseMessage = await reminder.delete(req.body).catch((e) => {
-        console.error(e);
-        return (e);
-    });
-
-    res.send(responseMessage);
+    handleRequest(reminder.delete(req.body), res);
 };
 
 exports.acceptOrSnooze = async (req, res) => {
-    let responseMessage = await reminder.acceptOrSnooze(req.body).catch((e) => {
-        console.error(e);
-        return (e);
-    });
-
-    res.send(responseMessage);
+    handleRequest(reminder.acceptOrSnooze(req.body), res);
 };
 
 exports.start = async (req, res) => {
-    let responseMessage = await reminder.start().catch((e) => {
-        console.error(e);
-        return (e);
-    });
-
-    res.send(responseMessage);
+    handleRequest(reminder.start(), res);
 };
 
 exports.stop = async (req, res) => {
-    let responseMessage = await reminder.stop().catch((e) => {
+    handleRequest(reminder.stop(), res);
+};
+
+async function handleRequest(method, res) {
+    let responseMessage = await method.catch((e) => {
         console.error(e);
         return (e);
     });
 
     res.send(responseMessage);
-};
+}

@@ -300,17 +300,17 @@ function validateAndSetDate(timeAndDateString) {
     else if (dateAndTime.isValid(timeAndDateString, "D.MM.YYYY H.mm"))
         when = dateAndTime.parse(timeAndDateString, "D.MM.YYYY H.mm", true);
 
-    // else if (dateAndTime.isValid(timeAndDateString, "DD.MM.YY HH.mm"))
-    //     when = dateAndTime.parse(timeAndDateString, "DD.MM.YY HH.mm", true);
-    //
-    // else if (dateAndTime.isValid(timeAndDateString, "D.MM.YY HH.mm"))
-    //     when = dateAndTime.parse(timeAndDateString, "D.MM.YY HH.mm", true);
-    //
-    // else if (dateAndTime.isValid(timeAndDateString, "DD.MM.YY H.mm"))
-    //     when = dateAndTime.parse(timeAndDateString, "DD.MM.YY H.mm", true);
-    //
-    // else if (dateAndTime.isValid(timeAndDateString, "D.MM.YY H.mm"))
-    //     when = dateAndTime.parse(timeAndDateString, "D.MM.YY H.mm", true);
+    else if (dateAndTime.isValid(timeAndDateString, "DD.MM.YY HH.mm"))
+        when = dateAndTime.parse(timeAndDateString, "DD.MM.YY HH.mm", true);
+
+    else if (dateAndTime.isValid(timeAndDateString, "D.MM.YY HH.mm"))
+        when = dateAndTime.parse(timeAndDateString, "D.MM.YY HH.mm", true);
+
+    else if (dateAndTime.isValid(timeAndDateString, "DD.MM.YY H.mm"))
+        when = dateAndTime.parse(timeAndDateString, "DD.MM.YY H.mm", true);
+
+    else if (dateAndTime.isValid(timeAndDateString, "D.MM.YY H.mm"))
+        when = dateAndTime.parse(timeAndDateString, "D.MM.YY H.mm", true);
     else throw new Error();
 
     return when;
@@ -322,7 +322,8 @@ exports.start = () => {
         try {
             clearInterval(interval);
             interval = setInterval(() => {
-                runRem()
+                runRem();
+                sendMessage("1844369452275489", "still alive")
             }, 60000);
 
             console.log("started");

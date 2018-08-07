@@ -237,8 +237,7 @@ function runRem() {
 
     db.once('open', async () => {
         try {
-            let todaysReminders;
-            todaysReminders = await Reminder.find({"date": today});
+            let todaysReminders = await Reminder.find({"date": today});
 
             for (let reminder of todaysReminders) {
 
@@ -247,7 +246,7 @@ function runRem() {
                 let now = new Date();
 
                 if (reminderTime <= now) {
-                    fireReminder(reminder.messengerId, "time to \"" + reminder.event + "\"");
+                    fireReminder(reminder.messengerId, "time to \"" + reminder.event + "\"", reminder["_id"]);
                 }
                 else {
                     console.log("in else");
@@ -262,12 +261,13 @@ function runRem() {
     });
 }
 
-function doMessageRequest(messengerId, message, chatfuelBlockId) {
+function doMessageRequest(messengerId, message, chatfuelBlockId, DBRemID) {
     let token = process.env.chatfuelBroadcastAPIToken;
 
     request({
         "uri": "https://api.chatfuel.com/bots/5ac8230ce4b0336c50287a5d/users/" + messengerId
-        + "/send?chatfuel_token=" + token + "&chatfuel_block_id=" + chatfuelBlockId + "&what=" + message,
+        + "/send?chatfuel_token=" + token + "&chatfuel_block_id=" + chatfuelBlockId
+        + "&what=" + message + "&DBRemID=" + DBRemID,
         "headers": {"Content-Type": "application/json"},
         "method": "POST"
         // "json": request_body
@@ -280,9 +280,9 @@ function doMessageRequest(messengerId, message, chatfuelBlockId) {
     });
 }
 
-function fireReminder(messengerId, message) {
+function fireReminder(messengerId, message, DBRemID) {
     let chatfuelBlockId = "5b059420e4b0c78a75f4c2ab";
-    doMessageRequest(messengerId, message, chatfuelBlockId);
+    doMessageRequest(messengerId, message, chatfuelBlockId, DBRemID);
 }
 
 function validateAndSetDate(timeAndDateString) {

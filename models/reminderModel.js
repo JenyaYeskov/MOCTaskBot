@@ -42,7 +42,7 @@ exports.getReminders = async (body) => {
             }
             catch (e) {
                 console.error(e);
-                reject([{"text": "error"}]);
+                reject([{"text": "Something went wrong. Try again"}]);
             }
             finally {
                 mongoose.connection.close();
@@ -82,13 +82,12 @@ exports.addReminder = async (body) => {
                 let timeAndDateString = body.date + " " + body.time;
 
                 try {
-                    ReminderTimeAndDate = validateAndSetDate(timeAndDateString);
+                    ReminderTimeAndDate = validateAndGetDate(timeAndDateString);
                     ReminderTimeAndDate.setHours(parseFloat(ReminderTimeAndDate.getHours() - body["timezone"]));
                 } catch (e) {
                     console.error(e);
                     reject([{
-                        "text": "Wrong date or time. Try again  " + ReminderTimeAndDate + " "
-                        + timeAndDateString
+                        "text": e.message
                     }]);
                     return;
                 }
@@ -97,7 +96,7 @@ exports.addReminder = async (body) => {
 
                 Reminder.create(reminder);
 
-                resolve([{"text": "Done " + userReminderId + " " + ReminderTimeAndDate}]);
+                resolve([{"text": "Done: " + userReminderId + " " + ReminderTimeAndDate}]);
             }
             catch (e) {
                 console.error(e);
@@ -112,7 +111,6 @@ exports.addReminder = async (body) => {
 
 function createUserReminderId(userReminders) {
     let idArray = [];
-
     let userReminderId = userReminders.length + 1;
 
     for (let reminder of userReminders) {
@@ -142,14 +140,14 @@ async function deleteReminder(messengerId, userReminderId) {
             try {
                 if (userReminderId.toUpperCase() === "ALL") {
                     await Reminder.remove({"messengerId": messengerId});
-                    resolve([{"text": "Done all " + userReminderId}]);
+                    resolve([{"text": "Done: " + userReminderId}]);
                 }
                 else {
                     await Reminder.remove({
                         "messengerId": messengerId,
                         "userReminderId": userReminderId
                     });
-                    resolve([{"text": "Done " + userReminderId}]);
+                    resolve([{"text": "Done: " + userReminderId}]);
                 }
             }
             catch (e) {
@@ -230,26 +228,20 @@ function getTimeFromStringOrNumber(time) {
 }
 
 function runRem() {
-    let today = dateAndTime.format(new Date(), "DD.MM.YYYY");
-
     mongoose.connect(uri);
     db.on('error', console.error.bind(console, 'connection error:'));
 
     db.once('open', async () => {
         try {
-            let todaysReminders = await Reminder.find({"date": today});
+            let reminders = await Reminder.find();
 
-            for (let reminder of todaysReminders) {
+            for (let reminder of reminders) {
 
                 let reminderTime = getTimeFromStringOrNumber(reminder["timeInUTC"]);
-
                 let now = new Date();
 
                 if (reminderTime <= now) {
                     fireReminder(reminder.messengerId, "time to \"" + reminder.event + "\"", reminder["_id"]);
-                }
-                else {
-                    console.log("in else");
                 }
             }
         } catch (e) {
@@ -285,35 +277,23 @@ function fireReminder(messengerId, message, DBRemID) {
     doMessageRequest(messengerId, message, chatfuelBlockId, DBRemID);
 }
 
-function validateAndSetDate(timeAndDateString) {
-    let when = new Date();
+function validateAndGetDate(timeAndDateString) {
+    let datePatterns = ["DD.MM.YYYY HH.mm", "D.MM.YYYY HH.mm", "DD.MM.YYYY H.mm",
+        "D.MM.YYYY H.mm", "DD.MM.YY HH.mm", "D.MM.YY HH.mm", "DD.MM.YY H.mm", "D.MM.YY H.mm",
+        "DD.M.YYYY HH.mm", "D.M.YYYY HH.mm", "DD.M.YYYY H.mm", "D.M.YYYY H.mm", "DD.M.YY HH.mm",
+        "D.M.YY HH.mm", "DD.M.YY H.mm", "D.M.YY H.mm"];
 
-    if (dateAndTime.isValid(timeAndDateString, "DD.MM.YYYY HH.mm"))
-        when = dateAndTime.parse(timeAndDateString, "DD.MM.YYYY HH.mm", true);
+    let timeAndDate;
 
-    else if (dateAndTime.isValid(timeAndDateString, "D.MM.YYYY HH.mm"))
-        when = dateAndTime.parse(timeAndDateString, "D.MM.YYYY HH.mm", true);
+    for (let pattern of datePatterns) {
+        if (dateAndTime.isValid(timeAndDateString, pattern)) {
+            timeAndDate = dateAndTime.parse(timeAndDateString, pattern);
+        }
+    }
 
-    else if (dateAndTime.isValid(timeAndDateString, "DD.MM.YYYY H.mm"))
-        when = dateAndTime.parse(timeAndDateString, "DD.MM.YYYY H.mm", true);
-
-    else if (dateAndTime.isValid(timeAndDateString, "D.MM.YYYY H.mm"))
-        when = dateAndTime.parse(timeAndDateString, "D.MM.YYYY H.mm", true);
-
-    else if (dateAndTime.isValid(timeAndDateString, "DD.MM.YY HH.mm"))
-        when = dateAndTime.parse(timeAndDateString, "DD.MM.YY HH.mm", true);
-
-    else if (dateAndTime.isValid(timeAndDateString, "D.MM.YY HH.mm"))
-        when = dateAndTime.parse(timeAndDateString, "D.MM.YY HH.mm", true);
-
-    else if (dateAndTime.isValid(timeAndDateString, "DD.MM.YY H.mm"))
-        when = dateAndTime.parse(timeAndDateString, "DD.MM.YY H.mm", true);
-
-    else if (dateAndTime.isValid(timeAndDateString, "D.MM.YY H.mm"))
-        when = dateAndTime.parse(timeAndDateString, "D.MM.YY H.mm", true);
-    else throw new Error();
-
-    return when;
+    if (timeAndDate instanceof Date)
+        return timeAndDate;
+    else throw new Error("Wrong date or time. Try again");
 }
 
 let interval;
@@ -353,3 +333,5 @@ function sendMessage(messengerId, message) {
     let chatfuelBlockId = "5ae34ee1e4b088ff003688cf";
     doMessageRequest(messengerId, message, chatfuelBlockId);
 }
+
+

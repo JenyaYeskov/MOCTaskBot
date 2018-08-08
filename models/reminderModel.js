@@ -23,10 +23,11 @@ exports.getReminders = async (body) => {
                     let date = reminder.date,
                         time = reminder.time,
                         event = reminder.event,
-                        userReminderId = reminder.userReminderId;
+                        userReminderId = reminder.userReminderId,
+                        timeInUTC = reminder["timeInUTC"];
 
                     if (body["todays"].toLowerCase() === "todays") {
-                        let reminderDate = dateAndTime.parse(date, "DD.MM.YYYY");
+                        let reminderDate = getTimeFromStringOrNumber(timeInUTC);
 
                         if (dateAndTime.isSameDay(new Date(), reminderDate))
                             message.push(createReminderMessageString(userReminderId, event, date, time));

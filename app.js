@@ -9,5 +9,3 @@ app.use(bodyParser.urlencoded({extended: false}));
 app.listen(process.env.PORT || 58588, () => console.log('webhook is listening'));
 
 app.use(router);
-
-console.dir(router)

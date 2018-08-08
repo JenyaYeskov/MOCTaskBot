@@ -8,7 +8,6 @@ let Reminder = require('./reminderSchema');
 let db = mongoose.connection;
 
 exports.getReminders = async (body) => {
-    let messengerId = body["messenger user id"];
     mongoose.connect(uri);
     db.on('error', console.error.bind(console, 'connection error:'));
 
@@ -16,7 +15,7 @@ exports.getReminders = async (body) => {
         db.once('open', async () => {
             try {
                 let message = [];
-                let UserReminders = await Reminder.find({'messengerId': messengerId});
+                let UserReminders = await Reminder.find({'messengerId': body["messenger user id"]});
 
                 for (let reminder of UserReminders) {
 
@@ -80,10 +79,13 @@ exports.addReminder = async (body) => {
                 let userReminderId = createUserReminderId(userReminders);
                 let ReminderTimeAndDate;
                 let timeAndDateString = body.date + " " + body.time;
+                let timezone = body["timezone"];
 
                 try {
                     ReminderTimeAndDate = validateAndGetDate(timeAndDateString);
-                    ReminderTimeAndDate.setHours(parseFloat(ReminderTimeAndDate.getHours() - body["timezone"]));
+                    if (timezone < 0)
+                        ReminderTimeAndDate.setHours(parseFloat(ReminderTimeAndDate.getHours() + Math.abs(timezone)));
+                    else ReminderTimeAndDate.setHours(parseFloat(ReminderTimeAndDate.getHours() - body["timezone"]));
                 } catch (e) {
                     console.error(e);
                     reject([{
@@ -111,7 +113,7 @@ exports.addReminder = async (body) => {
 
 function createUserReminderId(userReminders) {
     let idArray = [];
-    let userReminderId = userReminders.length + 1;
+    let userReminderId = 1;
 
     for (let reminder of userReminders) {
         idArray.push(reminder.userReminderId);
@@ -253,6 +255,11 @@ function runRem() {
     });
 }
 
+function fireReminder(messengerId, message, DBRemID) {
+    let chatfuelBlockId = "5b059420e4b0c78a75f4c2ab";
+    doMessageRequest(messengerId, message, chatfuelBlockId, DBRemID);
+}
+
 function doMessageRequest(messengerId, message, chatfuelBlockId, DBRemID) {
     let token = process.env.chatfuelBroadcastAPIToken;
 
@@ -272,20 +279,15 @@ function doMessageRequest(messengerId, message, chatfuelBlockId, DBRemID) {
     });
 }
 
-function fireReminder(messengerId, message, DBRemID) {
-    let chatfuelBlockId = "5b059420e4b0c78a75f4c2ab";
-    doMessageRequest(messengerId, message, chatfuelBlockId, DBRemID);
-}
-
 function validateAndGetDate(timeAndDateString) {
-    let datePatterns = ["DD.MM.YYYY HH.mm", "D.MM.YYYY HH.mm", "DD.MM.YYYY H.mm",
+    let dateAndTimePatterns = ["DD.MM.YYYY HH.mm", "D.MM.YYYY HH.mm", "DD.MM.YYYY H.mm",
         "D.MM.YYYY H.mm", "DD.MM.YY HH.mm", "D.MM.YY HH.mm", "DD.MM.YY H.mm", "D.MM.YY H.mm",
         "DD.M.YYYY HH.mm", "D.M.YYYY HH.mm", "DD.M.YYYY H.mm", "D.M.YYYY H.mm", "DD.M.YY HH.mm",
         "D.M.YY HH.mm", "DD.M.YY H.mm", "D.M.YY H.mm"];
 
     let timeAndDate;
 
-    for (let pattern of datePatterns) {
+    for (let pattern of dateAndTimePatterns) {
         if (dateAndTime.isValid(timeAndDateString, pattern)) {
             timeAndDate = dateAndTime.parse(timeAndDateString, pattern);
         }

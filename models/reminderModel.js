@@ -23,11 +23,10 @@ exports.getReminders = async (body) => {
                     let date = reminder.date,
                         time = reminder.time,
                         event = reminder.event,
-                        userReminderId = reminder.userReminderId,
-                        timeInUTC = reminder["timeInUTC"];
+                        userReminderId = reminder.userReminderId;
 
                     if (body["todays"].toLowerCase() === "todays") {
-                        let reminderDate = getTimeFromStringOrNumber(timeInUTC);
+                        let reminderDate = getTimeFromStringOrNumber(reminder["timeInUTC"]);
 
                         if (dateAndTime.isSameDay(new Date(), reminderDate))
                             message.push(createReminderMessageString(userReminderId, event, date, time));
@@ -304,7 +303,6 @@ exports.start = () => {
             clearInterval(interval);
             interval = setInterval(() => {
                 runRem();
-                sendMessage("1844369452275489", "still alive")
             }, 60000);
 
             console.log("started");

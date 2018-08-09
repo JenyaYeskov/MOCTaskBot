@@ -98,7 +98,7 @@ exports.addReminder = async (body) => {
 
                 Reminder.create(reminder);
 
-                resolve([{"text": "Done: " + userReminderId + " " + ReminderTimeAndDate}]);
+                resolve([{"text": "Done: " + userReminderId + ". " + ReminderTimeAndDate}]);
             }
             catch (e) {
                 console.error(e);
@@ -256,7 +256,7 @@ function runRem() {
 }
 
 function fireReminder(messengerId, message, DBRemID) {
-    let chatfuelBlockId = "5b059420e4b0c78a75f4c2ab";
+    const chatfuelBlockId = "5b059420e4b0c78a75f4c2ab";
     doMessageRequest(messengerId, message, chatfuelBlockId, DBRemID);
 }
 
@@ -331,7 +331,7 @@ exports.stop = () => {
 };
 
 function sendMessage(messengerId, message) {
-    let chatfuelBlockId = "5ae34ee1e4b088ff003688cf";
+    const chatfuelBlockId = "5ae34ee1e4b088ff003688cf";
     doMessageRequest(messengerId, message, chatfuelBlockId);
 }
 

@@ -1,10 +1,12 @@
-let router = require("./routes/botRoutes");
+/* eslint-disable one-var */
+const router = require('./routes/botRoutes');
 
-const express = require('express'),
-    bodyParser = require('body-parser'),
-    app = express().use(bodyParser.json());
+const express = require('express');
+const bodyParser = require('body-parser');
 
-app.use(bodyParser.urlencoded({extended: false}));
+const app = express().use(bodyParser.json());
+
+app.use(bodyParser.urlencoded({ extended: false }));
 
 app.listen(process.env.PORT || 58588, () => console.log('webhook is listening'));
 

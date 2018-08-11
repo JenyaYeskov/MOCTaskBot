@@ -1,20 +1,21 @@
-let express = require("express");
-let router = express.Router();
+const express = require('express');
 
-let reminderController = require("../controllers/reminderController");
+const router = express.Router();
 
-router.post("/getRems", reminderController.getReminders);
+const reminderController = require('../controllers/reminderController');
 
-router.post("/addRem", reminderController.addReminder);
+router.post('/getRems', reminderController.getReminders);
 
-router.post("/delete", reminderController.deleteReminder);
+router.post('/addRem', reminderController.addReminder);
 
-router.post("/acceptOrSnooze", reminderController.acceptOrSnooze);
+router.post('/delete', reminderController.deleteReminder);
 
-router.get("/start", reminderController.start);
+router.post('/acceptOrSnooze', reminderController.acceptOrSnooze);
 
-router.get("/stop", reminderController.stop);
+router.get('/start', reminderController.start);
 
-router.get("/", (req, res) => {res.send("deployed")});
+router.get('/stop', reminderController.stop);
+
+router.get('/', (req, res) => { res.send('deployed'); });
 
 module.exports = router;

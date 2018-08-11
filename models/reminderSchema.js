@@ -1,12 +1,13 @@
-let mongoose = require('mongoose');
+/* eslint-disable indent */
+const mongoose = require('mongoose');
 
-let remSchema = new mongoose.Schema({
+const remSchema = new mongoose.Schema({
     userReminderId: Number,
     messengerId: String,
     date: String,
     time: String,
     event: String,
-    timeInUTC: String
+    timeInUTC: String,
 });
 
 module.exports = mongoose.model('reminders', remSchema);

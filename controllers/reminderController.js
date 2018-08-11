@@ -1,4 +1,14 @@
-let reminder = require("../models/reminderModel");
+/* eslint-disable indent,no-console */
+const reminder = require('../models/reminderModel');
+
+async function handleRequest(method, res) {
+    const responseMessage = await method.catch((e) => {
+        console.error(e);
+        return ([{ text: e.message }]);
+    });
+
+    res.send(responseMessage);
+}
 
 exports.getReminders = async (req, res) => {
     handleRequest(reminder.getReminders(req.body), res);
@@ -24,11 +34,3 @@ exports.stop = async (req, res) => {
     handleRequest(reminder.stop(), res);
 };
 
-async function handleRequest(method, res) {
-    let responseMessage = await method.catch((e) => {
-        console.error(e);
-        return (e);
-    });
-
-    res.send(responseMessage);
-}

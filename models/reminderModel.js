@@ -1,9 +1,11 @@
 /* eslint-disable indent,no-console */
-const uri = process.env.MONGO_URI;
-const dateAndTime = require('date-and-time');
 const mongoose = require('mongoose');
+const dateAndTime = require('date-and-time');
 const request = require('request');
 const dotenv = require('dotenv').config();
+
+const uri = process.env.MONGO_URI;
+
 const Reminder = require('./reminderSchema');
 
 const db = mongoose.connection;
